@@ -8,8 +8,4 @@ This is an implementation of the WebSocket Draft -06 in Node.  See the examples 
 
 For a WebSocket -06 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
-There is one dependency for this project: [node-bufferlist](https://github.com/substack/node-bufferlist).
-
-    npm install bufferlist
-
 More to come soon...
