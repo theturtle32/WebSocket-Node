@@ -14,9 +14,12 @@ server.listen(8080, function() {
     console.log((new Date()) + " Server is listening on port 8080");
 });
 
-wsServer = new WebSocketServer(server, null, 'org.ietf.websocket.test-echo-assemble');
+wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: true
+});
 
-wsServer.on('connection', function(connection) {
+wsServer.on('connect', function(connection) {
     console.log((new Date()) + " Connection accepted.");
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
