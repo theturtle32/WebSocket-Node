@@ -45,7 +45,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
-    console.log((new Date()) + " Connection accepted.");
+    console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress);
     
     mirrorConnections.push(connection);
     connection.on('message', function(message) {
@@ -68,7 +68,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
-    console.log((new Date()) + " Connection accepted from " + connection.remoteAddress);
+    console.log((new Date()) + " dumb-increment-protocol onnection accepted from " + connection.remoteAddress);
 
     var number = 0;
     connection.timerInterval = setInterval(function() {
@@ -86,6 +86,6 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
         }
     });
     connection.on('close', function(connection) {
-        console.log((new Date()) + " Client " + connection.remoteAddress + " disconnected");
+        console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected");
     });
 });
