@@ -33,7 +33,7 @@ server.listen(8080, function() {
 
 wsServer = new WebSocketServer({
     httpServer: server,
-    maxFrameSize: 6
+    maxReceivedFrameSize: 6
 });
 
 var router = new WebSocketRouter();
