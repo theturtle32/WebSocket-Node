@@ -32,8 +32,7 @@ server.listen(8080, function() {
 });
 
 wsServer = new WebSocketServer({
-    httpServer: server,
-    maxReceivedFrameSize: 6
+    httpServer: server
 });
 
 var router = new WebSocketRouter();
