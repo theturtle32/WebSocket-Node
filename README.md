@@ -5,7 +5,7 @@ WebSocket Client & Server Implementation for Node
 
 Overview
 --------
-This code is currently unproven.  It should be considered alpha quality, and is recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
+This code is currently unproven.  It should be considered alpha quality, and is not recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
 
 This is a pure JavaScript implementation of the WebSocket Draft -07 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
