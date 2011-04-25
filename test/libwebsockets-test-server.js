@@ -6,6 +6,37 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 
+var args = { /* defaults */
+    secure: false
+};
+
+/* Parse command line options */
+var pattern = /^--(.*?)(?:=(.*))?$/;
+process.argv.forEach(function(value) {
+    var match = pattern.exec(value);
+    if (match) {
+        args[match[1]] = match[2] ? match[2] : true;
+    }
+});
+
+args.protocol = args.secure ? 'wss:' : 'ws:'
+
+if (!args.port) {
+    console.log("WebSocket-Node: Test Server implementing Andy Green's")
+    console.log("libwebsockets-test-server protocols.");
+    console.log("Usage: ./libwebsockets-test-server.js --port=8080 [--secure]");
+    console.log("");
+    return;
+}
+
+if (args.secure) {
+    console.log("WebSocket-Node: Test Server implementing Andy Green's")
+    console.log("libwebsockets-test-server protocols.");
+    console.log("ERROR: TLS is not yet supported.");
+    console.log("");
+    return;
+}
+
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + " Received request for " + request.url);
     if (request.url == "/") {
@@ -68,7 +99,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
-    console.log((new Date()) + " dumb-increment-protocol onnection accepted from " + connection.remoteAddress);
+    console.log((new Date()) + " dumb-increment-protocol connection accepted from " + connection.remoteAddress);
 
     var number = 0;
     connection.timerInterval = setInterval(function() {
@@ -89,3 +120,8 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
         console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected");
     });
 });
+
+console.log("WebSocket-Node: Test Server implementing Andy Green's")
+console.log("libwebsockets-test-server protocols.");
+console.log("Listening on port " + args.port);
+console.log("Point your draft-07 complant browser to http://localhost:" + args.port + "/");
