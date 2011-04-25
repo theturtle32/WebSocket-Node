@@ -15,7 +15,7 @@ If you're looking for the version supporting draft-06, see the draft-06 branch. 
 
 Current Features:
 -----------------
-- Draft-07 framing
+- Draft-07 framing and handshake
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
