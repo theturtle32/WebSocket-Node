@@ -69,7 +69,7 @@ incrementClient.on('connect', function(connection) {
         console.log("dumb-increment-protocol Connection Closed");
     })
     connection.on('message', function(message) {
-        console.log("Number: " + message.utf8Data);
+        console.log("Number: '" + message.utf8Data + "'");
     });
 });
 

@@ -104,7 +104,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     var number = 0;
     connection.timerInterval = setInterval(function() {
         connection.sendUTF((number++).toString(10));
-    }, 0);
+    }, 50);
     connection.on('close', function() {
         clearInterval(connection.timerInterval);
     });
