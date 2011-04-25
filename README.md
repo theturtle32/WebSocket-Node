@@ -116,7 +116,7 @@ This is a simple example client that will print out any utf-8 messages it receiv
         sendNumber();
     });
 
-    client.connect("ws://localhost:8080/", ['dumb-increment-protocol']);
+    client.connect("ws://localhost:8080/", ['echo-protocol']);
     
     
 Documentation
