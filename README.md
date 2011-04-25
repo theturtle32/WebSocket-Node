@@ -118,7 +118,12 @@ This is a simple example client that will print out any utf-8 messages it receiv
 
     client.connect("ws://localhost:8080/", ['echo-protocol']);
     
-    
+Request Router Example
+----------------------
+
+For an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.
+
+
 Documentation
 =============
 
