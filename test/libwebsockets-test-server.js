@@ -58,8 +58,8 @@ var server = http.createServer(function(request, response) {
         response.end();
     }
 });
-server.listen(8080, function() {
-    console.log((new Date()) + " Server is listening on port 8080");
+server.listen(args.port, function() {
+    console.log((new Date()) + " Server is listening on port " + args.port);
 });
 
 wsServer = new WebSocketServer({
@@ -123,5 +123,4 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
 
 console.log("WebSocket-Node: Test Server implementing Andy Green's")
 console.log("libwebsockets-test-server protocols.");
-console.log("Listening on port " + args.port);
 console.log("Point your draft-07 complant browser to http://localhost:" + args.port + "/");

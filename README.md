@@ -13,6 +13,8 @@ For a WebSocket -07 client written in Flash see my [AS3WebScocket](https://githu
 
 If you're looking for the version supporting draft-06, see the draft-06 branch.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
+**Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
+
 Current Features:
 -----------------
 - Draft-07 framing and handshake
