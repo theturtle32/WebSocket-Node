@@ -7,17 +7,19 @@ Overview
 --------
 This code is currently unproven.  It should be considered alpha quality, and is not recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
 
-This is a pure JavaScript implementation of the WebSocket Draft -07 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+This is a pure JavaScript implementation of the WebSocket Draft -09 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
-For a WebSocket -07 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
+For a WebSocket -09 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
-If you're looking for the version supporting draft-06, see the draft-06 branch.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
+*There will not be a draft-08 implementation, as the -08 specification was only out for a week before being superseded by -09.*
+
+If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
 **Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
 
 Current Features:
 -----------------
-- Draft-07 framing and handshake
+- Draft-09 framing and handshake
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
