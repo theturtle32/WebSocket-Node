@@ -63,7 +63,7 @@ Server Example
 Here's a short example showing a server that echos back anything sent to it, whether utf-8 or binary.
 
     #!/usr/bin/env node
-    var WebSocketServer = require('../lib/WebSocketServer');
+    var WebSocketServer = require('websocket').server;
     var http = require('http');
 
     var server = http.createServer(function(request, response) {
@@ -103,7 +103,7 @@ Client Example
 This is a simple example client that will print out any utf-8 messages it receives on the console, and periodically sends a random number.
 
     #!/usr/bin/env node
-    var WebSocketClient = require('../lib/WebSocketClient');
+    var WebSocketClient = require('websocket').client;
 
     var client = new WebSocketClient();
 
