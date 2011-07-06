@@ -17,6 +17,19 @@ If you're looking for the version supporting draft-07 or draft-06, see the draft
 
 **Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
 
+Installation
+------------
+In your project root:
+
+    $ npm install websocket
+  
+Then in your code:
+
+    var WebSocketServer = require('websocket').server;
+    var WebSocketClient = require('websocket').client;
+    var WebSocketFrame  = require('websocket').frame;
+    var WebSocketRouter = require('websocket').router;
+
 Current Features:
 -----------------
 - Draft-09 framing and handshake
