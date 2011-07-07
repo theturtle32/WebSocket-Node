@@ -123,4 +123,4 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
 
 console.log("WebSocket-Node: Test Server implementing Andy Green's")
 console.log("libwebsockets-test-server protocols.");
-console.log("Point your draft-07 complant browser to http://localhost:" + args.port + "/");
+console.log("Point your draft-09 complant browser to http://localhost:" + args.port + "/");
