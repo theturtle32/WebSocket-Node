@@ -81,7 +81,9 @@ document.getElementById("number").textContent = get_appropriate_ws_url();
 
 /* dumb increment protocol */
 	
-	var socket_di = new WebSocket(get_appropriate_ws_url(),
+	var ws_ctor = window['MozWebSocket'] ? window['MozWebSocket'] : window['WebSocket'];
+	
+	var socket_di = new ws_ctor(get_appropriate_ws_url(),
 				   "dumb-increment-protocol");  
 
 	try {
@@ -113,7 +115,10 @@ function reset() {
 	var no_last = 1;
 	var last_x = 0, last_y = 0;
 	var ctx;
-	var socket_lm = new WebSocket(get_appropriate_ws_url(),
+	
+	var ws_ctor = window['MozWebSocket'] ? window['MozWebSocket'] : window['WebSocket'];
+	
+	var socket_lm = new ws_ctor(get_appropriate_ws_url(),
 				   "lws-mirror-protocol");
 	var color = "#000000";
 
