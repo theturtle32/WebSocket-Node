@@ -3,6 +3,8 @@ WebSocket Client & Server Implementation for Node
 
 *WARNING: This is an experimental library implementing the most recent draft of the WebSocket proposal.*
 
+**Note about FireFox 6:  Firefox 6 re-enables support for WebSockets by default.  It uses a prefixed constructor name, MozWebSocket(), to avoid conflicting with already deployed scripts.  It also implements draft-07, so if you want to target Firefox 6, you will need to checkout my draft-07 branch, not the latest one.**
+
 Overview
 --------
 This code is currently unproven.  It should be considered alpha quality, and is not recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
