@@ -45,6 +45,9 @@ run.</p>
 		<td id=wslm_statustd align=center><div id=wslm_status>Not initialized</div></td>
 	</tr>
 	<tr>
+	  <button id="clearCanvasButton" onclick="clearCanvas()">Clear Canvas</button>
+	</tr>
+	<tr>
 		<td colspan=2 width=500 align=center style="background-color: #e0e0e0;"><div id=wslm_drawing> </div></td>
 	</tr>
 </table>
@@ -140,6 +143,9 @@ function reset() {
 					ctx.lineTo(+(i[4]), +(i[5]));
 					ctx.stroke();
 				}
+				if (i[0] == 'clear') {
+				  ctx.clearRect(0,0,480,300);
+				}
 				if (i[0] == 'c') {
 					ctx.strokeStyle = i[1];
 					ctx.beginPath();
@@ -212,10 +218,16 @@ function ev_mousemove (ev) {
 		last_y = y;
 		return;
 	}
-	socket_lm.send("d " + color + " " + last_x + " " + last_y + " " + x + ' ' + y + ';');
+	if (socket_lm.readyState === ws_ctor.OPEN)
+	  socket_lm.send("d " + color + " " + last_x + " " + last_y + " " + x + ' ' + y + ';');
 
 	last_x = x;
 	last_y = y;
+}
+
+function clearCanvas() {
+  if (socket_lm.readyState === ws_ctor.OPEN)
+    socket_lm.send("clear;");
 }
 
 

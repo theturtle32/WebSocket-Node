@@ -72,15 +72,28 @@ router.attachServer(wsServer);
 
 var mirrorConnections = [];
 
+var mirrorHistory = [];
+
 router.mount('*', 'lws-mirror-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress);
     
+    console.log((new Date()) + " sending mirror protocol history to client " + connection.remoteAddress);
+    mirrorHistory.forEach(function(historyItem) {
+        connection.sendUTF(historyItem);
+    });
+    
     mirrorConnections.push(connection);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
+            if (message.utf8Data === 'clear;') {
+                mirrorHistory = [];
+            }
+            else {
+                mirrorHistory.push(message.utf8Data);
+            }
             mirrorConnections.forEach(function (outputConnection) {
                 outputConnection.sendUTF(message.utf8Data);
             });
