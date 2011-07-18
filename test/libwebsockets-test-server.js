@@ -79,26 +79,35 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress);
-    
+
+
     console.log((new Date()) + " sending mirror protocol history to client " + connection.remoteAddress);
     if (mirrorHistory.length > 0) {
         connection.sendUTF(mirrorHistory.join(''));
     }
     
     mirrorConnections.push(connection);
+    
     connection.on('message', function(message) {
+        // We only care about text messages
         if (message.type === 'utf8') {
+            // Clear canvas command received
             if (message.utf8Data === 'clear;') {
                 mirrorHistory = [];
             }
             else {
+                // Record all other commands in the history
                 mirrorHistory.push(message.utf8Data);
             }
+
+            // Re-broadcast the command to all connected clients
             mirrorConnections.forEach(function (outputConnection) {
                 outputConnection.sendUTF(message.utf8Data);
             });
         }
     });
+
+
     connection.on('close', function(connection) {
         var index = mirrorConnections.indexOf(connection);
         if (index !== -1) {
