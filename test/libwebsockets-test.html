@@ -48,7 +48,7 @@ run.</p>
 	  <button id="clearCanvasButton" onclick="clearCanvas()">Clear Canvas</button>
 	</tr>
 	<tr>
-		<td colspan=2 width=500 align=center style="background-color: #e0e0e0;"><div id=wslm_drawing> </div></td>
+		<td colspan=2 width=500 align=center style="background-color: #e0e0e0;"><div id="wslm_drawing"> </div></td>
 	</tr>
 </table>
 
@@ -83,7 +83,8 @@ function get_appropriate_ws_url()
 document.getElementById("number").textContent = get_appropriate_ws_url();
 
 /* dumb increment protocol */
-	
+
+/*	
 	var ws_ctor = window['MozWebSocket'] ? window['MozWebSocket'] : window['WebSocket'];
 	
 	var socket_di = new ws_ctor(get_appropriate_ws_url(),
@@ -110,7 +111,7 @@ document.getElementById("number").textContent = get_appropriate_ws_url();
 function reset() {
 	socket_di.send("reset\n");
 }
-
+*/
 
 /* lws-mirror protocol */
 
@@ -125,11 +126,19 @@ function reset() {
 				   "lws-mirror-protocol");
 	var color = "#000000";
 
+  var lws_error = false;
+
 	try {
 		socket_lm.onopen = function() {
 			document.getElementById("wslm_statustd").style.backgroundColor = "#40ff40";
 			document.getElementById("wslm_status").textContent = " websocket connection opened ";
-		} 
+		}
+		
+		socket_lm.onerror = function(error) {
+		  lws_error = true;
+      document.getElementById("wslm_statustd").style.backgroundColor = "#ff4040";
+			document.getElementById("wslm_status").textContent = " websocket connection ERROR ";
+		};
 
 		socket_lm.onmessage =function got_packet(msg) {
 			j = msg.data.split(';');
@@ -158,8 +167,10 @@ function reset() {
 		}
 
 		socket_lm.onclose = function(){
-			document.getElementById("wslm_statustd").style.backgroundColor = "#ff4040";
-			document.getElementById("wslm_status").textContent = " websocket connection CLOSED ";
+		  if (!lws_error) {
+  			document.getElementById("wslm_statustd").style.backgroundColor = "#ff4040";
+  			document.getElementById("wslm_status").textContent = " websocket connection CLOSED ";
+		  }
 		}
 	} catch(exception) {
 		alert('<p>Error' + exception);  
