@@ -6,9 +6,12 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 
+console.log("WebSocket-Node: Test server to spit out fragmented messages.");
+
 var args = {
     "no-fragmentation": false,
-    "fragment": 16384
+    "fragment": "16384",
+    "port": "8080"
 };
 
 /* Parse command line options */
@@ -22,17 +25,19 @@ process.argv.forEach(function(value) {
 
 args.protocol = 'ws:';
 
-if (!args.port) {
-    console.log("WebSocket-Node: Example case for Firefox Aurora 7.0a2 fragmentation bug");
-    console.log("Usage: ./firefox-bug.js --port=8080");
+if (args.help) {
+    console.log("Usage: ./fragmentation-test-server.js [--port=8080] [--fragment=n] [--no-fragmentation]");
     console.log("");
     return;
+}
+else {
+    console.log("Use --help for usage information.")
 }
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + " Received request for " + request.url);
     if (request.url == "/") {
-        fs.readFile('firefox-bug.html', 'utf8', function(err, data) {
+        fs.readFile('fragmentation-test-page.html', 'utf8', function(err, data) {
             if (err) {
                 response.writeHead(404);
                 response.end();
@@ -70,7 +75,7 @@ var connections = [];
 var lorem = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.";
 
 
-router.mount('*', 'firefox-bug', function(request) {
+router.mount('*', 'fragmentation-test', function(request) {
     var connection = request.accept(request.origin);
     console.log((new Date()) + " connection accepted from " + connection.remoteAddress);
 
@@ -90,10 +95,26 @@ router.mount('*', 'firefox-bug', function(request) {
                 }
                 longLorem = longLorem.slice(0,requestedLength);
                 length = Buffer.byteLength(longLorem);
-                connection.sendUTF(longLorem);
                 if (length > 0) {
-                    console.log((new Date()) + " sent " + length + " byte message to " + connection.remoteAddress);
+                    connection.sendUTF(longLorem);
+                    console.log((new Date()) + " sent " + length + " byte utf-8 message to " + connection.remoteAddress);
                 }
+                return;
+            }
+            
+            var match = /sendBinaryMessage\|(\d+)/.exec(message.utf8Data);
+            if (match) {
+                var requestedLength = parseInt(match[1], 10);
+                
+                // Generate random binary data.
+                var buffer = new Buffer(requestedLength);
+                for (var i=0; i < requestedLength; i++) {
+                    buffer[i] = Math.ceil(Math.random()*255);
+                }
+                
+                connection.sendBytes(buffer);
+                console.log((new Date()) + " sent " + buffer.length + " byte binary message to " + connection.remoteAddress);
+                return;
             }
         }
     });
@@ -111,8 +132,7 @@ router.mount('*', 'firefox-bug', function(request) {
     });
 });
 
-console.log("WebSocket-Node: Firefox-bug test server.")
-console.log("Point Firefox Aurora 7.0a2 at http://localhost:" + args.port + "/");
+console.log("Point your draft-08 compliant browser at http://localhost:" + args.port + "/");
 if (args['no-fragmentation']) {
     console.log("Fragmentation disabled.");
 }

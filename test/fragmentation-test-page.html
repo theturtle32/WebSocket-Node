@@ -7,8 +7,13 @@
   
   var socket;
   
+  var requestedLength;
+  
   function connect() {
-    socket = new WebSocket(get_appropriate_ws_url(), 'firefox-bug');
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.close();
+    }
+    socket = new WebSocket(get_appropriate_ws_url(), 'fragmentation-test');
     socket.onopen = handleSocketOpen;
     socket.onmessage = handleSocketMessage;
     socket.onclose = handleSocketClose;
@@ -29,24 +34,27 @@
   }
   
   function log(data) {
-    if (window['console'] && window['console']['log'])
-      console.log(data)
-      
+    // if (window['console'] && window['console']['log'])
+    //   console.log(data)
+
     var el = document.getElementById('output');
     el.innerHTML += ('<br>\n' + data);
   }
   
-  function requestMessage() {
-    var field = document.getElementById('lengthField');
-    socket.send('sendMessage|' + field.value);
+  function requestData() {
+    socket.send('sendMessage|' + requestedLength);
+    requestedLength += Math.ceil(Math.random() * 1024);
   }
   
   function handleSocketOpen() {
     log("Socket opened.");
+    requestedLength = 100;
+    requestData();
   }
 
   function handleSocketMessage(event) {
-    log("Received response from server:<br>\n" + event.data);
+    log("Received " + event.data.length + " character utf-8 response from server.");
+    requestData();
   }
   
   function handleSocketClose() {
@@ -89,9 +97,6 @@
     <button onclick="clearLog()">Clear Log</button>
     <button onclick="connect()">Connect</button>
     <button onclick="disconnect()">Disconnect</button><br><br>
-    Length:
-    <input type="text" id="lengthField" value="4096"><br>
-    <button onclick="requestMessage()">Request Message</button>
   </div>
   <div>
     <h1>Output</h1>
