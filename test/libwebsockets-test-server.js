@@ -63,8 +63,7 @@ server.listen(args.port, function() {
 });
 
 wsServer = new WebSocketServer({
-    httpServer: server,
-    fragmentOutgoingMessages: false
+    httpServer: server
 });
 
 var router = new WebSocketRouter();

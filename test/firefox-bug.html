@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Firefox Bug</title>
+  <script>
+  
+  var socket;
+  
+  function connect() {
+    socket = new WebSocket(get_appropriate_ws_url(), 'firefox-bug');
+    socket.onopen = handleSocketOpen;
+    socket.onmessage = handleSocketMessage;
+    socket.onclose = handleSocketClose;
+    socket.onerror = handleSocketError;
+  }
+  
+  function disconnect() {
+    socket.close();
+  }
+  
+  function clearLog() {
+    
+  }
+  
+  function clearLog() {
+    var el = document.getElementById('output');
+    el.innerHTML = '';
+  }
+  
+  function log(data) {
+    if (window['console'] && window['console']['log'])
+      console.log(data)
+      
+    var el = document.getElementById('output');
+    el.innerHTML += ('<br>\n' + data);
+  }
+  
+  function requestMessage() {
+    var field = document.getElementById('lengthField');
+    socket.send('sendMessage|' + field.value);
+  }
+  
+  function handleSocketOpen() {
+    log("Socket opened.");
+  }
+
+  function handleSocketMessage(event) {
+    log("Received response from server:<br>\n" + event.data);
+  }
+  
+  function handleSocketClose() {
+    log("Socket closed.");
+  }
+  
+  function handleSocketError() {
+    log("Socket error.")
+  }
+
+  function get_appropriate_ws_url()
+  {
+  	var pcol;
+  	var u = document.URL;
+
+  	/*
+  	 * We open the websocket encrypted if this page came on an
+  	 * https:// url itself, otherwise unencrypted
+  	 */
+
+  	if (u.substring(0, 5) == "https") {
+  		pcol = "wss://";
+  		u = u.substr(8);
+  	} else {
+  		pcol = "ws://";
+  		if (u.substring(0, 4) == "http")
+  			u = u.substr(7);
+  	}
+
+  	u = u.split('/');
+
+  	return pcol + u[0];
+  }
+  
+  </script>
+</head>
+<body>
+  <div>
+    <h1>Controls</h1>
+    <button onclick="clearLog()">Clear Log</button>
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button><br><br>
+    Length:
+    <input type="text" id="lengthField" value="4096"><br>
+    <button onclick="requestMessage()">Request Message</button>
+  </div>
+  <div>
+    <h1>Output</h1>
+    <div id="output">Ready.</div>
+  </div>
+</body>
+</html>
