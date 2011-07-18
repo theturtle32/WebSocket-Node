@@ -617,9 +617,9 @@ function wuint64(value, endian, buffer, offset)
 
 	if (endian == 'big') {
 		wuint32(value[0], endian, buffer, offset);
-		wuint32(value[1], endian, buffer, offset+3);
+		wuint32(value[1], endian, buffer, offset+4);
 	} else {
-		wuint32(value[0], endian, buffer, offset+3);
+		wuint32(value[0], endian, buffer, offset+4);
 		wuint32(value[1], endian, buffer, offset);
 	}
 }
