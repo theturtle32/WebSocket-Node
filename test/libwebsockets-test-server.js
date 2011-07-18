@@ -81,9 +81,12 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress);
 
 
-    console.log((new Date()) + " sending mirror protocol history to client " + connection.remoteAddress);
+    
     if (mirrorHistory.length > 0) {
-        connection.sendUTF(mirrorHistory.join(''));
+        var historyString = mirrorHistory.join('');
+        console.log((new Date()) + " sending mirror protocol history to client; " + connection.remoteAddress + " : " + Buffer.byteLength(historyString) + " bytes");
+        
+        connection.sendUTF(historyString);
     }
     
     mirrorConnections.push(connection);
@@ -107,13 +110,16 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
         }
     });
 
-
     connection.on('close', function(connection) {
         var index = mirrorConnections.indexOf(connection);
         if (index !== -1) {
             console.log((new Date()) + " lws-mirror-protocol peer " + connection.remoteAddress + " disconnected.");
             mirrorConnections.splice(index, 1);
         }
+    });
+    
+    connection.on('error', function(error) {
+        console.log("Connection error for peer " + connection.remoteAddress + ": " + error);
     });
 });
 
