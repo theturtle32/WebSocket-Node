@@ -81,9 +81,9 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress);
     
     console.log((new Date()) + " sending mirror protocol history to client " + connection.remoteAddress);
-    mirrorHistory.forEach(function(historyItem) {
-        connection.sendUTF(historyItem);
-    });
+    if (mirrorHistory.length > 0) {
+        connection.sendUTF(mirrorHistory.join(''));
+    }
     
     mirrorConnections.push(connection);
     connection.on('message', function(message) {
