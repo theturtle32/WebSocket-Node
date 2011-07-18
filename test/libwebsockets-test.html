@@ -84,7 +84,6 @@ document.getElementById("number").textContent = get_appropriate_ws_url();
 
 /* dumb increment protocol */
 
-/*	
 	var ws_ctor = window['MozWebSocket'] ? window['MozWebSocket'] : window['WebSocket'];
 	
 	var socket_di = new ws_ctor(get_appropriate_ws_url(),
@@ -111,7 +110,6 @@ document.getElementById("number").textContent = get_appropriate_ws_url();
 function reset() {
 	socket_di.send("reset\n");
 }
-*/
 
 /* lws-mirror protocol */
 
