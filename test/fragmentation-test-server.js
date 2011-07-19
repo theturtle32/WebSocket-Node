@@ -132,7 +132,7 @@ router.mount('*', 'fragmentation-test', function(request) {
     });
 });
 
-console.log("Point your draft-08 compliant browser at http://localhost:" + args.port + "/");
+console.log("Point your draft-09 compliant browser at http://localhost:" + args.port + "/");
 if (args['no-fragmentation']) {
     console.log("Fragmentation disabled.");
 }
