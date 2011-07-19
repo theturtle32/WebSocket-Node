@@ -49,9 +49,13 @@ client.on('error', function(error) {
 
 var requestedLength = 100;
 var messageSize = 0;
+var startTime;
+var byteCounter;
 
 client.on('connect', function(connection) {
     console.log("Connected");
+    startTime = new Date();
+    byteCounter = 0;
 
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
@@ -64,10 +68,12 @@ client.on('connect', function(connection) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
+            logThroughput(message.utf8Data.length);
             requestData();
         }
         else {
             console.log("Received binary message of " + message.binaryData.length + " bytes.");
+            logThroughput(message.binaryData.length);
             requestData();
         }
     });
@@ -77,10 +83,22 @@ client.on('connect', function(connection) {
         messageSize += frame.length;
         if (frame.fin) {
             console.log("Total message size: " + messageSize + " bytes.");
+            logThroughput(messageSize);
             messageSize = 0;
             requestData();
         }
     });
+    
+    function logThroughput(numBytes) {
+        byteCounter += numBytes;
+        var duration = (new Date()).valueOf() - startTime.valueOf();
+        if (duration > 1000) {
+            var kiloBytesPerSecond = Math.round((byteCounter / 1024) / (duration/1000));
+            console.log("                                     Throughput: " + kiloBytesPerSecond + " KBps");
+            startTime = new Date();
+            byteCounter = 0;
+        }
+    };
     
     function requestData() {
         if (args.binary) {
