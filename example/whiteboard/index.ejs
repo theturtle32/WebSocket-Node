@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WebSocket Whiteboard Example</title>
+  <script src="/client.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="/client.css">
+</head>
+<body>
+  <canvas id="whiteboardCanvas" width="800" height="450"></canvas>
+  <br>
+  <button onclick="setColor(200,0,0)" style="color: #FFF; background-color: rgb(200,0,0)">Red</button>
+  <button onclick="setColor(0,128,0)" style="color: #FFF; background-color: rgb(0,128,0)">Green</button>
+  <button onclick="setColor(0,0,255)" style="color: #FFF; background-color: rgb(0,0,255)">Blue</button>
+  <button onclick="setColor(0,0,0)" style="color: #FFF; background-color: rgb(0,0,0)">Black</button>
+  
+  <button onclick="erase()">Erase Whiteboard</button>
+  
+  <script>
+    var client = new Whiteboard('whiteboardCanvas');
+    client.connect();
+    
+    function erase() {
+      client.sendClear();
+    }
+    
+    function setColor(r,g,b) {
+      client.setColor(r,g,b);
+    }
+  </script>
+</body>
+</html>
