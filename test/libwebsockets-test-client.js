@@ -51,7 +51,7 @@ mirrorClient.on('connect', function(connection) {
     spamCircles();
 });
 
-mirrorClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', ['lws-mirror-protocol']);
+mirrorClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'lws-mirror-protocol');
 
 
 var incrementClient = new WebSocketClient();
@@ -73,4 +73,4 @@ incrementClient.on('connect', function(connection) {
     });
 });
 
-incrementClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', ['dumb-increment-protocol']);
+incrementClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'dumb-increment-protocol');

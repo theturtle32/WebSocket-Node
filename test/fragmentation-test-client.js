@@ -140,4 +140,4 @@ else {
 }
 console.log("Connecting");
 
-client.connect(args.protocol + '//' + args.host + ':' + args.port + '/', ['fragmentation-test']);
+client.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'fragmentation-test');
