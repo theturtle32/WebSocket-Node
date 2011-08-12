@@ -141,7 +141,7 @@ This is a simple example client that will print out any utf-8 messages it receiv
         sendNumber();
     });
 
-    client.connect("ws://localhost:8080/", ['echo-protocol']);
+    client.connect("ws://localhost:8080/", 'echo-protocol');
     
 Request Router Example
 ----------------------
