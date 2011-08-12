@@ -11,9 +11,9 @@ This code is currently unproven.  It should be considered alpha quality, and is 
 
 This is a pure JavaScript implementation of the WebSocket Draft -09 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
-For a WebSocket -09 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
+For a WebSocket draft-08/-09/-10 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
-*There will not be a draft-08 implementation, as the -08 specification was only out for a week before being superseded by -09.*
+*The latest three drafts of the WebSocket protocol, draft-08, draft-09, and draft-10, are functionally identical and implement the same wire protocol, protocol version "8".  They are all interoperable, with only editorial changes across the three drafts.  The current implementation of WebSocket-Node works with all three.*
 
 If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
@@ -34,7 +34,7 @@ Then in your code:
 
 Current Features:
 -----------------
-- Draft-09 framing and handshake
+- Protocol version "8" (Draft-08/-09/-10) framing and handshake
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
