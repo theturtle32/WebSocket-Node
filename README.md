@@ -15,7 +15,7 @@ For a WebSocket draft-08/-09/-10 client written in Flash see my [AS3WebScocket](
 
 *The latest three drafts of the WebSocket protocol, draft-08, draft-09, and draft-10, are functionally identical and implement the same wire protocol, protocol version "8".  They are all interoperable, with only editorial changes across the three drafts.  The current implementation of WebSocket-Node works with all three.*
 
-If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
+If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  Previous draft branches will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
 **Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
 
