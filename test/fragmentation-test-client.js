@@ -38,11 +38,7 @@ var client = new WebSocketClient({
     assembleFragments: !args['no-defragment']
 });
 
-client.on('connectFailed', function(errorDescription) {
-    console.log("Connect Error: " + errorDescription);
-});
-
-client.on('error', function(error) {
+client.on('connectFailed', function(error) {
     console.log("Client Error: " + error.toString())
 });
 

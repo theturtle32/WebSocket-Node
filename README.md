@@ -109,7 +109,7 @@ This is a simple example client that will print out any utf-8 messages it receiv
 
     var client = new WebSocketClient();
 
-    client.on('error', function(error) {
+    client.on('connectFailed', function(error) {
         console.log("Connect Error: " + error.toString());
     });
 

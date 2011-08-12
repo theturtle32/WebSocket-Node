@@ -25,7 +25,7 @@ if (!args.host || !args.port) {
 
 var mirrorClient = new WebSocketClient();
 
-mirrorClient.on('error', function(error) {
+mirrorClient.on('connectFailed', function(error) {
     console.log("Connect Error: " + error.toString());
 });
 
@@ -56,7 +56,7 @@ mirrorClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', [
 
 var incrementClient = new WebSocketClient();
 
-incrementClient.on('error', function(error) {
+incrementClient.on('connectFailed', function(error) {
     console.log("Connect Error: " + error.toString());
 });
 
