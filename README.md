@@ -1,7 +1,7 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
-*WARNING: This is an experimental library implementing the most recent draft of the WebSocket proposal.*
+*WARNING: This is a library implementing only the most recent draft of the WebSocket protocol.  It will not work with production browsers until new versions are released that support it.*
 
 **Note about FireFox 6:  Firefox 6 re-enables support for WebSockets by default.  It uses a prefixed constructor name, MozWebSocket(), to avoid conflicting with already deployed scripts.  It also implements draft-07, so if you want to target Firefox 6, you will need to checkout my draft-07 branch, not the latest one.**
 
@@ -9,7 +9,7 @@ Overview
 --------
 This code is currently unproven.  It should be considered alpha quality, and is not recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
 
-This is a pure JavaScript implementation of the WebSocket Draft -09 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+This is a pure JavaScript implementation of the WebSocket protocol version 8 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
 For a WebSocket draft-08/-09/-10 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
@@ -18,6 +18,12 @@ For a WebSocket draft-08/-09/-10 client written in Flash see my [AS3WebScocket](
 If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  It will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
 **Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
+
+Browser Support
+---------------
+
+* Firefox Aurora 7 (Protocol Version 8)
+* Chrome 14 (Beta channel) (Protocol Version 8)
 
 Installation
 ------------
