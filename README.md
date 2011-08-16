@@ -128,7 +128,9 @@ This is a simple example client that will print out any utf-8 messages it receiv
             console.log("echo-protocol Connection Closed");
         })
         connection.on('message', function(message) {
-            console.log("Received: '" + message.utf8Data + "'");
+            if (message.type === 'utf8') {
+                console.log("Received: '" + message.utf8Data + "'");
+            }
         });
         
         function sendNumber() {
