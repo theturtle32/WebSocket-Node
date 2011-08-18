@@ -23,7 +23,7 @@ wsServer.on('connect', function(connection) {
     console.log((new Date()) + " Connection accepted.");
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log("Received Message: " + message.utf8Data);
+            console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
             connection.sendUTF(message.utf8Data);
         }
         else if (message.type === 'binary') {
