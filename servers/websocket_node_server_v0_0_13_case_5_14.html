@@ -1,0 +1,147 @@
+<html><body><head><style lang="css">
+      body
+      {
+         background-color: #F4F4F4;
+         color: #333;
+         font-family: Segoe UI,Tahoma,Arial,Verdana,sans-serif;
+      }
+
+      p#intro
+      {
+         margin-left: 30px;
+         font-size: 1.2em;
+      }
+
+      p#case_desc
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_expect
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_result
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      h1
+      {
+      }
+
+      h2
+      {
+         margin-top: 60px;
+         margin-left: 30px;
+      }
+
+      h3
+      {
+         margin-left: 50px;
+      }
+    
+      h2
+      {
+         margin-top: 30px;
+      }
+
+      p#case_ok
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #0a0;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_non_strict
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #990;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_failed
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #900;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      table
+      {
+         border-collapse: collapse;
+         border-spacing: 0px;
+         margin-left: 80px;
+         margin-bottom: 40px;
+         margin-top: 0px;
+      }
+
+      td
+      {
+         margin: 0;
+         font-size: 0.8em;
+         text-align: right;
+         border: 1px #fff solid;
+         padding-top: 6px;
+         padding-bottom: 6px;
+         padding-left: 16px;
+         padding-right: 16px;
+      }
+
+      tr#stats_header
+      {
+         color: #eee;
+         background-color: #000;
+      }
+
+      tr#stats_row
+      {
+         background-color: #fc3;
+         color: #000;
+      }
+
+      tr#stats_total
+      {
+         color: #fff;
+         background-color: #888;
+      }
+
+      div#wirelog
+      {
+         margin-top: 20px;
+         margin-bottom: 80px;
+      }
+
+      pre.wirelog_rx_octets {color: #aaa; margin: 0; background-color: #060; padding: 2px;}
+      pre.wirelog_tx_octets {color: #aaa; margin: 0; background-color: #600; padding: 2px;}
+      pre.wirelog_tx_octets_sync {color: #aaa; margin: 0; background-color: #606; padding: 2px;}
+
+      pre.wirelog_rx_frame {color: #fff; margin: 0; background-color: #0a0; padding: 2px;}
+      pre.wirelog_tx_frame {color: #fff; margin: 0; background-color: #a00; padding: 2px;}
+      pre.wirelog_tx_frame_sync {color: #fff; margin: 0; background-color: #a0a; padding: 2px;}
+
+      pre.wirelog_delay {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+      pre.wirelog_kill_after {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+
+      pre.wirelog_tcp_closed_by_me {color: #fff; margin: 0; background-color: #008; padding: 2px;}
+      pre.wirelog_tcp_closed_by_peer {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+   </style></head><h1>WebSocket-Node Server v0.0.13 - Test Case 5.14</h1><p id="case_ok"><b>Pass</b> (2011-08-18T23:09:27Z - 3 ms)</p><h2>Case</h2><p id="case_desc"><i>Description</i><br/><br/>Send unfragmented Text Message after Continuation Frame with FIN = false, where there is nothing to continue, sent in octet-wise chops.</p><p id="case_expect"><i>Expectation</i><br/><br/>The connection is failed immediately, since there is no message to continue.</p><h2>Result</h2><p id="case_result">Actual events match at least one expected.</p><p id="case_result">Expected = {'OK': [('failedByMe', False)]}</p><p id="case_result">Actual = [('failedByMe', False)]</p><h2>Statistics</h2><h3>Octets Received by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>33</td><td>1</td><td>33</td></tr><tr id="stats_row"><td>129</td><td>1</td><td>129</td></tr><tr id="stats_total"><td>Total</td><td>2</td><td>162</td></tr></table><h3>Octets Transmitted by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>1</td><td>49</td><td>49</td></tr><tr id="stats_row"><td>8</td><td>1</td><td>8</td></tr><tr id="stats_row"><td>152</td><td>1</td><td>152</td></tr><tr id="stats_total"><td>Total</td><td>51</td><td>209</td></tr></table><h3>Frames Received by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>8</td><td>1</td></tr><tr id="stats_total"><td>Total</td><td>1</td></tr></table><h3>Frames Transmitted by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>0</td><td>1</td></tr><tr id="stats_row"><td>1</td><td>1</td></tr><tr id="stats_row"><td>8</td><td>1</td></tr><tr id="stats_total"><td>Total</td><td>3</td></tr></table><h2>Wire Log</h2><div id="wirelog"><pre class="wirelog_tx_octets">000 TX OCTETS: 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393030300d0a557067726164653a20776562</pre><pre class="wirelog_tx_octets">               736f636b65740d0a436f6e6e656374696f6e3a20557067726164650d0a5365632d576562536f636b65742d4b65793a206a66</pre><pre class="wirelog_tx_octets">               442b715051454c38397a6a5855336333445458513d3d0d0a5365632d576562536f636b65742d56657273696f6e3a20380d0a</pre><pre class="wirelog_tx_octets">               0d0a</pre><pre class="wirelog_rx_octets">001 RX OCTETS: 485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a557067726164653a20776562736f636b</pre><pre class="wirelog_rx_octets">               65740d0a436f6e6e656374696f6e3a20557067726164650d0a5365632d576562536f636b65742d4163636570743a20456642</pre><pre class="wirelog_rx_octets">               7531316c79696d6148335567784d52444b384a6d4f7068343d0d0a0d0a</pre><pre class="wirelog_tx_frame_sync">002 TX FRAME : OPCODE=0, FIN=False, RSV=0, MASK=590f1d76, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=1, SYNC=False</pre><pre class="wirelog_tx_frame_sync">               non-continuation payload</pre><pre class="wirelog_tx_octets_sync">003 TX OCTETS: 00</pre><pre class="wirelog_tx_octets_sync">004 TX OCTETS: 98</pre><pre class="wirelog_tx_octets_sync">005 TX OCTETS: 59</pre><pre class="wirelog_tx_octets_sync">006 TX OCTETS: 0f</pre><pre class="wirelog_tx_octets_sync">007 TX OCTETS: 1d</pre><pre class="wirelog_tx_octets_sync">008 TX OCTETS: 76</pre><pre class="wirelog_tx_octets_sync">009 TX OCTETS: 37</pre><pre class="wirelog_tx_octets_sync">010 TX OCTETS: 60</pre><pre class="wirelog_tx_octets_sync">011 TX OCTETS: 73</pre><pre class="wirelog_tx_octets_sync">012 TX OCTETS: 5b</pre><pre class="wirelog_tx_octets_sync">013 TX OCTETS: 3a</pre><pre class="wirelog_tx_octets_sync">014 TX OCTETS: 60</pre><pre class="wirelog_tx_octets_sync">015 TX OCTETS: 73</pre><pre class="wirelog_tx_octets_sync">016 TX OCTETS: 02</pre><pre class="wirelog_tx_octets_sync">017 TX OCTETS: 30</pre><pre class="wirelog_tx_octets_sync">018 TX OCTETS: 61</pre><pre class="wirelog_tx_octets_sync">019 TX OCTETS: 68</pre><pre class="wirelog_tx_octets_sync">020 TX OCTETS: 17</pre><pre class="wirelog_tx_octets_sync">021 TX OCTETS: 2d</pre><pre class="wirelog_tx_octets_sync">022 TX OCTETS: 66</pre><pre class="wirelog_tx_octets_sync">023 TX OCTETS: 72</pre><pre class="wirelog_tx_octets_sync">024 TX OCTETS: 18</pre><pre class="wirelog_tx_octets_sync">025 TX OCTETS: 79</pre><pre class="wirelog_tx_octets_sync">026 TX OCTETS: 7f</pre><pre class="wirelog_tx_octets_sync">027 TX OCTETS: 7c</pre><pre class="wirelog_tx_octets_sync">028 TX OCTETS: 0f</pre><pre class="wirelog_tx_octets_sync">029 TX OCTETS: 35</pre><pre class="wirelog_tx_octets_sync">030 TX OCTETS: 60</pre><pre class="wirelog_tx_octets_sync">031 TX OCTETS: 7c</pre><pre class="wirelog_tx_octets_sync">032 TX OCTETS: 12</pre><pre class="wirelog_tx_frame_sync">033 TX FRAME : OPCODE=1, FIN=True, RSV=0, MASK=22fd5cf0, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=1, SYNC=False</pre><pre class="wirelog_tx_frame_sync">               Hello, world!</pre><pre class="wirelog_tx_octets_sync">034 TX OCTETS: 81</pre><pre class="wirelog_tx_octets_sync">035 TX OCTETS: 8d</pre><pre class="wirelog_tx_octets_sync">036 TX OCTETS: 22</pre><pre class="wirelog_tx_octets_sync">037 TX OCTETS: fd</pre><pre class="wirelog_tx_octets_sync">038 TX OCTETS: 5c</pre><pre class="wirelog_tx_octets_sync">039 TX OCTETS: f0</pre><pre class="wirelog_tx_octets_sync">040 TX OCTETS: 6a</pre><pre class="wirelog_tx_octets_sync">041 TX OCTETS: 98</pre><pre class="wirelog_tx_octets_sync">042 TX OCTETS: 30</pre><pre class="wirelog_rx_octets">043 RX OCTETS: 881f03ea556e657870656374656420436f6e74696e756174696f6e204672616d65</pre><pre class="wirelog_rx_frame">044 RX FRAME : OPCODE=8, FIN=True, RSV=0, MASKED=False, MASK=None</pre><pre class="wirelog_rx_frame">               ÍUnexpected Continuation Frame</pre><pre class="wirelog_tx_frame">045 TX FRAME : OPCODE=8, FIN=True, RSV=0, MASK=c5b088d2, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               Ë</pre><pre class="wirelog_tx_octets">046 TX OCTETS: 8882c5b088d2c658</pre><pre class="wirelog_tx_octets_sync">047 TX OCTETS: 9c</pre><pre class="wirelog_tx_octets_sync">048 TX OCTETS: 4d</pre><pre class="wirelog_tx_octets_sync">049 TX OCTETS: d1</pre><pre class="wirelog_tx_octets_sync">050 TX OCTETS: 7c</pre><pre class="wirelog_tx_octets_sync">051 TX OCTETS: 87</pre><pre class="wirelog_tx_octets_sync">052 TX OCTETS: 4d</pre><pre class="wirelog_tx_octets_sync">053 TX OCTETS: 8f</pre><pre class="wirelog_tx_octets_sync">054 TX OCTETS: 30</pre><pre class="wirelog_tx_octets_sync">055 TX OCTETS: 94</pre><pre class="wirelog_tx_octets_sync">056 TX OCTETS: 03</pre><pre class="wirelog_kill_after">057 KILL AFTER 1.000000 sec</pre><pre class="wirelog_tcp_closed_by_peer">058 TCP CLOSED BY PEER</pre></div></body></html>

@@ -1,0 +1,147 @@
+<html><body><head><style lang="css">
+      body
+      {
+         background-color: #F4F4F4;
+         color: #333;
+         font-family: Segoe UI,Tahoma,Arial,Verdana,sans-serif;
+      }
+
+      p#intro
+      {
+         margin-left: 30px;
+         font-size: 1.2em;
+      }
+
+      p#case_desc
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_expect
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_result
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      h1
+      {
+      }
+
+      h2
+      {
+         margin-top: 60px;
+         margin-left: 30px;
+      }
+
+      h3
+      {
+         margin-left: 50px;
+      }
+    
+      h2
+      {
+         margin-top: 30px;
+      }
+
+      p#case_ok
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #0a0;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_non_strict
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #990;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_failed
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #900;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      table
+      {
+         border-collapse: collapse;
+         border-spacing: 0px;
+         margin-left: 80px;
+         margin-bottom: 40px;
+         margin-top: 0px;
+      }
+
+      td
+      {
+         margin: 0;
+         font-size: 0.8em;
+         text-align: right;
+         border: 1px #fff solid;
+         padding-top: 6px;
+         padding-bottom: 6px;
+         padding-left: 16px;
+         padding-right: 16px;
+      }
+
+      tr#stats_header
+      {
+         color: #eee;
+         background-color: #000;
+      }
+
+      tr#stats_row
+      {
+         background-color: #fc3;
+         color: #000;
+      }
+
+      tr#stats_total
+      {
+         color: #fff;
+         background-color: #888;
+      }
+
+      div#wirelog
+      {
+         margin-top: 20px;
+         margin-bottom: 80px;
+      }
+
+      pre.wirelog_rx_octets {color: #aaa; margin: 0; background-color: #060; padding: 2px;}
+      pre.wirelog_tx_octets {color: #aaa; margin: 0; background-color: #600; padding: 2px;}
+      pre.wirelog_tx_octets_sync {color: #aaa; margin: 0; background-color: #606; padding: 2px;}
+
+      pre.wirelog_rx_frame {color: #fff; margin: 0; background-color: #0a0; padding: 2px;}
+      pre.wirelog_tx_frame {color: #fff; margin: 0; background-color: #a00; padding: 2px;}
+      pre.wirelog_tx_frame_sync {color: #fff; margin: 0; background-color: #a0a; padding: 2px;}
+
+      pre.wirelog_delay {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+      pre.wirelog_kill_after {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+
+      pre.wirelog_tcp_closed_by_me {color: #fff; margin: 0; background-color: #008; padding: 2px;}
+      pre.wirelog_tcp_closed_by_peer {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+   </style></head><h1>AutobahnServer v0.3.2 - Test Case 9.3.2</h1><p id="case_ok"><b>Pass</b> (2011-08-18T23:03:36Z - 8872 ms)</p><h2>Case</h2><p id="case_desc"><i>Description</i><br/><br/>Send fragmented text message message with message payload of length 8 * 2**20 (8M). Sent out in fragments of 256.</p><p id="case_expect"><i>Expectation</i><br/><br/>Receive echo'ed text message (with payload as sent).</p><h2>Result</h2><p id="case_result">Received text message of length 8388608.</p><h2>Statistics</h2><h3>Octets Received by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>129</td><td>1</td><td>129</td></tr><tr id="stats_row"><td>4476</td><td>1</td><td>4476</td></tr><tr id="stats_row"><td>11658</td><td>1</td><td>11658</td></tr><tr id="stats_row"><td>49412</td><td>1</td><td>49412</td></tr><tr id="stats_row"><td>65536</td><td>127</td><td>8323072</td></tr><tr id="stats_total"><td>Total</td><td>131</td><td>8388747</td></tr></table><h3>Octets Transmitted by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>6</td><td>1</td><td>6</td></tr><tr id="stats_row"><td>152</td><td>1</td><td>152</td></tr><tr id="stats_row"><td>264</td><td>32768</td><td>8650752</td></tr><tr id="stats_total"><td>Total</td><td>32770</td><td>8650910</td></tr></table><h3>Frames Received by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>1</td><td>1</td></tr><tr id="stats_total"><td>Total</td><td>1</td></tr></table><h3>Frames Transmitted by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>0</td><td>32768</td></tr><tr id="stats_row"><td>1</td><td>1</td></tr><tr id="stats_total"><td>Total</td><td>32769</td></tr></table><h2>Wire Log</h2><p style="margin-left: 40px; color: #f00;"><i>Wire log after handshake disabled!</i></p><div id="wirelog"><pre class="wirelog_tx_octets">000 TX OCTETS: 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393030300d0a557067726164653a20776562</pre><pre class="wirelog_tx_octets">               736f636b65740d0a436f6e6e656374696f6e3a20557067726164650d0a5365632d576562536f636b65742d4b65793a206c47</pre><pre class="wirelog_tx_octets">               6538344c33772f38526b65724a4f6c37637561673d3d0d0a5365632d576562536f636b65742d56657273696f6e3a20380d0a</pre><pre class="wirelog_tx_octets">               0d0a</pre><pre class="wirelog_rx_octets">001 RX OCTETS: 485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a557067726164653a20776562736f636b</pre><pre class="wirelog_rx_octets">               65740d0a436f6e6e656374696f6e3a20557067726164650d0a5365632d576562536f636b65742d4163636570743a20585055</pre><pre class="wirelog_rx_octets">               544c4f57325962763572597476756e6d46314f6a467239383d0d0a0d0a</pre><pre class="wirelog_kill_after">002 KILL AFTER 10.000000 sec</pre><pre class="wirelog_tcp_closed_by_me">003 TCP CLOSED BY ME</pre></div></body></html>
