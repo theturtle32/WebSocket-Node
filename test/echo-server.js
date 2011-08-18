@@ -5,13 +5,31 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 
+var args = { /* defaults */
+    port: '8080'
+};
+
+/* Parse command line options */
+var pattern = /^--(.*?)(?:=(.*))?$/;
+process.argv.forEach(function(value) {
+    var match = pattern.exec(value);
+    if (match) {
+        args[match[1]] = match[2] ? match[2] : true;
+    }
+});
+
+var port = parseInt(args.port, 10);
+
+console.log("WebSocket-Node: echo-server");
+console.log("Usage: ./echo-server.js [--port=8080]");
+
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + " Received request for " + request.url);
     response.writeHead(404);
     response.end();
 });
-server.listen(8080, function() {
-    console.log((new Date()) + " Server is listening on port 8080");
+server.listen(port, function() {
+    console.log((new Date()) + " Server is listening on port " + port);
 });
 
 wsServer = new WebSocketServer({
