@@ -37,7 +37,8 @@ wsServer = new WebSocketServer({
     autoAcceptConnections: true,
     maxReceivedFrameSize: 64*1024*1024,   // 64MiB
     maxReceivedMessageSize: 64*1024*1024, // 64MiB
-    fragmentationThreshold: 64*1024       // 64KiB
+    fragmentOutgoingMessages: false,
+    keepalive: false
 });
 
 wsServer.on('connect', function(connection) {
