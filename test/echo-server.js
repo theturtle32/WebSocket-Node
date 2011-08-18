@@ -34,7 +34,10 @@ server.listen(port, function() {
 
 wsServer = new WebSocketServer({
     httpServer: server,
-    autoAcceptConnections: true
+    autoAcceptConnections: true,
+    maxReceivedFrameSize: 64*1024*1024,   // 64MiB
+    maxReceivedMessageSize: 64*1024*1024, // 64MiB
+    fragmentationThreshold: 64*1024       // 64KiB
 });
 
 wsServer.on('connect', function(connection) {
