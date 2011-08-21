@@ -21,6 +21,11 @@ If you're looking for the version supporting draft-07 or draft-06, see the draft
 
 **Tested against Node version 0.4.7.**  It may work in earlier versions but I haven't tried it.  YMMV.
 
+Documentation
+=============
+
+For more complete documentation, see the [Documentation Wiki](https://github.com/Worlize/WebSocket-Node/wiki/Documentation).
+
 Browser Support
 ---------------
 
@@ -153,11 +158,6 @@ Request Router Example
 
 For an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.
 
-
-Documentation
-=============
-
-For more complete documentation, see the [Documentation Wiki](https://github.com/Worlize/WebSocket-Node/wiki/Documentation).
 
 Resources
 ---------
