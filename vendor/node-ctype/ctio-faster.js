@@ -1,6 +1,8 @@
 /*
  * rm - Feb 2011
- * ctio.js:
+ * ctio-faster.js:
+ * This file is a modification of ctio.js that removes all the runtime sanity
+ * checking for efficiency.
  *
  * A simple way to read and write simple ctypes. Of course, as you'll find the
  * code isn't as simple as it might appear. The following types are currently

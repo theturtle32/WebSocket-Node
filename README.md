@@ -42,6 +42,7 @@ Then in your code:
 
 Current Features:
 -----------------
+- Licensed under the Apache License, Version 2.0
 - Protocol version "8" (Draft-08/-09/-10) framing and handshake
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages

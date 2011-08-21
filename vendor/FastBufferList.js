@@ -1,3 +1,7 @@
+// This file was copied from https://github.com/substack/node-bufferlist
+// and modified to be able to copy bytes from the bufferlist directly into
+// a pre-existing fixed-size buffer without an additional memory allocation.
+
 // bufferlist.js
 // Treat a linked list of buffers as a single variable-size buffer.
 var Buffer = require('buffer').Buffer;
