@@ -37,7 +37,7 @@ function Whiteboard(canvasId) {
 Whiteboard.prototype.connect = function() {
     var url = "ws://" + document.URL.substr(7).split('/')[0];
     
-    var wsCtor = MozWebSocket ? MozWebSocket : WebSocket;
+    var wsCtor = window['MozWebSocket'] ? MozWebSocket : WebSocket;
     this.socket = new wsCtor(url, 'whiteboard-example');
 
     this.socket.onmessage = this.handleWebsocketMessage.bind(this);
