@@ -67,7 +67,13 @@ getCaseCount(function(caseCount) {
 
 function runTestCase(caseIndex, caseCount, callback) {
     console.log("Running test " + caseIndex + " of " + caseCount);
-    var echoClient = new WebSocketClient();
+    var echoClient = new WebSocketClient({
+        maxReceivedFrameSize: 64*1024*1024,   // 64MiB
+        maxReceivedMessageSize: 64*1024*1024, // 64MiB
+        fragmentOutgoingMessages: false,
+        keepalive: false,
+        disableNagleAlgorithm: false
+    });
 
     echoClient.on('connectFailed', function(error) {
         console.log("Connect Error: " + error.toString());
@@ -92,7 +98,7 @@ function runTestCase(caseIndex, caseCount, callback) {
     
     var qs = querystring.stringify({
         case: caseIndex,
-        agent: "WebSocket-Node-" + wsVersion
+        agent: "WebSocket-Node Client v" + wsVersion
     });
     var url = "ws://" + args.host + ":" + args.port + "/runCase?" + qs;
     echoClient.connect("ws://" + args.host + ":" + args.port + "/runCase?" + qs, []);
@@ -121,7 +127,7 @@ function getCaseCount(callback) {
 function updateReport(callback) {
     var client = new WebSocketClient();
     var qs = querystring.stringify({
-        agent: "WebSocket-Node Client " + wsVersion
+        agent: "WebSocket-Node Client v" + wsVersion
     });
     client.on('connect', function(connection) {
         connection.on('close', callback);
