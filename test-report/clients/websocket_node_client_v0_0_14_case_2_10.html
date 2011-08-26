@@ -1,0 +1,147 @@
+<html><body><head><style lang="css">
+      body
+      {
+         background-color: #F4F4F4;
+         color: #333;
+         font-family: Segoe UI,Tahoma,Arial,Verdana,sans-serif;
+      }
+
+      p#intro
+      {
+         margin-left: 30px;
+         font-size: 1.2em;
+      }
+
+      p#case_desc
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_expect
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      p#case_result
+      {
+         border-radius: 10px;
+         background-color: #eee;
+         padding: 20px;
+         margin: 20px;
+      }
+
+      h1
+      {
+      }
+
+      h2
+      {
+         margin-top: 60px;
+         margin-left: 30px;
+      }
+
+      h3
+      {
+         margin-left: 50px;
+      }
+    
+      h2
+      {
+         margin-top: 30px;
+      }
+
+      p#case_ok
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #0a0;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_non_strict
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #990;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      p#case_failed
+      {
+         color: #fff;
+         border-radius: 10px;
+         background-color: #900;
+         padding: 20px;
+         margin: 20px;
+         font-size: 1.2em;
+      }
+
+      table
+      {
+         border-collapse: collapse;
+         border-spacing: 0px;
+         margin-left: 80px;
+         margin-bottom: 40px;
+         margin-top: 0px;
+      }
+
+      td
+      {
+         margin: 0;
+         font-size: 0.8em;
+         text-align: right;
+         border: 1px #fff solid;
+         padding-top: 6px;
+         padding-bottom: 6px;
+         padding-left: 16px;
+         padding-right: 16px;
+      }
+
+      tr#stats_header
+      {
+         color: #eee;
+         background-color: #000;
+      }
+
+      tr#stats_row
+      {
+         background-color: #fc3;
+         color: #000;
+      }
+
+      tr#stats_total
+      {
+         color: #fff;
+         background-color: #888;
+      }
+
+      div#wirelog
+      {
+         margin-top: 20px;
+         margin-bottom: 80px;
+      }
+
+      pre.wirelog_rx_octets {color: #aaa; margin: 0; background-color: #060; padding: 2px;}
+      pre.wirelog_tx_octets {color: #aaa; margin: 0; background-color: #600; padding: 2px;}
+      pre.wirelog_tx_octets_sync {color: #aaa; margin: 0; background-color: #606; padding: 2px;}
+
+      pre.wirelog_rx_frame {color: #fff; margin: 0; background-color: #0a0; padding: 2px;}
+      pre.wirelog_tx_frame {color: #fff; margin: 0; background-color: #a00; padding: 2px;}
+      pre.wirelog_tx_frame_sync {color: #fff; margin: 0; background-color: #a0a; padding: 2px;}
+
+      pre.wirelog_delay {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+      pre.wirelog_kill_after {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+
+      pre.wirelog_tcp_closed_by_me {color: #fff; margin: 0; background-color: #008; padding: 2px;}
+      pre.wirelog_tcp_closed_by_peer {color: #fff; margin: 0; background-color: #000; padding: 2px;}
+   </style></head><h1>WebSocket-Node Client v0.0.14 - Test Case 2.10</h1><p id="case_ok"><b>Pass</b> (2011-08-26T19:30:52Z - 1002 ms)</p><h2>Case</h2><p id="case_desc"><i>Description</i><br/><br/>Send 10 Pings with payload.</p><p id="case_expect"><i>Expectation</i><br/><br/>Pongs for our Pings with all the payloads. Note: This is not required by the Spec .. but we check for this behaviour anyway.</p><h2>Result</h2><p id="case_result">Actual events match at least one expected.</p><p id="case_result">Expected = {'OK': [('pong', 'payload-1'), ('pong', 'payload-2'), ('pong', 'payload-3'), ('pong', 'payload-4'), ('pong', 'payload-5'), ('pong', 'payload-6'), ('pong', 'payload-7'), ('pong', 'payload-8'), ('pong', 'payload-9'), ('failedByMe', True)]}</p><p id="case_result">Actual = [('pong', 'payload-1'), ('pong', 'payload-2'), ('pong', 'payload-3'), ('pong', 'payload-4'), ('pong', 'payload-5'), ('pong', 'payload-6'), ('pong', 'payload-7'), ('pong', 'payload-8'), ('pong', 'payload-9'), ('failedByMe', True)]</p><h2>Statistics</h2><h3>Octets Received by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>15</td><td>2</td><td>30</td></tr><tr id="stats_row"><td>30</td><td>2</td><td>60</td></tr><tr id="stats_row"><td>45</td><td>1</td><td>45</td></tr><tr id="stats_row"><td>207</td><td>1</td><td>207</td></tr><tr id="stats_total"><td>Total</td><td>6</td><td>342</td></tr></table><h3>Octets Transmitted by Chop Size</h3><table><tr id="stats_header"><td>Chop Size</td><td>Count</td><td>Octets</td></tr><tr id="stats_row"><td>11</td><td>9</td><td>99</td></tr><tr id="stats_row"><td>129</td><td>1</td><td>129</td></tr><tr id="stats_total"><td>Total</td><td>10</td><td>228</td></tr></table><h3>Frames Received by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>10</td><td>9</td></tr><tr id="stats_total"><td>Total</td><td>9</td></tr></table><h3>Frames Transmitted by Opcode</h3><table><tr id="stats_header"><td>Opcode</td><td>Count</td></tr><tr id="stats_row"><td>9</td><td>9</td></tr><tr id="stats_total"><td>Total</td><td>9</td></tr></table><h2>Wire Log</h2><div id="wirelog"><pre class="wirelog_rx_octets">000 RX OCTETS: 474554202f72756e436173653f636173653d3236266167656e743d576562536f636b65742d4e6f6465253230436c69656e74</pre><pre class="wirelog_rx_octets">               25323076302e302e313420485454502f312e310d0a557067726164653a20776562736f636b65740d0a436f6e6e656374696f</pre><pre class="wirelog_rx_octets">               6e3a20557067726164650d0a5365632d576562536f636b65742d56657273696f6e3a20380d0a5365632d576562536f636b65</pre><pre class="wirelog_rx_octets">               742d4b65793a206a2f7241304e30374262676634775534434763436e413d3d0d0a486f73743a206c6f63616c686f73743a39</pre><pre class="wirelog_rx_octets">               3030300d0a0d0a</pre><pre class="wirelog_tx_octets">001 TX OCTETS: 485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a557067726164653a20776562736f636b</pre><pre class="wirelog_tx_octets">               65740d0a436f6e6e656374696f6e3a20557067726164650d0a5365632d576562536f636b65742d4163636570743a206f6377</pre><pre class="wirelog_tx_octets">               5469473761747442464e595053506644565762513765536f3d0d0a0d0a</pre><pre class="wirelog_tx_frame">002 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-1</pre><pre class="wirelog_tx_octets">003 TX OCTETS: 89097061796c6f61642d31</pre><pre class="wirelog_tx_frame">004 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-2</pre><pre class="wirelog_tx_octets">005 TX OCTETS: 89097061796c6f61642d32</pre><pre class="wirelog_tx_frame">006 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-3</pre><pre class="wirelog_tx_octets">007 TX OCTETS: 89097061796c6f61642d33</pre><pre class="wirelog_tx_frame">008 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-4</pre><pre class="wirelog_tx_octets">009 TX OCTETS: 89097061796c6f61642d34</pre><pre class="wirelog_tx_frame">010 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-5</pre><pre class="wirelog_tx_octets">011 TX OCTETS: 89097061796c6f61642d35</pre><pre class="wirelog_tx_frame">012 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-6</pre><pre class="wirelog_tx_octets">013 TX OCTETS: 89097061796c6f61642d36</pre><pre class="wirelog_tx_frame">014 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-7</pre><pre class="wirelog_tx_octets">015 TX OCTETS: 89097061796c6f61642d37</pre><pre class="wirelog_tx_frame">016 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-8</pre><pre class="wirelog_tx_octets">017 TX OCTETS: 89097061796c6f61642d38</pre><pre class="wirelog_tx_frame">018 TX FRAME : OPCODE=9, FIN=True, RSV=0, MASK=None, PAYLOAD-REPEAT-LEN=None, CHOPSIZE=None, SYNC=False</pre><pre class="wirelog_tx_frame">               payload-9</pre><pre class="wirelog_tx_octets">019 TX OCTETS: 89097061796c6f61642d39</pre><pre class="wirelog_kill_after">020 KILL AFTER 1.000000 sec</pre><pre class="wirelog_rx_octets">021 RX OCTETS: 8a895f7b2f1f2f1a5673301a4b326e</pre><pre class="wirelog_rx_frame">022 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=5f7b2f1f</pre><pre class="wirelog_rx_frame">               payload-1</pre><pre class="wirelog_rx_octets">023 RX OCTETS: 8a89b1faf5c5c19b8ca9de9b91e8838a89d5661728a5076e44ba077305e6</pre><pre class="wirelog_rx_frame">024 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=b1faf5c5</pre><pre class="wirelog_rx_frame">               payload-2</pre><pre class="wirelog_rx_frame">025 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=d5661728</pre><pre class="wirelog_rx_frame">               payload-3</pre><pre class="wirelog_rx_octets">026 RX OCTETS: 8a894b3b6a0f3b5a1363245a0e227f8a898394a684f3f5dfe8ecf5c2a9b68a89622418f61245619a0d457cdb54</pre><pre class="wirelog_rx_frame">027 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=4b3b6a0f</pre><pre class="wirelog_rx_frame">               payload-4</pre><pre class="wirelog_rx_frame">028 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=8394a684</pre><pre class="wirelog_rx_frame">               payload-5</pre><pre class="wirelog_rx_frame">029 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=622418f6</pre><pre class="wirelog_rx_frame">               payload-6</pre><pre class="wirelog_rx_octets">030 RX OCTETS: 8a89cafd2504ba9c5c68a59c4129fd</pre><pre class="wirelog_rx_frame">031 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=cafd2504</pre><pre class="wirelog_rx_frame">               payload-7</pre><pre class="wirelog_rx_octets">032 RX OCTETS: 8a89c92170dab94009b6a64014f7f18a89810a8a4cf16bf320ee6bee61b8</pre><pre class="wirelog_rx_frame">033 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=c92170da</pre><pre class="wirelog_rx_frame">               payload-8</pre><pre class="wirelog_rx_frame">034 RX FRAME : OPCODE=10, FIN=True, RSV=0, MASKED=True, MASK=810a8a4c</pre><pre class="wirelog_rx_frame">               payload-9</pre><pre class="wirelog_tcp_closed_by_me">035 TCP CLOSED BY ME</pre></div></body></html>
