@@ -85,9 +85,6 @@ var router = new WebSocketRouter();
 router.attachServer(wsServer);
 
 
-var connections = [];
-
-
 var lorem = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.";
 
 
@@ -95,8 +92,6 @@ router.mount('*', 'fragmentation-test', function(request) {
     var connection = request.accept(request.origin);
     console.log((new Date()) + " connection accepted from " + connection.remoteAddress);
 
-    
-    connections.push(connection);
     
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -136,11 +131,7 @@ router.mount('*', 'fragmentation-test', function(request) {
     });
 
     connection.on('close', function(connection) {
-        var index = connections.indexOf(connection);
-        if (index !== -1) {
-            console.log((new Date()) + " peer " + connection.remoteAddress + " disconnected.");
-            connections.splice(index, 1);
-        }
+        console.log((new Date()) + " peer " + connection.remoteAddress + " disconnected.");
     });
     
     connection.on('error', function(error) {
