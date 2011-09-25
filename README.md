@@ -1,21 +1,29 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
-*WARNING: This is a library implementing only the most recent draft of the WebSocket protocol.  It will not work with production browsers until new versions are released that support it.*
+Browser Support
+---------------
 
-**Note about FireFox 6:  Firefox 6 re-enables support for WebSockets by default.  It uses a prefixed constructor name, MozWebSocket(), to avoid conflicting with already deployed scripts.  It also implements draft-07, so if you want to target Firefox 6, you will need to checkout my draft-07 branch, not the latest one.**
+* Firefox Beta 7 (Protocol Version 8)
+* Chrome 14 (Stable channel) (Protocol Version 8)
+
+*WARNING: This is a library implementing only the most recent draft of the WebSocket protocol.  It will not work with most production browsers until new versions are released that support it.*
+
+**Note about FireFox 6:  Firefox 6 re-enables support for WebSockets by default.  It uses a prefixed constructor name, MozWebSocket(), to avoid conflicting with already deployed scripts.  It also implements the previous version draft-07 (protocol version 7), so if you want to target Firefox 6, you will need to checkout my draft-07 branch, not the latest one.**
+
+I made a decision early on to explicitly avoid maintaining 3+ slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and once the final version of the protocol is ratified by the IETF, it won't be long before support in the wild stabilizes on that version.  My client is in Flash, so for my purposes I'm not dependent on the browser implementations.
 
 ***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1219165***
 
+For a WebSocket draft-08/-09/-10 client written in ActionScript 3 see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
+
 Overview
 --------
-This code is currently unproven.  It should be considered alpha quality, and is not recommended for production use, though it is used in production on worlize.com.  Your mileage may vary.
+This code is relatively new, though it is used in production on http://worlize.com and seems to be stable.  Your mileage may vary.
 
 This is a pure JavaScript implementation of the WebSocket protocol version 8 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
-For a WebSocket draft-08/-09/-10 client written in Flash see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
-
-*The latest three drafts of the WebSocket protocol, draft-08, draft-09, and draft-10, are functionally identical and implement the same wire protocol, protocol version "8".  They are all interoperable, with only editorial changes across the three drafts.  The current implementation of WebSocket-Node works with all three.*
+***Note about Draft Naming and versioning:*** *The latest three drafts of the WebSocket protocol, draft-08, draft-09, and draft-10, are functionally identical and implement the same wire protocol, protocol version "8".  They are all interoperable, with only editorial changes across the three drafts.  The current implementation of WebSocket-Node works with all three.*
 
 If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  Previous draft branches will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
@@ -25,12 +33,6 @@ Documentation
 =============
 
 For more complete documentation, see the [Documentation Wiki](https://github.com/Worlize/WebSocket-Node/wiki/Documentation).
-
-Browser Support
----------------
-
-* Firefox Aurora 7 (Protocol Version 8)
-* Chrome 14 (Beta channel) (Protocol Version 8)
 
 Installation
 ------------
@@ -93,6 +95,11 @@ Here's a short example showing a server that echos back anything sent to it, whe
 
     wsServer = new WebSocketServer({
         httpServer: server,
+        // You should not use autoAcceptConnections for production
+        // applications, as it defeats all standard cross-origin protection
+        // facilities built into the protocol and the browser.  You should
+        // *always* verify the connection's origin and decide whether or not
+        // to accept it.
         autoAcceptConnections: true
     });
 
@@ -117,6 +124,8 @@ Client Example
 --------------
 
 This is a simple example client that will print out any utf-8 messages it receives on the console, and periodically sends a random number.
+
+*This code demonstrates a client in Node.js, not in the browser*
 
     #!/usr/bin/env node
     var WebSocketClient = require('websocket').client;
