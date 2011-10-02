@@ -100,10 +100,18 @@ Here's a short example showing a server that echos back anything sent to it, whe
         // facilities built into the protocol and the browser.  You should
         // *always* verify the connection's origin and decide whether or not
         // to accept it.
-        autoAcceptConnections: true
+        autoAcceptConnections: false
     });
 
-    wsServer.on('connect', function(connection) {
+    wsServer.on('request', function(request) {
+        if (!originIsAllowed(request.origin)) {
+          // Make sure we only accept requests from an allowed origin
+          request.reject();
+          console.log((new Date()) + " Connection from origin " + request.origin + " rejected.");
+          return;
+        }
+        
+        var connection = request.accept('whiteboard-example', request.origin);
         console.log((new Date()) + " Connection accepted.");
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
@@ -119,6 +127,11 @@ Here's a short example showing a server that echos back anything sent to it, whe
             console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
         });
     });
+    
+    function originIsAllowed(origin) {
+      // put logic here to detect whether the specified origin is allowed.
+      return true;
+    }
 
 Client Example
 --------------
