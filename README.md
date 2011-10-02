@@ -111,7 +111,7 @@ Here's a short example showing a server that echos back anything sent to it, whe
           return;
         }
         
-        var connection = request.accept('whiteboard-example', request.origin);
+        var connection = request.accept(null, request.origin);
         console.log((new Date()) + " Connection accepted.");
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
