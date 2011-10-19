@@ -60,8 +60,8 @@ mirrorClient.on('connect', function(connection) {
             var x = Math.round(Math.random() * 502);
             var y = Math.round(Math.random() * 306);
             var radius = Math.round(Math.random() * 30);
-            connection.sendUTF("c #" + color.toString(16) + " " + x + " " + y + " " + radius);
-            setTimeout(spamCircles, 5);
+            connection.sendUTF("c #" + color.toString(16) + " " + x + " " + y + " " + radius + ";");
+            setTimeout(spamCircles, 10);
         }
     }
     spamCircles();
