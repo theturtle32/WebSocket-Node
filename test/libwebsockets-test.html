@@ -14,7 +14,10 @@ reset the number.<br><br>
 
 <table>
 	<tr>
-		<td align=center><input type=button id=offset value="Reset counter" onclick="reset();" ></td>
+		<td align=center>
+		  <input type=button id=offset value="Reset counter" onclick="reset();">
+		  <input type=button id=offset value="Disconnect" onclick="closeIncrementConnection();">
+		</td>
 		<td width=100 align=center><div id=number> </div></td>
 		<td id=wsdi_statustd align=center><div id=wsdi_status>Not initialized</div></td>
 	</tr>
@@ -109,6 +112,10 @@ document.getElementById("number").textContent = get_appropriate_ws_url();
 
 function reset() {
 	socket_di.send("reset\n");
+}
+
+function closeIncrementConnection() {
+  socket_di.close();
 }
 
 /* lws-mirror protocol */
