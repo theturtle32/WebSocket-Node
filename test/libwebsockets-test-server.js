@@ -103,7 +103,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
         var historyString = mirrorHistory.join('');
         console.log((new Date()) + " sending mirror protocol history to client; " + connection.remoteAddress + " : " + Buffer.byteLength(historyString) + " bytes");
         
-        connection.sendUTF(historyString);
+        connection.send(historyString);
     }
     
     mirrorConnections.push(connection);
@@ -122,7 +122,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
 
             // Re-broadcast the command to all connected clients
             mirrorConnections.forEach(function (outputConnection) {
-                outputConnection.sendUTF(message.utf8Data);
+                outputConnection.send(message.utf8Data);
             });
         }
     });
@@ -149,7 +149,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
 
     var number = 0;
     connection.timerInterval = setInterval(function() {
-        connection.sendUTF((number++).toString(10));
+        connection.send((number++).toString(10));
     }, 50);
     connection.on('close', function() {
         clearInterval(connection.timerInterval);
