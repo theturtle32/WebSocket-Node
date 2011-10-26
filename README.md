@@ -126,7 +126,7 @@ Here's a short example showing a server that echos back anything sent to it, whe
                 connection.sendBytes(message.binaryData);
             }
         });
-        connection.on('close', function(connection) {
+        connection.on('close', function(reasonCode, description) {
             console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
         });
     });

@@ -127,10 +127,10 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
         }
     });
 
-    connection.on('close', function(connection) {
+    connection.on('close', function(closeReason, description) {
         var index = mirrorConnections.indexOf(connection);
         if (index !== -1) {
-            console.log((new Date()) + " lws-mirror-protocol peer " + connection.remoteAddress + " disconnected.");
+            console.log((new Date()) + " lws-mirror-protocol peer " + connection.remoteAddress + " disconnected, code: " + closeReason + ".");
             mirrorConnections.splice(index, 1);
         }
     });
@@ -162,8 +162,8 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
             }
         }
     });
-    connection.on('close', function(connection) {
-        console.log((new Date()) + " dumb-increment-protocol peer " + connection.remoteAddress + " disconnected");
+    connection.on('close', function(closeReason, description) {
+        console.log((new Date()) + " dumb-increment-protocol peer " + connection.remoteAddress + " disconnected, code: " + closeReason + ".");
     });
 });
 

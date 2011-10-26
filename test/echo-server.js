@@ -58,7 +58,8 @@ wsServer = new WebSocketServer({
 });
 
 wsServer.on('connect', function(connection) {
-    console.log((new Date()) + " Connection accepted.");
+    console.log((new Date()) + " Connection accepted" +
+                " - Protocol Version " + connection.websocketVersion);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
@@ -69,7 +70,7 @@ wsServer.on('connect', function(connection) {
             connection.sendBytes(message.binaryData);
         }
     });
-    connection.on('close', function(connection) {
+    connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
     });
 });
