@@ -130,7 +130,7 @@ router.mount('*', 'fragmentation-test', function(request) {
         }
     });
 
-    connection.on('close', function(connection) {
+    connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + " peer " + connection.remoteAddress + " disconnected.");
     });
     
