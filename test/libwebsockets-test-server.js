@@ -21,6 +21,7 @@ var WebSocketRouter = require('../lib/WebSocketRouter');
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
+var os = require('os');
 
 var args = { /* defaults */
     secure: false
@@ -91,9 +92,18 @@ var mirrorConnections = [];
 var mirrorHistory = [];
 
 router.mount('*', 'lws-mirror-protocol', function(request) {
+    var cookies = [
+        {
+            name: "TestCookie",
+            value: "CookieValue" + Math.floor(Math.random()*1000),
+            secure: false,
+            httponly: false
+        }
+    ];
+    
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
-    var connection = request.accept(request.origin);
+    var connection = request.accept(request.origin, cookies);
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress +
                 " - Protocol Version " + connection.websocketVersion);
 
