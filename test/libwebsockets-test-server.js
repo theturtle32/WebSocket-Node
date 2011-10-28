@@ -96,8 +96,10 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
         {
             name: "TestCookie",
             value: "CookieValue" + Math.floor(Math.random()*1000),
+            path: '/',
             secure: false,
-            httponly: false
+            maxage: 5000,
+            httponly: true
         }
     ];
     
