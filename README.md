@@ -4,21 +4,24 @@ WebSocket Client & Server Implementation for Node
 Browser Support
 ---------------
 
-* Firefox 7 (Stable) (Protocol Version 8)
-* Firefox 8 (Beta) (Protocol Version 8)
-* Chrome 14 (Stable) (Protocol Version 8)
-* Chrome 15 (Beta) (Protocol Version 8)
-* Chrome 16 (Dev) (Protocol Version 13)
+* Firefox 7 (Old) (Protocol Version 8)
+* Firefox 8 (Stable) (Protocol Version 8)
+* Firefox 9 (Beta) (Protocol Version 8)
+* Chrome 14 (Old) (Protocol Version 8)
+* Chrome 15 (Stable) (Protocol Version 8)
+* Chrome 16 (Beta) (Protocol Version 13)
+
+***Safari is not supported at this time as it uses an old draft of WebSockets***
 
 *WARNING: This is a library implementing only the most recent draft of the WebSocket protocol.  It will not work with most production browsers until new versions are released that support it.*
 
-I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and once the final version of the protocol is ratified by the IETF, it won't be long before support in the wild stabilizes on that version.  My client is in Flash, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing drafts -08 through -17.
+I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and once the final version of the protocol is ratified by the IETF, it won't be long before support in the wild stabilizes on that version.  My client application is in Flash/ActionScript 3, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing drafts -08 through -17.
 
 ***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1219165***
 
-**Note about FireFox:  Firefox uses a prefixed constructor name in its client side JavaScript, MozWebSocket(), to avoid conflicting with already deployed scripts.**
+**Note about FireFox:  Firefox uses a prefixed constructor name in its client side JavaScript, MozWebSocket(), which will be changed to WebSocket() presumably when the WebSocket RFC has been released.**
 
-For a WebSocket draft-08/-09/-10 client written in ActionScript 3 see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
+For a WebSocket protocol 8 (draft-10) client written in ActionScript 3 see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
 Overview
 --------
@@ -26,9 +29,9 @@ This code is relatively new, though it is used in production on http://worlize.c
 
 This is a pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
-***Note about Draft Naming and versioning:*** *The draft number (draft-17) does not necessarily correspond to the protocol version (13.)  Many times a new draft is released with only editorial changes, in which case the protocol version is not incremented.  They are all interoperable, with only editorial changes across the three drafts.  The current implementation of WebSocket-Node works protocol version 8 (drafts -08 through -12) and protocol version 13 (drafts -13 through -17.)*
+***Note about Draft Naming and versioning:*** *The draft number (draft-17) does not necessarily correspond to the protocol version (13.)  Many times a new draft is released with only editorial changes, in which case the protocol version is not incremented.  The drafts are interoperable within a protocol version, with only editorial changes.  The current implementation of WebSocket-Node works protocol version 8 (drafts -08 through -12) and protocol version 13 (drafts -13 through -17.)*
 
-If you're looking for the version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  Previous draft branches will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
+If you're looking for a version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  Previous draft branches will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
 **Tested against Node version 0.4.7, 0.4.10, and 0.4.12.**  It may work in earlier or versions but I haven't tried it.  YMMV.  Once Node 0.6.0 is released, I will make sure it works with both 0.4.x and 0.6.x.
 
@@ -53,7 +56,7 @@ Then in your code:
 Current Features:
 -----------------
 - Licensed under the Apache License, Version 2.0
-- Protocol version "8" (Draft-08/-09/-10) framing and handshake
+- Protocol version "8" and "13" (Draft-08 through Draft-17) framing and handshake
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
@@ -71,7 +74,6 @@ Current Features:
 Known Issues/Missing Features:
 ------------------------------
 - No API for user-provided protocol extensions.
-- The 'deflate-stream' extension put forward as a proof of concept extension in the protocol draft is not implemented.
 - Haven't tested TLS.  (Perhaps this is handled automatically by attaching the WebSocket server to a https.createServer instead of http.createServer?)
 
 
