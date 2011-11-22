@@ -33,7 +33,11 @@ This is a pure JavaScript implementation of the WebSocket protocol versions 8 an
 
 If you're looking for a version supporting draft-07 or draft-06, see the draft-07 or draft-06 branches.  Previous draft branches will not be maintained, as I plan to track each subsequent draft of the protocol until it's finalized, and will ultimately be supporting *only* the final draft.
 
-**Tested against Node version 0.4.7, 0.4.10, and 0.4.12.**  It may work in earlier or versions but I haven't tried it.  YMMV.  Once Node 0.6.0 is released, I will make sure it works with both 0.4.x and 0.6.x.
+**Supported with the following node versions:**
+- 0.4.12
+- 0.6.2
+
+It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
 Documentation
 =============
@@ -60,6 +64,8 @@ Current Features:
 - Can handle/aggregate received fragmented messages
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
+- TLS supported for outbound connections via WebSocketClient
+- Cookie setting and parsing
 - Tunable settings
   - Max Receivable Frame Size
   - Max Aggregate ReceivedMessage Size
@@ -74,7 +80,7 @@ Current Features:
 Known Issues/Missing Features:
 ------------------------------
 - No API for user-provided protocol extensions.
-- Haven't tested TLS.  (Perhaps this is handled automatically by attaching the WebSocket server to a https.createServer instead of http.createServer?)
+- Haven't tested TLS for the Server.  (Perhaps this is handled automatically by attaching the WebSocket server to a https.createServer instead of http.createServer?)
 
 
 Usage Examples
