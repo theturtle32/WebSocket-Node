@@ -107,7 +107,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     // origin into the accept method of the request.
     var connection = request.accept(request.origin, cookies);
     console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress +
-                " - Protocol Version " + connection.websocketVersion);
+                " - Protocol Version " + connection.webSocketVersion);
 
 
     
@@ -157,7 +157,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
     console.log((new Date()) + " dumb-increment-protocol connection accepted from " + connection.remoteAddress +
-                " - Protocol Version " + connection.websocketVersion);
+                " - Protocol Version " + connection.webSocketVersion);
 
     var number = 0;
     connection.timerInterval = setInterval(function() {

@@ -59,7 +59,7 @@ wsServer = new WebSocketServer({
 
 wsServer.on('connect', function(connection) {
     console.log((new Date()) + " Connection accepted" +
-                " - Protocol Version " + connection.websocketVersion);
+                " - Protocol Version " + connection.webSocketVersion);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
