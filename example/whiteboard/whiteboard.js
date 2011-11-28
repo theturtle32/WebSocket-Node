@@ -15,10 +15,7 @@
  *  limitations under the License.
  ***********************************************************************/
 
-// Enable us to simply require('websocket') from within the examples directory
-require.paths.unshift(__dirname + '/../../lib/');
-
-var WebSocketServer = require('websocket').server;
+var WebSocketServer = require('../../lib/websocket').server;
 var express = require('express');
 
 var app = express.createServer();
