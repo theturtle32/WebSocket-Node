@@ -17,7 +17,7 @@ Browser Support
 
 I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and once the final version of the protocol is ratified by the IETF, it won't be long before support in the wild stabilizes on that version.  My client application is in Flash/ActionScript 3, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing drafts -08 through -17.
 
-***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1219165***
+***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
 
 **Note about FireFox:  Firefox uses a prefixed constructor name in its client side JavaScript, MozWebSocket(), which will be changed to WebSocket() presumably when the WebSocket RFC has been released.**
 
