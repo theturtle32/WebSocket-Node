@@ -96,12 +96,12 @@ Here's a short example showing a server that echos back anything sent to it, whe
     var http = require('http');
 
     var server = http.createServer(function(request, response) {
-        console.log((new Date()) + " Received request for " + request.url);
+        console.log((new Date()) + ' Received request for ' + request.url);
         response.writeHead(404);
         response.end();
     });
     server.listen(8080, function() {
-        console.log((new Date()) + " Server is listening on port 8080");
+        console.log((new Date()) + ' Server is listening on port 8080');
     });
 
     wsServer = new WebSocketServer({
@@ -118,24 +118,24 @@ Here's a short example showing a server that echos back anything sent to it, whe
         if (!originIsAllowed(request.origin)) {
           // Make sure we only accept requests from an allowed origin
           request.reject();
-          console.log((new Date()) + " Connection from origin " + request.origin + " rejected.");
+          console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
           return;
         }
         
         var connection = request.accept(null, request.origin);
-        console.log((new Date()) + " Connection accepted.");
+        console.log((new Date()) + ' Connection accepted.');
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
-                console.log("Received Message: " + message.utf8Data);
+                console.log('Received Message: ' + message.utf8Data);
                 connection.sendUTF(message.utf8Data);
             }
             else if (message.type === 'binary') {
-                console.log("Received Binary Message of " + message.binaryData.length + " bytes");
+                console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
                 connection.sendBytes(message.binaryData);
             }
         });
         connection.on('close', function(reasonCode, description) {
-            console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+            console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
         });
     });
     
@@ -157,17 +157,17 @@ This is a simple example client that will print out any utf-8 messages it receiv
     var client = new WebSocketClient();
 
     client.on('connectFailed', function(error) {
-        console.log("Connect Error: " + error.toString());
+        console.log('Connect Error: ' + error.toString());
     });
 
     client.on('connect', function(connection) {
-        console.log("WebSocket client connected");
+        console.log('WebSocket client connected');
         connection.on('error', function(error) {
             console.log("Connection Error: " + error.toString());
         });
         connection.on('close', function() {
-            console.log("echo-protocol Connection Closed");
-        })
+            console.log('echo-protocol Connection Closed');
+        });
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
                 console.log("Received: '" + message.utf8Data + "'");
@@ -184,7 +184,7 @@ This is a simple example client that will print out any utf-8 messages it receiv
         sendNumber();
     });
 
-    client.connect("ws://localhost:8080/", 'echo-protocol');
+    client.connect('ws://localhost:8080/', 'echo-protocol');
     
 Request Router Example
 ----------------------
