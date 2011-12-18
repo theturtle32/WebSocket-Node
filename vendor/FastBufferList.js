@@ -71,8 +71,7 @@ function BufferList(opts) {
         if (!head.buffer) return new self.construct(0);
         
         if (head.buffer.length - offset <= 0) return self;
-        var firstBuf = new self.construct(head.buffer.length - offset);
-        head.buffer.copy(firstBuf, 0, offset, head.buffer.length);
+        var firstBuf = head.buffer.slice(offset);
         
         var b = { buffer : firstBuf, next : head.next };
         
