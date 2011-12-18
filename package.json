@@ -11,6 +11,9 @@
     "engines": {
         "node": ">=0.4.7"
     },
+    "scripts": {
+      "preinstall": "make validator"
+    },
     "main": "index",
     "directories": {
         "lib": "./lib"
