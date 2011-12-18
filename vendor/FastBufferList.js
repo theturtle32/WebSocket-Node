@@ -53,7 +53,7 @@ function BufferList(opts) {
     };
     
     self.end = function (buf) {
-        if (buf instanceof Buffer) self.write(buf);
+        if (Buffer.isBuffer(buf)) self.write(buf);
     };
     
     // Push buffers to the end of the linked list. (deprecated)
