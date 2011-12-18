@@ -1,6 +1,11 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
+Changelog
+---------
+
+[View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
+
 Browser Support
 ---------------
 

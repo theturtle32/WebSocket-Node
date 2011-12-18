@@ -1,7 +1,22 @@
 Changelog
 =========
 
-I decided it's time to start maintaining a changelog now, starting with version 1.0.1.
+Version 1.0.3
+-------------
+*Released 2011-12-18*
+- Substantial speed increase (~150% on my machine, depending on the circumstances) due to an optimization in FastBufferList.js that drastically reduces the number of memory alloctions and buffer copying. (kazuyukitanimura)
+
+
+Version 1.0.2
+-------------
+*Released 2011-11-28*
+
+- Fixing whiteboard example to work under Node 0.6.x (theturtle32)
+- Now correctly emitting a `close` event with a 1006 error code if there is a TCP error while writing to the socket during the handshake. (theturtle32)
+- Catching errors when writing to the TCP socket during the handshake. (justoneplanet)
+- No longer outputting console.warn messages when there is an error writing to the TCP socket (justoneplanet)
+- Fixing some formatting errors, commas, semicolons, etc.  (kaisellgren)
+
 
 Version 1.0.1
 -------------
@@ -17,3 +32,7 @@ Version 1.0.1
 - Removed more console.log statements.  Please rely on the various events emitted to be notified of error conditions.  I decided that it is not a library's place to spew information to the console.
 - Renamed the `websocketVersion` property to `webSocketVersion` throughout the code to fix inconsistent capitalization.  `websocketVersion` has been kept for compatibility but is deprecated and may be removed in the future.
 - Now outputting the sanitized version of custom header names rather than the raw value.  This prevents invalid HTTP from being put onto the wire if given an illegal header name.
+
+
+I decided it's time to start maintaining a changelog now, starting with version 1.0.1.
+
