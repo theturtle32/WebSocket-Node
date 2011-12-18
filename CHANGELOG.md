@@ -4,6 +4,7 @@ Changelog
 Version 1.0.3
 -------------
 *Released 2011-12-18*
+
 - Substantial speed increase (~150% on my machine, depending on the circumstances) due to an optimization in FastBufferList.js that drastically reduces the number of memory alloctions and buffer copying. (kazuyukitanimura)
 
 
