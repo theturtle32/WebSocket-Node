@@ -5,18 +5,18 @@ Version 1.0.3
 -------------
 *Released 2011-12-18*
 
-- Substantial speed increase (~150% on my machine, depending on the circumstances) due to an optimization in FastBufferList.js that drastically reduces the number of memory alloctions and buffer copying. (kazuyukitanimura)
+- Substantial speed increase (~150% on my machine, depending on the circumstances) due to an optimization in FastBufferList.js that drastically reduces the number of memory alloctions and buffer copying. ([kazuyukitanimura](https://github.com/kazuyukitanimura))
 
 
 Version 1.0.2
 -------------
 *Released 2011-11-28*
 
-- Fixing whiteboard example to work under Node 0.6.x (theturtle32)
-- Now correctly emitting a `close` event with a 1006 error code if there is a TCP error while writing to the socket during the handshake. (theturtle32)
-- Catching errors when writing to the TCP socket during the handshake. (justoneplanet)
-- No longer outputting console.warn messages when there is an error writing to the TCP socket (justoneplanet)
-- Fixing some formatting errors, commas, semicolons, etc.  (kaisellgren)
+- Fixing whiteboard example to work under Node 0.6.x ([theturtle32](https://github.com/theturtle32))
+- Now correctly emitting a `close` event with a 1006 error code if there is a TCP error while writing to the socket during the handshake. ([theturtle32](https://github.com/theturtle32))
+- Catching errors when writing to the TCP socket during the handshake. ([justoneplanet](https://github.com/justoneplanet))
+- No longer outputting console.warn messages when there is an error writing to the TCP socket ([justoneplanet](https://github.com/justoneplanet))
+- Fixing some formatting errors, commas, semicolons, etc.  ([kaisellgren](https://github.com/kaisellgren))
 
 
 Version 1.0.1
