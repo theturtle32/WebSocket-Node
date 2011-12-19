@@ -3,7 +3,7 @@ WebSocket Client & Server Implementation for Node
 
 Overview
 --------
-This is a pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
 Current News
 ------------
