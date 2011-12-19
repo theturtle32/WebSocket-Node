@@ -3,7 +3,7 @@
     "description": "Websocket Client & Server Library tracking the latest protocol drafts from the IETF.",
     "keywords": ["websocket", "socket", "networking", "comet", "push"],
     "author": "Brian McKelvey <brian@worlize.com>",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "repository": {
         "type": "git",
         "url": "https://theturtle32@github.com/Worlize/WebSocket-Node.git"

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.4
+-------------
+*Released 2011-12-18*
+
+- Now validates that incoming UTF-8 messages do, in fact, contain valid UTF-8 data.  The connection is dropped with prejudice if invalid data is received.  This strict behavior conforms to the WebSocket RFC and is verified by the Autobahn Test Suite.  This is accomplished in a performant way by using a native C++ Node module created by [einaros](https://github.com/einaros).
+- Updated handling of connection closure to pass more of the Autobahn Test Suite.
+
 Version 1.0.3
 -------------
 *Released 2011-12-18*
