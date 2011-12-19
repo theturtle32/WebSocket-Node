@@ -1,8 +1,14 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
+Overview
+--------
+This is a pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+
 Current News
 ------------
+
+- As of version 1.0.4, WebSocket-Node now validates that incoming UTF-8 messages actually contain well-formed UTF-8 data, and will drop the connection if not.  This is accomplished in a performant manner by using a native C++ module created by [einaros](https://github.com/einaros).  See the section about the Autobahn Test Suite below for details.
 
 - WebSocket-Node was already [one of the fastest WebSocket libraries for Node](http://hobbycoding.posterous.com/websockt-binary-data-transfer-benchmark-rsult), and thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now [up to 200% faster](http://hobbycoding.posterous.com/how-to-make-websocket-work-2x-faster-on-nodej) as of version 1.0.3!
 
@@ -34,10 +40,19 @@ I made a decision early on to explicitly avoid maintaining multiple slightly dif
 
 For a WebSocket protocol 8 (draft-10) client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
-Overview
---------
-This is a pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+Autobahn Tests
+--------------
+The very complete [Autobahn Test Suite](http://www.tavendo.de/autobahn/testsuite.html) is used by most WebSocket implementations to test spec compliance and interoperability.
 
+**Note about failing UTF-8 tests:** There are some UTF-8 validation tests that fail due to the fact that Node automatically converts non-existent unicode characters to the [Unicode Replacement Character](http://en.wikipedia.org/wiki/Specials_%28Unicode_block%29#Replacement_character) internally, and it is not possible to disable this behavior.  The Autobahn Test Suite requires that the code points for these non-existent characters are echoed back to the test server unaltered, since the numerical representations of those code points would still be valid UTF-8.  ***I do not consider this to be a problem*** since it is very unlikely to cause any issues in any real-world application, so these test failures should be ignored.
+
+**Note about the ws test results:** The [ws test results](http://einaros.github.com/ws/servers/index.html) posted by einaros show "Pass" for these tests run against [ws](https://github.com/einaros/ws/), another WebSocket library for Node.  These results are somewhat misleading.  The reason they show as "Pass" is because his test application passes back the binary data for UTF-8 messages without the decode/encode phase that would be unavoidable in any real application using the library.  I believe that entirely defeats the intent of the Autobahn UTF-8 validation tests, and is an inaccurate result.  The results displayed for 'ws' in the server test results below use a modified test application that includes the decode/encode phase in order to provide an accurate result.
+
+- [View Server Test Results](http://worlize.github.com/WebSocket-Node/test-report/servers/)
+- [View Client Test Results](http://worlize.github.com/WebSocket-Node/test-report/clients/)
+
+Notes
+-----
 This library has been used in production on [worlize.com](https://www.worlize.com) since April 2011 and seems to be stable.  Your mileage may vary.
 
 ***Note about Draft Naming and versioning:*** *The draft number (draft-17) does not necessarily correspond to the protocol version (13.)  Many times a new draft is released with only editorial changes, in which case the protocol version is not incremented.  The drafts are interoperable within a protocol version, with only editorial changes.  The current implementation of WebSocket-Node works protocol version 8 (drafts -08 through -12) and protocol version 13 (drafts -13 through -17 and the final RFC.)*
