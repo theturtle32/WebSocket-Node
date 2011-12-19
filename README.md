@@ -4,12 +4,13 @@ WebSocket Client & Server Implementation for Node
 Current News
 ------------
 
-- Thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now up to 200% faster as of version 1.0.3!
+- WebSocket-Node was already [one of the fastest WebSocket libraries for Node](http://hobbycoding.posterous.com/websockt-binary-data-transfer-benchmark-rsult), and thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now [up to 200% faster](http://hobbycoding.posterous.com/how-to-make-websocket-work-2x-faster-on-nodej) as of version 1.0.3!
 
 Changelog
 ---------
 
 Current Version: 1.0.3
+
 [View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
 
 Browser Support
@@ -42,6 +43,7 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 ***Note about Draft Naming and versioning:*** *The draft number (draft-17) does not necessarily correspond to the protocol version (13.)  Many times a new draft is released with only editorial changes, in which case the protocol version is not incremented.  The drafts are interoperable within a protocol version, with only editorial changes.  The current implementation of WebSocket-Node works protocol version 8 (drafts -08 through -12) and protocol version 13 (drafts -13 through -17 and the final RFC.)*
 
 **Tested with the following node versions:**
+
 - 0.4.12
 - 0.6.6
 
@@ -125,6 +127,11 @@ wsServer = new WebSocketServer({
     autoAcceptConnections: false
 });
 
+function originIsAllowed(origin) {
+  // put logic here to detect whether the specified origin is allowed.
+  return true;
+}
+
 wsServer.on('request', function(request) {
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
@@ -149,11 +156,6 @@ wsServer.on('request', function(request) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
     });
 });
-
-function originIsAllowed(origin) {
-  // put logic here to detect whether the specified origin is allowed.
-  return true;
-}
 ```
 
 Client Example
