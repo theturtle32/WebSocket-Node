@@ -1,0 +1,484 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>websocket client benchmark</title>
+    <style>
+      body {
+        font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 0;
+        color: #333;
+        text-align: center;
+      }
+      #content {
+        width: 580px;
+        margin-top: 50px;
+        display: inline-block;
+        text-align: left;
+      }
+      .head {
+        font-size: 14pt;
+      }
+		  .container {
+        width: 800px; 
+        height: 400px; 
+        margin: 0 auto 30px;		    
+		  }
+    </style>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script type="text/javascript" src="highcharts.js"></script>
+		<script type="text/javascript" src="exporting.js"></script>
+		<script type="text/javascript">		
+			$(document).ready(function() {
+				new Highcharts.Chart({
+					chart: {
+						renderTo: 'container1',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.1 Text Message (increasing size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64kB', '256kB', '1MB', '4MB', '8MB', '16MB']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series: [
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [159,619,2454,9929,19859,38937]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [75,260,1042,4189,8335,16702]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [65,267,1065,4249,14093,17034]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [71,262,1084,4366,8398,22420]
+					}
+					]
+				})
+
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container2',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.2 Binary Message (increasing size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64kB', '256kB', '1MB', '4MB', '8MB', '16MB']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series: [
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [68,248,968,3882,7738,15521]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [24,92,362,1789,2836,5912]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [24,97,366,1522,2890,5883]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [24,97,365,1444,2878,5710]
+					}
+					]
+				})
+
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container3',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.3 Fragmented Text Message (fixed size, increasing fragment size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64B', '256B', '1kB', '4kB', '16kB', '64kB', '256kB', '1MB', '4MB']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series: [
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [14444,11004,10068,9849,10015,9601,9747,9792,9745]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [15132,7145,4844,4359,4137,4092,4120,4097,4070]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [7217,4977,4382,4236,4325,4217,4222,4191,4209]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [6821,4843,4412,4531,4233,4140,4157,4152,4137]
+					}
+					]
+        });
+
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container4',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.4 Fragmented Binary Message (fixed size, increasing fragment size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64B', '256B', '1kB', '4kB', '16kB', '64kB', '256kB', '1MB', '4MB']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series: [
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [7952,4772,4004,4036,3737,3738,3722,3763,3698]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [12320,4378,2095,1500,1414,1378,1496,1308,1299]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [4245,2159,1579,1736,1323,1329,1325,1338,1369]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [3898,1997,1478,1371,1339,1332,1322,1324,1309]
+					}
+					]
+        });
+        
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container5',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.5 Text Message (fixed 1MB size, increasing chop size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64 octets', '128', '256', '512', '1024', '2048']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series:[
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [3411,2612,2517,2472,2440,2447]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [2797,1915,1471,1253,1145,1090]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [2868,1943,1496,1303,1157,1093]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [2836,1957,1517,1351,1151,1114]
+					}
+					]
+        });
+        
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container6',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.6 Binary Message (fixed 1MB size, increasing chop size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['64 octets', '128', '256', '512', '1024', '2048']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series:[
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [2314,1406,997,982,980,978]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [2138,1240,795,577,462,414]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [2122,1297,830,624,496,421]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [2356,1254,798,577,477,404]
+					}
+					]
+        });
+        
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container7',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.7 Text Message Roundtrip Time (fixed number, increasing size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['0B', '16B', '64B', '256B', '1024B', '4096B']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series:[
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [421,501,605,1112,3109,10745]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [419,473,545,792,1719,5221]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [444,502,549,837,1834,5421]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [303,338,427,717,1576,5147]
+					}
+					]
+        });
+        
+        new Highcharts.Chart({
+					chart: {
+						renderTo: 'container8',
+						defaultSeriesType: 'line'
+					},
+					title: {
+						text: '9.8 Binary Message Roundtrip Time (fixed number, increasing size)'
+					},
+					subtitle: {
+						text: 'Lower is better'
+					},
+					xAxis: {
+						categories: ['0B', '16B', '64B', '256B', '1024B', '4096B']
+					},
+					yAxis: {
+						title: {
+							text: 'Milliseconds'
+						}
+					},
+					tooltip: {
+						enabled: true,
+						formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+								this.x +': '+ this.y +'ms';
+						}
+					},
+					plotOptions: {
+						line: {
+							dataLabels: {
+								enabled: true
+							},
+							enableMouseTracking: true
+						}
+					},
+					series:[
+					{ 
+					  name: 'AutobahnServer 0.4.10',
+					  data: [386,442,485,714,1497,5235]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.2',
+					  data: [398,415,449,571,909,2271]
+					},
+					{ 
+					  name: 'WebSocket-node Client 1.0.4',
+					  data: [416,458,513,660,971,2598]
+					},
+					{ 
+					  name: 'ws 0.3.4',
+					  data: [300,328,368,439,789,2174]
+					}
+					]
+        });
+			});				
+		</script>
+		
+	</head>
+	<body>
+    <div id="content">
+      <div class="head">WebSocket-Node</div>
+      <p>Here are some results from the performance tests of the AutoBahn Test Suite.</p>
+      <p>Tests were conducted on a Mid-2009 MacBook Pro 15", 2.66GHz Intel Core 2 Duo, 8GB RAM, Mac OS X 10.7.2, Node v0.6.6</p>
+    </div>
+		<div id="container1" class="container"></div>
+		<div id="container2" class="container"></div>
+		<div id="container3" class="container"></div>
+		<div id="container4" class="container"></div>
+		<div id="container5" class="container"></div>
+		<div id="container6" class="container"></div>
+		<div id="container7" class="container"></div>
+		<div id="container8" class="container"></div>
+	</body>
+</html>
