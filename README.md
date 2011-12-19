@@ -40,6 +40,10 @@ I made a decision early on to explicitly avoid maintaining multiple slightly dif
 
 For a WebSocket protocol 8 (draft-10) client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
+Benchmarks
+----------
+There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://worlize.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
+
 Autobahn Tests
 --------------
 The very complete [Autobahn Test Suite](http://www.tavendo.de/autobahn/testsuite.html) is used by most WebSocket implementations to test spec compliance and interoperability.
