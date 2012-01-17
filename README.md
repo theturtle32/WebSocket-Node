@@ -96,6 +96,8 @@ Current Features:
 - Can fragment outgoing messages
 - Router to mount multiple applications to various path and protocol combinations
 - TLS supported for outbound connections via WebSocketClient
+- TLS supported for server connections (use https.createServer instead of http.createServer)
+  - Thanks to [pors](https://github.com/pors) for confirming this!
 - Cookie setting and parsing
 - Tunable settings
   - Max Receivable Frame Size
@@ -111,7 +113,6 @@ Current Features:
 Known Issues/Missing Features:
 ------------------------------
 - No API for user-provided protocol extensions.
-- Haven't tested TLS for the Server.  (Perhaps this is handled automatically by attaching the WebSocket server to a https.createServer instead of http.createServer?)  My server implements TLS via stunnel->haproxy->node.
 
 
 Usage Examples
