@@ -1,0 +1,16 @@
+.npmignore
+.gitignore
+
+CHANGELOG.md
+README.md
+LICENSE
+
+example/
+build/
+build/.wafpickle-7
+test/
+
+vendor/node-ctype/README
+vendor/node-ctype/ctio.js
+vendor/node-ctype/ctype.js
+vendor/node-ctype/tst/
