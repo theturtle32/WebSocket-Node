@@ -1,6 +1,6 @@
 To run the whiteboard example, make sure to run..
 
-npm install
+npm install "express@2.3.11" "ejs@0.4.3"
 
 ..from within the 'whiteboard' folder, then fire up the example server with..
 
