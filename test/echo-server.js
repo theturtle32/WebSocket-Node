@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /************************************************************************
  *  Copyright 2010-2011 Worlize Inc.
- *  
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,8 @@ var url = require('url');
 var fs = require('fs');
 
 var args = { /* defaults */
-    port: '8080'
+    port: '8080',
+    debug: 'true'
 };
 
 /* Parse command line options */
@@ -34,12 +35,13 @@ process.argv.forEach(function(value) {
 });
 
 var port = parseInt(args.port, 10);
+var debug = (args.debug == 'true');
 
 console.log("WebSocket-Node: echo-server");
-console.log("Usage: ./echo-server.js [--port=8080]");
+console.log("Usage: ./echo-server.js [--port=8080 --debug=true|false]");
 
 var server = http.createServer(function(request, response) {
-    console.log((new Date()) + " Received request for " + request.url);
+    if (debug) console.log((new Date()) + " Received request for " + request.url);
     response.writeHead(404);
     response.end();
 });
@@ -58,19 +60,19 @@ wsServer = new WebSocketServer({
 });
 
 wsServer.on('connect', function(connection) {
-    console.log((new Date()) + " Connection accepted" +
-                " - Protocol Version " + connection.webSocketVersion);
+    if (debug) console.log((new Date()) + " Connection accepted" +
+                            " - Protocol Version " + connection.webSocketVersion);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
+            if (debug) console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
             connection.sendUTF(message.utf8Data);
         }
         else if (message.type === 'binary') {
-            console.log("Received Binary Message of " + message.binaryData.length + " bytes");
+            if (debug) console.log("Received Binary Message of " + message.binaryData.length + " bytes");
             connection.sendBytes(message.binaryData);
         }
     });
     connection.on('close', function(reasonCode, description) {
-        console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+        if (debug) console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
     });
 });
