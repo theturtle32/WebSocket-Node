@@ -91,6 +91,10 @@ var mirrorConnections = [];
 
 var mirrorHistory = [];
 
+function sendCallback(err) {
+    if (err) console.error("send() error: " + err);
+}
+
 router.mount('*', 'lws-mirror-protocol', function(request) {
     var cookies = [
         {
@@ -115,7 +119,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
         var historyString = mirrorHistory.join('');
         console.log((new Date()) + " sending mirror protocol history to client; " + connection.remoteAddress + " : " + Buffer.byteLength(historyString) + " bytes");
         
-        connection.send(historyString);
+        connection.send(historyString, sendCallback);
     }
     
     mirrorConnections.push(connection);
@@ -134,7 +138,7 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
 
             // Re-broadcast the command to all connected clients
             mirrorConnections.forEach(function (outputConnection) {
-                outputConnection.send(message.utf8Data);
+                outputConnection.send(message.utf8Data, sendCallback);
             });
         }
     });
@@ -161,7 +165,7 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
 
     var number = 0;
     connection.timerInterval = setInterval(function() {
-        connection.send((number++).toString(10));
+        connection.send((number++).toString(10), sendCallback);
     }, 50);
     connection.on('close', function() {
         clearInterval(connection.timerInterval);

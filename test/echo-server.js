@@ -62,14 +62,17 @@ wsServer = new WebSocketServer({
 wsServer.on('connect', function(connection) {
     if (debug) console.log((new Date()) + " Connection accepted" +
                             " - Protocol Version " + connection.webSocketVersion);
+    function sendCallback(err) {
+        if (err) console.error("send() error: " + err);
+    }
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             if (debug) console.log("Received utf-8 message of " + message.utf8Data.length + " characters.");
-            connection.sendUTF(message.utf8Data);
+            connection.sendUTF(message.utf8Data, sendCallback);
         }
         else if (message.type === 'binary') {
             if (debug) console.log("Received Binary Message of " + message.binaryData.length + " bytes");
-            connection.sendBytes(message.binaryData);
+            connection.sendBytes(message.binaryData, sendCallback);
         }
     });
     connection.on('close', function(reasonCode, description) {
