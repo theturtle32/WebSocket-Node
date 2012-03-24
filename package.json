@@ -12,7 +12,9 @@
         "node": ">=0.4.7"
     },
     "scripts": {
-      "preinstall": "make validator"
+      "preinstall": "node-gyp configure",
+      "install": "node-gyp build",
+      "preuninstall": "node-gyp clean"
     },
     "main": "index",
     "directories": {
