@@ -53,6 +53,9 @@ mirrorClient.on('connect', function(connection) {
     connection.on('close', function() {
         console.log("lws-mirror-protocol Connection Closed");
     });  
+    function sendCallback(err) {
+        if (err) console.error("send() error: " + err);
+    }
     function spamCircles() {
         if (connection.connected) {
             // c #7A9237 487 181 14;
@@ -60,7 +63,7 @@ mirrorClient.on('connect', function(connection) {
             var x = Math.round(Math.random() * 502);
             var y = Math.round(Math.random() * 306);
             var radius = Math.round(Math.random() * 30);
-            connection.send("c #" + color.toString(16) + " " + x + " " + y + " " + radius + ";");
+            connection.send("c #" + color.toString(16) + " " + x + " " + y + " " + radius + ";", sendCallback);
             setTimeout(spamCircles, 10);
         }
     }

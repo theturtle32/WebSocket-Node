@@ -111,13 +111,17 @@ client.on('connect', function(connection) {
             byteCounter = 0;
         }
     };
+
+    function sendUTFCallback(err) {
+        if (err) console.error("sendUTF() error: " + err);
+    }
     
     function requestData() {
         if (args.binary) {
-            connection.sendUTF('sendBinaryMessage|' + requestedLength);
+            connection.sendUTF('sendBinaryMessage|' + requestedLength, sendUTFCallback);
         }
         else {
-            connection.sendUTF('sendMessage|' + requestedLength);
+            connection.sendUTF('sendMessage|' + requestedLength, sendUTFCallback);
         }
         requestedLength += Math.ceil(Math.random() * 1024);
     }

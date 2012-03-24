@@ -95,6 +95,9 @@ router.mount('*', 'fragmentation-test', function(request) {
     
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
+            function sendCallback(err) {
+                if (err) console.error("send() error: " + err);
+            }
             var length = 0;
             var match = /sendMessage\|(\d+)/.exec(message.utf8Data);
             if (match) {
@@ -107,7 +110,7 @@ router.mount('*', 'fragmentation-test', function(request) {
                 longLorem = longLorem.slice(0,requestedLength);
                 length = Buffer.byteLength(longLorem);
                 if (length > 0) {
-                    connection.sendUTF(longLorem);
+                    connection.sendUTF(longLorem, sendCallback);
                     console.log((new Date()) + " sent " + length + " byte utf-8 message to " + connection.remoteAddress);
                 }
                 return;
@@ -123,7 +126,7 @@ router.mount('*', 'fragmentation-test', function(request) {
                     buffer[i] = Math.ceil(Math.random()*255);
                 }
                 
-                connection.sendBytes(buffer);
+                connection.sendBytes(buffer, sendCallback);
                 console.log((new Date()) + " sent " + buffer.length + " byte binary message to " + connection.remoteAddress);
                 return;
             }
