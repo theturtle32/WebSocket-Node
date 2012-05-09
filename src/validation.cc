@@ -140,3 +140,5 @@ extern "C" void init (Handle<Object> target)
   HandleScope scope;
   Validation::Initialize(target);
 }
+
+NODE_MODULE(validation, init);
