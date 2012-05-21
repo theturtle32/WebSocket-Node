@@ -10,7 +10,6 @@
 #include <node_buffer.h>
 #include <node_object_wrap.h>
 #include <stdlib.h>
-#include <strings.h>
 #include <wchar.h>
 #include <stdio.h>
 
@@ -141,3 +140,5 @@ extern "C" void init (Handle<Object> target)
   HandleScope scope;
   Validation::Initialize(target);
 }
+
+NODE_MODULE(validation, init);
