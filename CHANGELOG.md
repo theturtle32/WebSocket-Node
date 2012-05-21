@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 1.0.5
+-------------
+*Released 2012-05-21*
+
+- Fixes the issues that users were having building the native UTF-8 validator on Windows platforms.  Special Thanks to:
+  - [zerodivisi0n](https://github.com/zerodivisi0n)
+  - [andreasbotsikas](https://github.com/andreasbotsikas)
+- Fixed accidental global variable usage (Thanks, [hakobera](https://github.com/hakobera)!)
+- Added callbacks to the send* methods that provide notification of messages being sent on the wire and any socket errors that may occur when sending a message. (Thanks, [zerodivisi0n](https://github.com/zerodivisi0n)!)
+- Added option to disable logging in the echo-server in the test folder (Thanks, [oberstet](https://github.com/oberstet)!)
+
+
 Version 1.0.4
 -------------
 *Released 2011-12-18*

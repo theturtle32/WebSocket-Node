@@ -8,6 +8,8 @@ This is a (mostly) pure JavaScript implementation of the WebSocket protocol vers
 Current News
 ------------
 
+- I've finally released version 1.0.5, which fixes the issues that users were having building the module on Windows!
+
 - As of version 1.0.4, WebSocket-Node now validates that incoming UTF-8 messages actually contain well-formed UTF-8 data, and will drop the connection if not.  This is accomplished in a performant manner by using a native C++ module created by [einaros](https://github.com/einaros).  See the section about the Autobahn Test Suite below for details.
 
 - WebSocket-Node was already [one of the fastest WebSocket libraries for Node](http://hobbycoding.posterous.com/websockt-binary-data-transfer-benchmark-rsult), and thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now [up to 200% faster](http://hobbycoding.posterous.com/how-to-make-websocket-work-2x-faster-on-nodej) as of version 1.0.3!
@@ -15,30 +17,28 @@ Current News
 Changelog
 ---------
 
-Current Version: 1.0.4
+Current Version: 1.0.5
 
 [View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
 
 Browser Support
 ---------------
 
-* Firefox 7 (Old) (Protocol Version 8)
-* Firefox 8 (Stable) (Protocol Version 8)
-* Firefox 9 (Beta) (Protocol Version 8)
-* Chrome 14 (Old) (Protocol Version 8)
-* Chrome 15 (Stable) (Protocol Version 8)
-* Chrome 16 (Beta) (Protocol Version 13)
-* Internet Explorer 10 (Preview) (Protocol Version 8?)
+* Firefox 7-9 (Old) (Protocol Version 8)
+* Firefox 10+ (Protocol Version 13)
+* Chrome 14,15 (Old) (Protocol Version 8)
+* Chrome 16+ (Protocol Version 13)
+* Internet Explorer 10 (Preview) (Protocol Version 13)
 
 ***Safari is not supported at this time as it uses an old draft of WebSockets***
 
-**Note about FireFox:  Firefox [uses a prefixed constructor name](https://developer.mozilla.org/en/WebSockets/WebSockets_reference/WebSocket) in its client side JavaScript, MozWebSocket(), which will be changed to WebSocket() presumably when the WebSocket API has been finalized by the W3C.**
+**Note about FireFox:  Old versions of Firefox [used a prefixed constructor name](https://developer.mozilla.org/en/WebSockets/WebSockets_reference/WebSocket) in their client side JavaScript, MozWebSocket().**
 
 I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and now that the final version of the protocol has been [published as an official RFC](http://datatracker.ietf.org/doc/rfc6455/), it won't be long before support in the wild stabilizes on that version.  My client application is in Flash/ActionScript 3, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 8 along with 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing draft -08 all the way up through the final RFC.
 
 ***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
 
-For a WebSocket protocol 8 (draft-10) client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
+For a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
 Benchmarks
 ----------
@@ -59,12 +59,10 @@ Notes
 -----
 This library has been used in production on [worlize.com](https://www.worlize.com) since April 2011 and seems to be stable.  Your mileage may vary.
 
-***Note about Draft Naming and versioning:*** *The draft number (draft-17) does not necessarily correspond to the protocol version (13.)  Many times a new draft is released with only editorial changes, in which case the protocol version is not incremented.  The drafts are interoperable within a protocol version, with only editorial changes.  The current implementation of WebSocket-Node works protocol version 8 (drafts -08 through -12) and protocol version 13 (drafts -13 through -17 and the final RFC.)*
-
 **Tested with the following node versions:**
 
-- 0.4.12
 - 0.6.6
+- 0.6.18
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
@@ -87,6 +85,14 @@ var WebSocketClient = require('websocket').client;
 var WebSocketFrame  = require('websocket').frame;
 var WebSocketRouter = require('websocket').router;
 ```
+
+Note for Windows Users
+----------------------
+Because there is a small C++ component used for validating UTF-8 data, you will need to install a few other software packages in addition to Node to be able to build this module:
+
+- [Microsoft Visual C++](http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express)
+- [Python 2.7](http://www.python.org/download/) (NOT Python 3.x)
+
 
 Current Features:
 -----------------
