@@ -8,6 +8,8 @@ This is a (mostly) pure JavaScript implementation of the WebSocket protocol vers
 Current News
 ------------
 
+- Version 1.0.6 updates the package.json file to require node v0.6.13, since that's the first version that I can manage to successfully build the native UTF-8 validator with node-gyp through npm.  If anyone can figure out how to build native extensions in a way that works with both older and newer versions of Node, I'm happy to accept a patch!
+
 - I've finally released version 1.0.5, which fixes the issues that users were having building the module on Windows!
 
 - As of version 1.0.4, WebSocket-Node now validates that incoming UTF-8 messages actually contain well-formed UTF-8 data, and will drop the connection if not.  This is accomplished in a performant manner by using a native C++ module created by [einaros](https://github.com/einaros).  See the section about the Autobahn Test Suite below for details.
@@ -17,7 +19,7 @@ Current News
 Changelog
 ---------
 
-Current Version: 1.0.5
+Current Version: 1.0.6
 
 [View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
 

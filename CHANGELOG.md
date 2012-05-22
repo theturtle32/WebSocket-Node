@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.0.6
+*Released 2012-05-22*
+
+- Now requires Node v0.6.13 since that's the first version that I can manage to successfully build the native UTF-8 validator with node-gyp through npm.
+
 Version 1.0.5
 -------------
 *Released 2012-05-21*
