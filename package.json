@@ -1,6 +1,6 @@
 {
     "name": "websocket",
-    "description": "Websocket Client & Server Library tracking the latest protocol drafts from the IETF.",
+    "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
     "keywords": ["websocket", "socket", "networking", "comet", "push"],
     "author": "Brian McKelvey <brian@worlize.com>",
     "version": "1.0.6",
