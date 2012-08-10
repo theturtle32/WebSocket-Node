@@ -31,8 +31,9 @@ Browser Support
 * Chrome 14,15 (Old) (Protocol Version 8)
 * Chrome 16+ (Protocol Version 13)
 * Internet Explorer 10 (Preview) (Protocol Version 13)
+* Safari 6 (Protocol Version 13)
 
-***Safari is not supported at this time as it uses an old draft of WebSockets***
+***Safari older than 6.0 is not supported at this time as it uses an old draft of WebSockets***
 
 **Note about FireFox:  Old versions of Firefox [used a prefixed constructor name](https://developer.mozilla.org/en/WebSockets/WebSockets_reference/WebSocket) in their client side JavaScript, MozWebSocket().**
 
