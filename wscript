@@ -15,3 +15,6 @@ def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
   obj.target = 'validation'
   obj.source = 'src/validation.cc'
+  xor = bld.new_task_gen("cxx", "shlib", "node_addon")
+  xor.target = "xor"
+  xor.source = "src/xor.cpp"
