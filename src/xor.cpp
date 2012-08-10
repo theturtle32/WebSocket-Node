@@ -7,6 +7,7 @@
 
 #include <v8.h>
 #include <node_buffer.h>
+#include <cstring>
 
 using namespace node;
 using namespace v8;
