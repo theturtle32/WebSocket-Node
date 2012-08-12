@@ -1,13 +1,9 @@
 .npmignore
 .gitignore
 
-CHANGELOG.md
-README.md
-LICENSE
-
 example/
 build/
-build/.wafpickle-7
+build/
 test/
 
 vendor/node-ctype/README
