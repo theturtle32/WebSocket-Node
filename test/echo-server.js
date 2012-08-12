@@ -22,7 +22,7 @@ var fs = require('fs');
 
 var args = { /* defaults */
     port: '8080',
-    debug: 'true'
+    debug: false
 };
 
 /* Parse command line options */
@@ -35,10 +35,10 @@ process.argv.forEach(function(value) {
 });
 
 var port = parseInt(args.port, 10);
-var debug = (args.debug == 'true');
+var debug = args.debug;
 
 console.log("WebSocket-Node: echo-server");
-console.log("Usage: ./echo-server.js [--port=8080 --debug=true|false]");
+console.log("Usage: ./echo-server.js [--port=8080] [--debug]");
 
 var server = http.createServer(function(request, response) {
     if (debug) console.log((new Date()) + " Received request for " + request.url);
