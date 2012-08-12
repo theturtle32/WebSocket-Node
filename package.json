@@ -2,7 +2,7 @@
     "name": "websocket",
     "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
     "keywords": ["websocket", "socket", "networking", "comet", "push"],
-    "author": "Brian McKelvey <brian@worlize.com>",
+    "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
     "version": "1.0.6",
     "repository": {
         "type": "git",
@@ -10,6 +10,12 @@
     },
     "engines": {
         "node": ">=0.6.13"
+    },
+    "config": {
+      "verbose" : false
+    },
+    "scripts": {
+        "install": "node install.js"
     },
     "main": "index",
     "directories": {
