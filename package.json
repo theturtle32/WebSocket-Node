@@ -3,13 +3,13 @@
     "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
     "keywords": ["websocket", "socket", "networking", "comet", "push"],
     "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "repository": {
         "type": "git",
         "url": "https://theturtle32@github.com/Worlize/WebSocket-Node.git"
     },
     "engines": {
-        "node": ">=0.6.13"
+        "node": ">=0.6.10"
     },
     "config": {
       "verbose" : false

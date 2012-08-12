@@ -8,18 +8,18 @@ This is a (mostly) pure JavaScript implementation of the WebSocket protocol vers
 Current News
 ------------
 
-- Version 1.0.6 updates the package.json file to require node v0.6.13, since that's the first version that I can manage to successfully build the native UTF-8 validator with node-gyp through npm.  If anyone can figure out how to build native extensions in a way that works with both older and newer versions of Node, I'm happy to accept a patch!
+- As of version 1.0.7, ***Native modules are now optional.*** If they fail to compile, WebSocket-Node will still work but will not verify that received UTF-8 data is valid, and xor masking/unmasking of payload data for security purposes will not be as efficient as it is performed in JavaScript instead of native code.
 
-- I've finally released version 1.0.5, which fixes the issues that users were having building the module on Windows!
+- Version 1.0.7 requires node v0.6.10, since that's the first version that I can manage to successfully build the native extensions with node-gyp through npm.  If anyone can figure out how to build native extensions in a way that works with both older and newer versions of Node, I'm happy to accept a patch!
 
-- As of version 1.0.4, WebSocket-Node now validates that incoming UTF-8 messages actually contain well-formed UTF-8 data, and will drop the connection if not.  This is accomplished in a performant manner by using a native C++ module created by [einaros](https://github.com/einaros).  See the section about the Autobahn Test Suite below for details.
+- If you want to support Unicode characters outside the Basic Multilingual Plane (BMP) you must use Node v0.8.x, which added support for representing these characters as surrogate pairs inside JavaScript strings.  Under Node v0.6.x, characters with code points greater than 65535 (greater than a 16-bit unsigned value) will have their code point truncated, resulting in seemingly unpredictable characters being returned.
 
 - WebSocket-Node was already [one of the fastest WebSocket libraries for Node](http://hobbycoding.posterous.com/websockt-binary-data-transfer-benchmark-rsult), and thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now [up to 200% faster](http://hobbycoding.posterous.com/how-to-make-websocket-work-2x-faster-on-nodej) as of version 1.0.3!
 
 Changelog
 ---------
 
-Current Version: 1.0.6
+Current Version: 1.0.7
 
 [View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
 
@@ -33,13 +33,11 @@ Browser Support
 * Internet Explorer 10 (Preview) (Protocol Version 13)
 * Safari 6 (Protocol Version 13)
 
-***Safari older than 6.0 is not supported at this time as it uses an old draft of WebSockets***
-
-**Note about FireFox:  Old versions of Firefox [used a prefixed constructor name](https://developer.mozilla.org/en/WebSockets/WebSockets_reference/WebSocket) in their client side JavaScript, MozWebSocket().**
+***Safari older than 6.0 is not supported since it uses a very old draft of WebSockets***
 
 I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and now that the final version of the protocol has been [published as an official RFC](http://datatracker.ietf.org/doc/rfc6455/), it won't be long before support in the wild stabilizes on that version.  My client application is in Flash/ActionScript 3, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 8 along with 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing draft -08 all the way up through the final RFC.
 
-***If you need to simultaneously support older production browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
+***If you need to simultaneously support legacy browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
 
 For a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
 
@@ -52,8 +50,7 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://www.tavendo.de/autobahn/testsuite.html) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 **Note about failing UTF-8 tests:** There are some UTF-8 validation tests that fail due to the fact that according to the ECMAScript spec, V8 and subsequently Node cannot support Unicode characters outside the BMP (Basic Multilingual Plane.)  JavaScript's String.fromCharCode() function truncates all code points to 16-bit, so you cannot decode higher plane code points in JavaScript.  Google's V8 uses UCS-2 as its internal string representation, and [they have no intention to change that any time soon](http://code.google.com/p/v8/issues/detail?id=761), so it is not possible to decode higher plane code points in C++, to the best of my knowledge, because those characters are not representable in UCS-2 anyway.  The Autobahn Test Suite requires that all valid Unicode code points survive a complete round trip, including code points that represent non-existent characters and characters above the BMP.  Since JavaScript cannot represent any characters with a code point >= 65535, no JavaScript implementation of WebSockets can pass these UTF-8 tests without using a cheat, such as echoing back the original binary data without decoding and re-encoding the UTF-8 data, which is not representative of real-world practical application.  ***I do not consider this to be a problem in the majority of circumstances*** since it is very unlikely to cause major issues in any real-world application as long as you don't need to use characters outside the BMP.
-
-**Note about the ws test results:** The [ws test results posted by einaros](http://einaros.github.com/ws/servers/index.html) show "Pass" for these tests as run against [ws, his WebSocket library for Node](https://github.com/einaros/ws/).  These results are somewhat misleading.  The reason they show as "Pass" is because its test application echoes back the original binary data for UTF-8 messages without the decode/encode phase that would be unavoidable under normal circumstances.  I believe that defeats the intent of the Autobahn UTF-8 validation tests, and yields an inaccurate result.  The results displayed for [ws](https://github.com/einaros/ws/) in the server test results below use a modified test application that includes the decode/encode phase.
+**Update:** This issue seems to have been resolved in the version of V8 used in Node 0.8.x.  I believe they are using surrogate-pairs to accommodate characters that are outside the BMP, but I haven't looked into it.
 
 - [View Server Test Results](http://worlize.github.com/WebSocket-Node/test-report/servers/)
 - [View Client Test Results](http://worlize.github.com/WebSocket-Node/test-report/clients/)
@@ -64,8 +61,8 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 
 **Tested with the following node versions:**
 
-- 0.6.6
 - 0.6.18
+- 0.8.6
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 

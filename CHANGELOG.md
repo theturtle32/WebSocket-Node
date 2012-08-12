@@ -1,7 +1,15 @@
 Changelog
 =========
 
+Version 1.0.7
+-------------
+*Released 2012-08-12*
+
+- ***Native modules are now optional!*** If they fail to compile, WebSocket-Node will still work but will not verify that received UTF-8 data is valid, and xor masking/unmasking of payload data for security purposes will not be as efficient as it is performed in JavaScript instead of native code.
+- Reduced Node.JS version requirement back to v0.6.10
+
 Version 1.0.6
+-------------
 *Released 2012-05-22*
 
 - Now requires Node v0.6.13 since that's the first version that I can manage to successfully build the native UTF-8 validator with node-gyp through npm.
