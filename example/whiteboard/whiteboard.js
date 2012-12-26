@@ -45,8 +45,8 @@ var canvasCommands = [];
 wsServer.on('request', function(request) {
     var connection = request.accept('whiteboard-example', request.origin);
     connections.push(connection);
-    
-    console.log(connection.remoteAddress + " connected - Protocol Version " + connection.websocketVersion);
+
+    console.log(connection.remoteAddress + " connected - Protocol Version " + connection.webSocketVersion);
     
     // Send all the existing canvas commands to the new client
     connection.sendUTF(JSON.stringify({
