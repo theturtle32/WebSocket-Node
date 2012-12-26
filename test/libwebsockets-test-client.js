@@ -18,7 +18,8 @@
 var WebSocketClient = require('../lib/WebSocketClient');
 
 var args = { /* defaults */
-    secure: false
+    secure: false,
+    version: 13
 };
 
 /* Parse command line options */
@@ -31,15 +32,18 @@ process.argv.forEach(function(value) {
 });
 
 args.protocol = args.secure ? 'wss:' : 'ws:'
+args.version = parseInt(args.version, 10);
 
 if (!args.host || !args.port) {
     console.log("WebSocket-Node: Test client for Andy Green's libwebsockets-test-server");
-    console.log("Usage: ./libwebsockets-test-client.js --host=127.0.0.1 --port=8080 [--secure]");
+    console.log("Usage: ./libwebsockets-test-client.js --host=127.0.0.1 --port=8080 [--version=8|13] [--secure]");
     console.log("");
     return;
 }
 
-var mirrorClient = new WebSocketClient();
+var mirrorClient = new WebSocketClient({
+    webSocketVersion: args.version
+});
 
 mirrorClient.on('connectFailed', function(error) {
     console.log("Connect Error: " + error.toString());
@@ -73,7 +77,9 @@ mirrorClient.on('connect', function(connection) {
 mirrorClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'lws-mirror-protocol');
 
 
-var incrementClient = new WebSocketClient();
+var incrementClient = new WebSocketClient({
+    webSocketVersion: args.version
+});
 
 incrementClient.on('connectFailed', function(error) {
     console.log("Connect Error: " + error.toString());
