@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.8
+-------------
+*Released 2012-12-26*
+
+- Fixed remaining naming inconsistency of "websocketVersion" as opposed to "webSocketVersion" throughout the code, and added deprecation warnings for use of the old casing throughout.
+
+
 Version 1.0.7
 -------------
 *Released 2012-08-12*
