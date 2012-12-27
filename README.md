@@ -73,6 +73,9 @@ For more complete documentation, see the [Documentation Wiki](https://github.com
 
 Installation
 ------------
+
+WebSocket-Node uses gyp to compile native extensions. For this reason, make sure you've got a C++ compiler, and have done `npm install -g node-gyp` first. Native extensions are optional, however.
+
 In your project root:
 
     $ npm install websocket
