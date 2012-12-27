@@ -6,7 +6,10 @@ Version 1.0.8
 *Released 2012-12-26*
 
 - Fixed remaining naming inconsistency of "websocketVersion" as opposed to "webSocketVersion" throughout the code, and added deprecation warnings for use of the old casing throughout.
-
+- Fixed an issue with our case-insensitive handling of WebSocket subprotocols.  Clients that requested a mixed-case subprotocol would end up failing the connection when the server accepted the connection, returning a lower-case version of the subprotocol name.  Now we return the subprotocol name in the exact casing that was requested by the client, while still maintaining the case-insensitive verification logic for convenience and practicality.
+- Making sure that any socket-level activity timeout that may have been set on a TCP socket is removed when initializing a connection.
+- Added support for native TCP Keep-Alive instead of using the WebSocket ping/pong packets to serve that function.
+- Fixed cookie parsing to be compliant with RFC 2109
 
 Version 1.0.7
 -------------
