@@ -73,6 +73,11 @@ For more complete documentation, see the [Documentation Wiki](https://github.com
 
 Installation
 ------------
+
+A few users have reported difficulties building the native extensions without first manually installing node-gyp.  If you have trouble building the native extensions, make sure you've got a C++ compiler, and have done `npm install -g node-gyp` first. 
+
+Native extensions are optional, however, and WebSocket-Node will work even if the extensions cannot be compiled.
+
 In your project root:
 
     $ npm install websocket
