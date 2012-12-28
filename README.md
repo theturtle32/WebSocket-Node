@@ -19,7 +19,7 @@ Current News
 Changelog
 ---------
 
-Current Version: 1.0.7
+Current Version: 1.0.8
 
 [View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
 
