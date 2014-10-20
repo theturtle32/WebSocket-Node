@@ -40,14 +40,22 @@ If true, fragmented messages will be automatically assembled and the full messag
 **closeTimeout** - uint - *Default: 5000*  
 The number of milliseconds to wait after sending a close frame for an acknowledgement to come back before giving up and just closing the socket.
 
+**tlsOptions** - object - *Default: {}*  
+Options to pass to https.connect if connecting via TLS
+
 
 Methods
 -------
-###connect(requestUrl, requestedProtocols, origin)
+###connect(requestUrl, requestedProtocols, [[[origin], headers], requestOptions])
 
 Will establish a connection to the given `requestUrl`.  `requestedProtocols` indicates a list of multiple subprotocols supported by the client.  The remote server will select the best subprotocol that it supports and send that back when establishing the connection.  `origin` is an optional field that can be used in user-agent scenarios to identify the page containing any scripting content that caused the connection to be requested.  (This seems unlikely in node.. probably should leave it null most of the time.)  `requestUrl` should be a standard websocket url, such as:
-
 `ws://www.mygreatapp.com:1234/websocketapp/`
+
+`headers` should be either `null` or an object specifying additional arbitrary HTTP request headers to send along with the request.  This may be used to pass things like access tokens, etc. so that the server can verify authentication/authorization before deciding to accept and open the full WebSocket connection.
+
+`requestOptions` should be either `null` or an object specifying additional configuration options to be passed to `http.request` or `https.request`.  This can be used to pass a custom `agent` to enable `WebSocketClient` usage from behind an HTTP or HTTPS proxy server using [koichik/node-tunnel](https://github.com/koichik/node-tunnel) or similar.
+
+`origin` must be specified if you want to pass `headers`, and both `origin` and `headers` must be specified if you want to pass `requestOptions`.  The `origin` and `headers` parameters may be passed as `null`.
 
 
 Events
@@ -65,6 +73,6 @@ Emitted when there is an error connecting to the remote host or the handshake re
 ###httpResponse
 `function(response, webSocketClient)`
 
-Emitted when the server replies with anything other then "101 Switching Protocols".  Provides an opportunity to handle redirects for example. The ```response``` parameter is an instance of the [http.IncomingMessage](http://nodejs.org/api/http.html#http_http_incomingmessage) class.  This is not suitable for handling receiving of large response bodies, as the underlying socket will be immediately closed by WebSocket-Node as soon as all handlers for this event are executed.
+Emitted when the server replies with anything other then "101 Switching Protocols".  Provides an opportunity to handle redirects for example. The `response` parameter is an instance of the [http.IncomingMessage](http://nodejs.org/api/http.html#http_http_incomingmessage) class.  This is not suitable for handling receiving of large response bodies, as the underlying socket will be immediately closed by WebSocket-Node as soon as all handlers for this event are executed.
 
-Normally, if the remote server sends an HTTP response with a response code other than 101, the ```WebSocketClient``` will automatically emit the ```connectFailed``` event with a description of what was received from the remote server.  However, if there are one or more listeners attached to the ```httpResponse``` event, then the ```connectFailed``` event will not be emitted for non-101 responses received.  ```connectFailed``` will still be emitted for non-HTTP errors, such as when the remote server is unreachable or not accepting TCP connections.
+Normally, if the remote server sends an HTTP response with a response code other than 101, the `WebSocketClient` will automatically emit the `connectFailed` event with a description of what was received from the remote server.  However, if there are one or more listeners attached to the `httpResponse` event, then the `connectFailed` event will not be emitted for non-101 responses received.  `connectFailed` will still be emitted for non-HTTP errors, such as when the remote server is unreachable or not accepting TCP connections.
