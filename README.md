@@ -49,9 +49,6 @@ Autobahn Tests
 --------------
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
-**Note about failing UTF-8 tests:** There are some UTF-8 validation tests that fail due to the fact that according to the ECMAScript spec, V8 and subsequently Node cannot support Unicode characters outside the BMP (Basic Multilingual Plane.)  JavaScript's String.fromCharCode() function truncates all code points to 16-bit, so you cannot decode higher plane code points in JavaScript.  Google's V8 uses UCS-2 as its internal string representation, and [they have no intention to change that any time soon](http://code.google.com/p/v8/issues/detail?id=761), so it is not possible to decode higher plane code points in C++, to the best of my knowledge, because those characters are not representable in UCS-2 anyway.  The Autobahn Test Suite requires that all valid Unicode code points survive a complete round trip, including code points that represent non-existent characters and characters above the BMP.  Since JavaScript cannot represent any characters with a code point >= 65535, no JavaScript implementation of WebSockets can pass these UTF-8 tests without using a cheat, such as echoing back the original binary data without decoding and re-encoding the UTF-8 data, which is not representative of real-world practical application.  ***I do not consider this to be a problem in the majority of circumstances*** since it is very unlikely to cause major issues in any real-world application as long as you don't need to use characters outside the BMP.
-**Update:** This issue seems to have been resolved in the version of V8 used in Node 0.8.x.  I believe they are using surrogate-pairs to accommodate characters that are outside the BMP, but I haven't looked into it.
-
 - [View Server Test Results](http://worlize.github.com/WebSocket-Node/test-report/servers/)
 - [View Client Test Results](http://worlize.github.com/WebSocket-Node/test-report/clients/)
 
@@ -61,8 +58,8 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 
 **Tested with the following node versions:**
 
-- 0.6.18
-- 0.8.6
+- 0.8.28
+- 0.10.32
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
