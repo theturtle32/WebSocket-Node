@@ -5,6 +5,8 @@ WebSocketClient
 * [Config Options](#client-config-options)
 * [Methods](#methods)
 * [Events](#events)
+* **Examples**
+  * [Connect using a Proxy Server](#connect-using-a-proxy-server)
 
 `var WebSocketClient = require('websocket').client`
 
@@ -76,3 +78,31 @@ Emitted when there is an error connecting to the remote host or the handshake re
 Emitted when the server replies with anything other then "101 Switching Protocols".  Provides an opportunity to handle redirects for example. The `response` parameter is an instance of the [http.IncomingMessage](http://nodejs.org/api/http.html#http_http_incomingmessage) class.  This is not suitable for handling receiving of large response bodies, as the underlying socket will be immediately closed by WebSocket-Node as soon as all handlers for this event are executed.
 
 Normally, if the remote server sends an HTTP response with a response code other than 101, the `WebSocketClient` will automatically emit the `connectFailed` event with a description of what was received from the remote server.  However, if there are one or more listeners attached to the `httpResponse` event, then the `connectFailed` event will not be emitted for non-101 responses received.  `connectFailed` will still be emitted for non-HTTP errors, such as when the remote server is unreachable or not accepting TCP connections.
+
+
+Examples
+========
+
+Connect using a Proxy Server
+----------------------------
+
+Using [koichik/node-tunnel](https://github.com/koichik/node-tunnel):
+
+```javascript
+var WebSocketClient = require('websocket').client;
+var client = new WebSocketClient();
+var tunnel = require('tunnel');
+
+var tunnelingAgent = tunnel.httpOverHttp({
+  proxy: {
+    host: 'proxy.host.com',
+    port: 8080
+  }
+});
+
+var requestOptions = {
+    agent: tunnelingAgent
+};
+
+client.connect('ws://echo.websocket.org/', null, null, null, requestOptions);
+```
