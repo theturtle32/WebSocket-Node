@@ -8,13 +8,14 @@ This is a (mostly) pure JavaScript implementation of the WebSocket protocol vers
 Current News
 ------------
 
-- As of version 1.0.7, ***Native modules are now optional.*** If they fail to compile, WebSocket-Node will still work but will not verify that received UTF-8 data is valid, and xor masking/unmasking of payload data for security purposes will not be as efficient as it is performed in JavaScript instead of native code.
+* Version 1.0.9 has a bunch of bug fixes, enhancements, and new features.  For a full list, check out the the [changelog](CHANGELOG.md). A few highlights:
+  * Fixed the obscure "ghost connections" bug where the `WebSocketConnection` would sometimes fail to emit the `close` event when there was an error such as ECONNRESET on the underlying socket.
+  * Adding option to ignore `X-Forwarded-For` headers when accepting connections from untrusted clients.
+  * Can now simultaneously listen on ws:// and wss://
+  * Incorporating upstream enhancements to native extensions.  Hopefully the build process on Windows will go a bit more smoothly now.
+  * Better and more fair handling of buffered incoming messges under load.
 
-- Version 1.0.7 requires node v0.6.10, since that's the first version that I can manage to successfully build the native extensions with node-gyp through npm.  If anyone can figure out how to build native extensions in a way that works with both older and newer versions of Node, I'm happy to accept a patch!
-
-- If you want to support Unicode characters outside the Basic Multilingual Plane (BMP) you must use Node v0.8.x, which added support for representing these characters as surrogate pairs inside JavaScript strings.  Under Node v0.6.x, characters with code points greater than 65535 (greater than a 16-bit unsigned value) will have their code point truncated, resulting in seemingly unpredictable characters being returned.
-
-- WebSocket-Node was already [one of the fastest WebSocket libraries for Node](http://hobbycoding.posterous.com/websockt-binary-data-transfer-benchmark-rsult), and thanks to a small patch from [kazuyukitanimura](https://github.com/kazuyukitanimura), this library is now [up to 200% faster](http://hobbycoding.posterous.com/how-to-make-websocket-work-2x-faster-on-nodej) as of version 1.0.3!
+* As of version 1.0.7, ***Native modules are now optional.*** If they fail to compile, WebSocket-Node will still work but will not verify that received UTF-8 data is valid, and xor masking/unmasking of payload data for security purposes will not be as efficient as it is performed in JavaScript instead of native code.
 
 Changelog
 ---------
@@ -30,12 +31,10 @@ Browser Support
 * Firefox 10+ (Protocol Version 13)
 * Chrome 14,15 (Old) (Protocol Version 8)
 * Chrome 16+ (Protocol Version 13)
-* Internet Explorer 10 (Preview) (Protocol Version 13)
-* Safari 6 (Protocol Version 13)
+* Internet Explorer 10+ (Protocol Version 13)
+* Safari 6+ (Protocol Version 13)
 
 ***Safari older than 6.0 is not supported since it uses a very old draft of WebSockets***
-
-I made a decision early on to explicitly avoid maintaining multiple slightly different copies of the same code just to support the browsers currently in the wild.  The major browsers that support WebSocket are on a rapid-release schedule (with the exception of Safari) and now that the final version of the protocol has been [published as an official RFC](http://datatracker.ietf.org/doc/rfc6455/), it won't be long before support in the wild stabilizes on that version.  My client application is in Flash/ActionScript 3, so for my purposes I'm not dependent on the browser implementations.  *I made an exception to my stated intention here to support protocol version 8 along with 13, since only one minor thing changed and it was trivial to handle conditionally.*  The library now interoperates with other clients and servers implementing draft -08 all the way up through the final RFC.
 
 ***If you need to simultaneously support legacy browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
 
