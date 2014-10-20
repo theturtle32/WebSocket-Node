@@ -5,8 +5,8 @@ WebSocket-Node includes both client and server functionality, available through 
 
 Click on one of the classes below to view its API documentation.
 
-[WebSocketClient](./WebSocketClient.md)
-[WebSocketConnection](./WebSocketConnection.md)
-[WebSocketFrame](./WebSocketFrame.md)
-[WebSocketRequest](./WebSocketRequest.md)
-[WebSocketServer.md](./WebSocketServer.md)
+* [WebSocketClient](./WebSocketClient.md)
+* [WebSocketConnection](./WebSocketConnection.md)
+* [WebSocketFrame](./WebSocketFrame.md)
+* [WebSocketRequest](./WebSocketRequest.md)
+* [WebSocketServer.md](./WebSocketServer.md)
