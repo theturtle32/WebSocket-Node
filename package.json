@@ -1,7 +1,10 @@
 {
     "name": "websocket",
     "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
-    "keywords": ["websocket", "websockets", "socket", "networking", "comet", "push"],
+    "keywords": [
+        "websocket", "websockets", "socket", "networking", "comet", "push",
+        "RFC-6455", "realtime", "server", "client"
+    ],
     "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
     "version": "1.0.8",
     "repository": {
