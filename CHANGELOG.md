@@ -5,21 +5,21 @@ Version 1.0.9
 -------------
 * Fixing an insidious corner-case bug that prevented ```WebSocketConnection``` from firing the ```close``` event in certain cases when there was an error on the underlying ```Socket```, leading to connections sticking around forever, stuck erroneously in the ```connected``` state.  These "ghost" connections would cause an error event when trying to write to them.
 * Removed deprecated ```websocketVersion``` property.  Use ```webSocketVersion``` instead (case difference).
-* Allowing user to specify all properties for ```tlsOptions``` in WebSocketClient, not just a few whitelisted properties.  This keeps us from having to constantly add new config properties for new versions of Node. (Thanks, @jesusprubio)
+* Allowing user to specify all properties for ```tlsOptions``` in WebSocketClient, not just a few whitelisted properties.  This keeps us from having to constantly add new config properties for new versions of Node. (Thanks, [jesusprubio](https://github.com/jesusprubio))
 * Removing support for Node 0.4.x and 0.6.x.
 * Adding ```fuzzingclient.json``` spec file for the Autobahn Test Suite.
 * Now more fairly emitting ```message``` events from the ```WebSocketConnection```.  Previously, all buffered frames for a connection would be processed and all ```message``` events emitted before moving on to processing the next connection with available data.  Now We process one frame per connection (most of the time) in a more fair round-robin fashion.
 * Now correctly calling the ```EventEmitter``` superclass constructor during class instance initialization.
 * ```WebSocketClient.prototype.connect``` now accepts the empty string (```''```) to mean "no subprotocol requested."  Previously either ```null``` or an empty array (```[]```) was required.
-* Fixing a ```TypeError``` bug in ```WebSocketRouter``` (Thanks, @a0000778)
-* Fixing a potential race condition when attaching event listeners to the underlying ```Socket```. (Thanks @RichardBsolut)
-* ```WebSocketClient``` now accepts an optional options hash to be passed to ```(http|https).request```. (Thanks @mildred and @aus)  This enables the following new abilities, amongst others:
+* Fixing a ```TypeError``` bug in ```WebSocketRouter``` (Thanks, [a0000778](https://github.com/a0000778))
+* Fixing a potential race condition when attaching event listeners to the underlying ```Socket```. (Thanks [RichardBsolut](https://github.com/RichardBsolut))
+* ```WebSocketClient``` now accepts an optional options hash to be passed to ```(http|https).request```. (Thanks [mildred](https://github.com/mildred) and [aus](https://github.com/aus))  This enables the following new abilities, amongst others:
   * Use WebSocket-Node from behind HTTP/HTTPS proxy servers using [koichik/node-tunnel](https://github.com/koichik/node-tunnel) or similar.
   * Specify the local port and local address to bind the outgoing request socket to.
 * Adding option to ignore ```X-Forwarded-For``` headers when accepting connections from untrusted clients.
 * Adding ability to mount a ```WebSocketServer``` instance to an arbitrary number of Node http/https servers.
 * Adding browser shim so Browserify won't blow up when trying to package up code that uses WebSocket-Node.  The shim is a no-op, it ***does not implement a wrapper*** providing the WebSocket-Node API in the browser.
-* Incorporating upstream enhancements for the native C++ UTF-8 validation and xor masking functions. (Thanks @einaros and @kkoopa)
+* Incorporating upstream enhancements for the native C++ UTF-8 validation and xor masking functions. (Thanks [einaros](https://github.com/einaros) and [kkoopa](https://github.com/kkoopa))
 
 
 Version 1.0.8
