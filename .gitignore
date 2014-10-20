@@ -3,6 +3,7 @@ node_modules
 .lock-*
 build
 build/*
+builderror.log
 npm-debug.log
 test/autobahn/reports/*
 test/heapdump/*

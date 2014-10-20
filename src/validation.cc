@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <stdio.h>
+#include "nan.h"
 
 using namespace v8;
 using namespace node;
@@ -45,7 +46,7 @@ static int isLegalUTF8(const uint8_t *source, const int length)
   default: return 0;
   /* Everything else falls through when "true"... */
   /* RFC3629 makes 5 & 6 bytes UTF-8 illegal
-  case 6: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return 0; 
+  case 6: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return 0;
   case 5: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return 0; */
   case 4: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return 0;
   case 3: if ((a = (*--srcptr)) < 0x80 || a > 0xBF) return 0;
@@ -68,14 +69,14 @@ static int isLegalUTF8(const uint8_t *source, const int length)
 int is_valid_utf8 (size_t len, char *value)
 {
   /* is the string valid UTF-8? */
-  for (size_t i = 0; i < len; i++) {
+  for (unsigned int i = 0; i < len; i++) {
     uint32_t ch = 0;
     uint8_t  extrabytes = trailingBytesForUTF8[(uint8_t) value[i]];
 
     if (extrabytes + i >= len)
       return 0;
 
-    if (isLegalUTF8 ((uint8_t *) (value + i), extrabytes + 1) == 0) return 0;      
+    if (isLegalUTF8 ((uint8_t *) (value + i), extrabytes + 1) == 0) return 0;
 
     switch (extrabytes) {
       case 5 : ch += (uint8_t) value[i++]; ch <<= 6;
@@ -102,43 +103,43 @@ int is_valid_utf8 (size_t len, char *value)
 class Validation : public ObjectWrap
 {
 public:
-  
+
   static void Initialize(v8::Handle<v8::Object> target)
   {
-    HandleScope scope;
-    Local<FunctionTemplate> t = FunctionTemplate::New(New);
+    NanScope();
+    Local<FunctionTemplate> t = NanNew<FunctionTemplate>(New);
     t->InstanceTemplate()->SetInternalFieldCount(1);
-    NODE_SET_METHOD(t->GetFunction(), "isValidUTF8", Validation::IsValidUTF8);
-    target->Set(String::NewSymbol("Validation"), t->GetFunction());
+    NODE_SET_METHOD(t, "isValidUTF8", Validation::IsValidUTF8);
+    target->Set(NanSymbol("Validation"), t->GetFunction());
   }
-  
+
 protected:
-  
-  static Handle<Value> New(const Arguments& args)
+
+  static NAN_METHOD(New)
   {
-    HandleScope scope;
+    NanScope();
     Validation* validation = new Validation();
     validation->Wrap(args.This());
-    return args.This();
+    NanReturnValue(args.This());
   }
-  
-  static Handle<Value> IsValidUTF8(const Arguments& args)
+
+  static NAN_METHOD(IsValidUTF8)
   {
-    HandleScope scope;
+    NanScope();
     if (!Buffer::HasInstance(args[0])) {
-      return ThrowException(Exception::Error(String::New("First argument needs to be a buffer")));
+      return NanThrowTypeError("First argument needs to be a buffer");
     }
     Local<Object> buffer_obj = args[0]->ToObject();
     char *buffer_data = Buffer::Data(buffer_obj);
-    size_t buffer_length = Buffer::Length(buffer_obj);    
-    return is_valid_utf8(buffer_length, buffer_data) == 1 ? scope.Close(True()) : scope.Close(False());
-   }  
+    size_t buffer_length = Buffer::Length(buffer_obj);
+    NanReturnValue(is_valid_utf8(buffer_length, buffer_data) == 1 ? NanTrue() : NanFalse());
+  }
 };
 
 extern "C" void init (Handle<Object> target)
 {
-  HandleScope scope;
+  NanScope();
   Validation::Initialize(target);
 }
 
-NODE_MODULE(validation, init);
+NODE_MODULE(validation, init)

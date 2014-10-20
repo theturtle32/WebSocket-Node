@@ -9,13 +9,16 @@
         "url": "http://github.com/Worlize/WebSocket-Node.git"
     },
     "engines": {
-        "node": ">=0.6.10"
+        "node": ">=0.8.0"
+    },
+    "dependencies": {
+        "nan": "~1.0.0"
     },
     "config": {
-      "verbose" : false
+        "verbose" : false
     },
     "scripts": {
-        "install": "node install.js"
+        "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)"
     },
     "main": "index",
     "directories": {
