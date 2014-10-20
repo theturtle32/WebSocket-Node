@@ -20,5 +20,6 @@
     "main": "index",
     "directories": {
         "lib": "./lib"
-    }
+    },
+    "browser": "lib/browser.js"
 }
