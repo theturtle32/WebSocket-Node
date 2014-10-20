@@ -39,10 +39,6 @@ An array of extensions that were negotiated for this connection.  Currently unus
 
 The IP address of the remote peer as a string.  In the case of a server, the `X-Forwarded-For` header will be respected and preferred for the purposes of populating this field.  If you need to get to the actual remote IP address, `webSocketConnection.socket.remoteAddress` will provide it.
 
-###websocketVersion
-
-**Deprecated, renamed to webSocketVersion.**
-
 ###webSocketVersion
 
 A number indicating the version of the WebSocket protocol being spoken on this connection.

@@ -18,9 +18,6 @@ new WebSocketClient([clientConfig]);
 
 Client Config Options
 ---------------------
-**websocketVersion** - uint - *Default: 13*  
-**Deprecated, renamed to webSocketVersion.**
-
 **webSocketVersion** - uint - *Default: 13*
 Which version of the WebSocket protocol to use when making the connection.  Currently supported values are 8 and 13.
 This option will be removed once the protocol is finalized by the IETF It is only available to ease the transition through the intermediate draft protocol versions. The only thing this affects the name of the Origin header.
