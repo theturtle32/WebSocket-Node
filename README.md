@@ -21,7 +21,7 @@ Changelog
 
 Current Version: 1.0.8
 
-[View the changelog](https://github.com/Worlize/WebSocket-Node/blob/master/CHANGELOG.md)
+[View the changelog](CHANGELOG.md)
 
 Browser Support
 ---------------
@@ -66,7 +66,7 @@ It may work in earlier or later versions but I'm not actively testing it outside
 Documentation
 =============
 
-For more complete documentation, see the [Documentation Wiki](https://github.com/Worlize/WebSocket-Node/wiki/Documentation).
+[You can read the full API documentation in the docs folder.](docs/index.md)
 
 Installation
 ------------
