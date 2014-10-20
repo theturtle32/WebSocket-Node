@@ -5,3 +5,4 @@ build
 build/*
 npm-debug.log
 test/autobahn/reports/*
+test/heapdump/*
