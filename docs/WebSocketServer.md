@@ -76,6 +76,15 @@ The number of milliseconds to wait after sending a close frame for an acknowledg
 **disableNagleAlgorithm** - boolean - *Default: true*  
 The Nagle Algorithm makes more efficient use of network resources by introducing a small delay before sending small packets so that multiple messages can be batched together before going onto the wire.  This however comes at the cost of latency, so the default is to disable it.  If you don't need low latency and are streaming lots of small messages, you can change this to 'false';
 
+**ignoreXForwardedFor** - Boolean - *Default: false*  
+Whether or not the `X-Forwarded-For` header should be respected.
+It's important to set this to 'true' when accepting connections
+from untrusted clients, as a malicious client could spoof its
+IP address by simply setting this header.  It's meant to be added
+by a trusted proxy or other intermediary within your own
+infrastructure.
+More info: [X-Forwarded-For on Wikipedia](http://en.wikipedia.org/wiki/X-Forwarded-For)
+
 Events
 ------
 There are three events emitted by a WebSocketServer instance that allow you to handle incoming requests, establish connections, and detect when a connection has been closed.
