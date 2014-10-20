@@ -5,6 +5,11 @@ Overview
 --------
 This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
 
+Documentation
+=============
+
+[You can read the full API documentation in the docs folder.](docs/index.md)
+
 Current News
 ------------
 
@@ -61,11 +66,6 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 - 0.10.32
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
-
-Documentation
-=============
-
-[You can read the full API documentation in the docs folder.](docs/index.md)
 
 Installation
 ------------

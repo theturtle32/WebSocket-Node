@@ -9,4 +9,4 @@ Click on one of the classes below to view its API documentation.
 * [WebSocketConnection](./WebSocketConnection.md)
 * [WebSocketFrame](./WebSocketFrame.md)
 * [WebSocketRequest](./WebSocketRequest.md)
-* [WebSocketServer.md](./WebSocketServer.md)
+* [WebSocketServer](./WebSocketServer.md)
