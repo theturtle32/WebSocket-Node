@@ -6,7 +6,7 @@
         "RFC-6455", "realtime", "server", "client"
     ],
     "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "repository": {
         "type": "git",
         "url": "http://github.com/Worlize/WebSocket-Node.git"
