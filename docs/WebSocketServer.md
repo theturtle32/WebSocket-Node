@@ -37,8 +37,8 @@ Gracefully closes all open WebSocket connections and unmounts the server from th
 
 Server Config Options
 ---------------------
-**httpServer** - (http.Server instance)  
-The http server instance to attach to.  **Required**.
+**httpServer** - (http.Server instance) **Required**.  
+The Node http or https server instance(s) to attach to.  You can pass a single instance directly, or pass an array of instances to attach to multiple http/https servers.  Passing an array is particularly useful when you want to accept encrypted and unencrypted WebSocket connections on both ws:// and wss:// protocols using the same WebSocketServer instance.
 
 **maxReceivedFrameSize** - uint - *Default: 64KiB*  
 The maximum allowed received frame size in bytes.  Single frame messages will also be limited to this maximum.
