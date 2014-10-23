@@ -1,5 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 var WebSocketClient = require('../lib/websocket').client
 
 var connectionAmount = process.argv[2];
@@ -22,7 +20,11 @@ function connectDevices() {
 
 function connect( i ){          
     // console.log( "--- Connecting: " + i );
-    var client = new WebSocketClient(); 
+    var client = new WebSocketClient({
+        tlsOptions: {
+            rejectUnauthorized: false
+        }
+    }); 
     client._clientID = i;
     deviceList[i] = client;
 
