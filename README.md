@@ -13,6 +13,8 @@ Documentation
 Current News
 ------------
 
+* Version 1.0.10 is a quick followup release to 1.0.9 that only includes one bugfix for issue #146.
+
 * Version 1.0.9 has a bunch of bug fixes, enhancements, and new features.  For a full list, check out the the [changelog](CHANGELOG.md). A few highlights:
   * Fixed the obscure "ghost connections" bug where the `WebSocketConnection` would sometimes fail to emit the `close` event when there was an error such as ECONNRESET on the underlying socket.
   * Adding option to ignore `X-Forwarded-For` headers when accepting connections from untrusted clients.
@@ -25,7 +27,7 @@ Current News
 Changelog
 ---------
 
-Current Version: 1.0.9
+Current Version: 1.0.10
 
 [View the changelog](CHANGELOG.md)
 

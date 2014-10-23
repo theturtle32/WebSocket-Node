@@ -1,8 +1,16 @@
 Changelog
 =========
 
+Version 1.0.10
+--------------
+*Released 2014-10-22*
+
+* Fixed Issue #146 that was causing WebSocketClient to throw errors when instantiated if passed `tlsOptions`.
+
 Version 1.0.9
 -------------
+*Released 2014-10-20*
+
 * Fixing an insidious corner-case bug that prevented `WebSocketConnection` from firing the `close` event in certain cases when there was an error on the underlying `Socket`, leading to connections sticking around forever, stuck erroneously in the `connected` state.  These "ghost" connections would cause an error event when trying to write to them.
 * Removed deprecated `websocketVersion` property.  Use `webSocketVersion` instead (case difference).
 * Allowing user to specify all properties for `tlsOptions` in WebSocketClient, not just a few whitelisted properties.  This keeps us from having to constantly add new config properties for new versions of Node. (Thanks, [jesusprubio](https://github.com/jesusprubio))
