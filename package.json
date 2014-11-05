@@ -1,31 +1,53 @@
 {
-    "name": "websocket",
-    "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
-    "keywords": [
-        "websocket", "websockets", "socket", "networking", "comet", "push",
-        "RFC-6455", "realtime", "server", "client"
-    ],
-    "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
-    "version": "1.0.10",
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/Worlize/WebSocket-Node.git"
-    },
-    "engines": {
-        "node": ">=0.8.0"
-    },
-    "dependencies": {
-        "nan": "~1.0.0"
-    },
-    "config": {
-        "verbose" : false
-    },
-    "scripts": {
-        "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)"
-    },
-    "main": "index",
-    "directories": {
-        "lib": "./lib"
-    },
-    "browser": "lib/browser.js"
+  "name": "websocket",
+  "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
+  "keywords": [
+    "websocket",
+    "websockets",
+    "socket",
+    "networking",
+    "comet",
+    "push",
+    "RFC-6455",
+    "realtime",
+    "server",
+    "client"
+  ],
+  "author": "Brian McKelvey <brian@worlize.com> (https://www.worlize.com/)",
+  "version": "1.0.10",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Worlize/WebSocket-Node.git"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "bl": "^0.9.3",
+    "bytechunker": "^1.0.1",
+    "duplexer2": "0.0.2",
+    "nan": "~1.0.0",
+    "readable-stream": "^1.0.0",
+    "through2": "^0.6.3"
+  },
+  "config": {
+    "verbose": false
+  },
+  "scripts": {
+    "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)",
+    "test": "faucet"
+  },
+  "main": "index",
+  "directories": {
+    "lib": "./lib"
+  },
+  "browser": "lib/browser.js",
+  "devDependencies": {
+    "buffertools": "^2.1.2",
+    "concat-stream": "^1.4.6",
+    "stream-spigot": "^3.0.4",
+    "tape": "^3.0.1",
+    "through2-spy": "^1.2.0",
+    "websocket": "1.0.10"
+  }
 }
