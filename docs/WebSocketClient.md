@@ -43,7 +43,7 @@ If true, fragmented messages will be automatically assembled and the full messag
 The number of milliseconds to wait after sending a close frame for an acknowledgement to come back before giving up and just closing the socket.
 
 **tlsOptions** - object - *Default: {}*  
-Options to pass to `https.connect` if connecting via TLS
+Options to pass to `https.request` if connecting via TLS
 
 
 Methods
