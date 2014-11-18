@@ -97,7 +97,7 @@ If `autoAcceptConnections` is set to `false`, a `request` event will be emitted 
 ###connect
 `function(webSocketConnection)`
 
-If `autoAcceptConnections` is set to `true`, a `connect` event will be emitted by the server when a new WebSocket request is made.  The server automatically accepts all connections, so the `connect` event will pass the established WebSocketConnection object.  *This should only be used in extremely simplistic test servers etc. for security reasons, as it will accept connections from any source domain.*
+Emitted whenever a new WebSocket connection is accepted.
 
 ###close
 `function(webSocketConnection, closeReason, description)`
