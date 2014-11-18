@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "debug": "~2.1.0",
-    "nan": "~1.0.0"
+    "nan": "~1.0.0",
+    "typedarray-to-buffer": "^3.0.0"
   },
   "config": {
     "verbose": false
