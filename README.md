@@ -87,6 +87,7 @@ var WebSocketServer = require('websocket').server;
 var WebSocketClient = require('websocket').client;
 var WebSocketFrame  = require('websocket').frame;
 var WebSocketRouter = require('websocket').router;
+var W3CWebSocket = require('websocket').w3cwebsocket;
 ```
 
 Note for Windows Users
@@ -117,6 +118,7 @@ Current Features:
   - Keep-alive ping interval
   - Whether or not to automatically assemble received fragments (allows application to handle individual fragments directly)
   - How long to wait after sending a close frame for acknowledgment before closing the socket.
+- [W3C WebSocket API](http://www.w3.org/TR/websockets/) for applications running on both Node and browsers (via the `W3CWebSocket` class). 
 
 
 Known Issues/Missing Features:
@@ -205,7 +207,7 @@ client.on('connectFailed', function(error) {
 });
 
 client.on('connect', function(connection) {
-    console.log('WebSocket client connected');
+    console.log('WebSocket Client Connected');
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
     });
@@ -229,6 +231,44 @@ client.on('connect', function(connection) {
 });
 
 client.connect('ws://localhost:8080/', 'echo-protocol');
+```
+
+Client Example using the *W3C WebSocket API*
+--------------------------------------------
+
+Same example as above but using the [W3C WebSocket API](http://www.w3.org/TR/websockets/).
+
+```javascript
+var W3CWebSocket = require('websocket').w3cwebsocket;
+
+var client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
+
+client.onerror = function() {
+    console.log('Connection Error');
+};
+
+client.onopen = function() {
+    console.log('WebSocket Client Connected');
+
+    function sendNumber() {
+        if (client.readyState === client.OPEN) {
+            var number = Math.round(Math.random() * 0xFFFFFF);
+            client.send(number.toString());
+            setTimeout(sendNumber, 1000);
+        }
+    }
+    sendNumber();
+};
+
+client.onclose = function() {
+    console.log('echo-protocol Client Closed');
+};
+
+client.onmessage(e) {
+    if (typeof e.data === 'string') {
+        console.log("Received: '" + e.data + "'");
+    }
+};
 ```
     
 Request Router Example
