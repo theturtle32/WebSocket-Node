@@ -10,3 +10,4 @@ Click on one of the classes below to view its API documentation.
 * [WebSocketFrame](./WebSocketFrame.md)
 * [WebSocketRequest](./WebSocketRequest.md)
 * [WebSocketServer](./WebSocketServer.md)
+* [W3CWebSocket](./W3CWebSocket.md)
