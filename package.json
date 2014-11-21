@@ -28,6 +28,10 @@
     "typedarray-to-buffer": "~3.0.0"
   },
   "devDependencies": {
+    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
+    "gulp-jshint": "^1.9.0",
+    "gulp-nodeunit-runner": "^0.2.2",
+    "jshint-stylish": "^1.0.0",
     "tape": "~3.0.0"
   },
   "config": {
