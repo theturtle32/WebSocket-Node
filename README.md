@@ -13,6 +13,10 @@ Documentation
 Current News
 ------------
 
+* Version 1.0.11 (Still in testing, not yet released)
+  * Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
+  * Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [https://github.com/ibc](@ibc)!)
+
 * Version 1.0.10 is a quick followup release to 1.0.9 that only includes one bugfix for issue #146.
 
 * Version 1.0.9 has a bunch of bug fixes, enhancements, and new features.  For a full list, check out the the [changelog](CHANGELOG.md). A few highlights:
@@ -65,7 +69,7 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 **Tested with the following node versions:**
 
 - 0.8.28
-- 0.10.32
+- 0.10.33
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
