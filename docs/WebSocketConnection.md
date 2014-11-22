@@ -49,9 +49,9 @@ A boolean value indicating whether or not the connection is still connected.  *R
 
 Methods
 -------
-###close
+###close([reasonCode], [description])
 
-Will gracefully close the connection.  A close frame will be sent to the remote peer indicating that we wish to close the connection, and we will then wait for up to `config.closeTimeout` milliseconds for an acknowledgment from the remote peer before terminating the underlying socket connection.  The `closeTimeout` is passed as part of the `serverOptions` or `clientOptions` hashes to either the `WebSocketServer` or `WebSocketClient` constructors.
+Will gracefully close the connection.  A close frame will be sent to the remote peer with the provided `reasonCode` and `description` indicating that we wish to close the connection, and we will then wait for up to `config.closeTimeout` milliseconds for an acknowledgment from the remote peer before terminating the underlying socket connection.  The `closeTimeout` is passed as part of the `serverOptions` or `clientOptions` hashes to either the `WebSocketServer` or `WebSocketClient` constructors.  Most of the time, you should call `close()` without arguments to initiate a normal connection closure.  If you specify a `reasonCode` that is defined as one of the standard codes in the WebSocket protocol specification and do not provide a `description`, the default description for the given code will be used.  If you would prefer not to send a description at all, pass an empty string `''`as the description parameter.
 
 ###drop([reasonCode], [description])
 
