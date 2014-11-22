@@ -1,4 +1,4 @@
-var WebSocketClient = require('../lib/websocket').client
+var WebSocketClient = require('../../lib/websocket').client
 
 var connectionAmount = process.argv[2];
 var activeCount = 0;

@@ -1,9 +1,17 @@
 module.exports = startEchoServer;
 
-function startEchoServer(callback) {
-  if ('function' !== typeof callback) { callback = function(){}; }
+function startEchoServer(outputStream, callback) {
+  if ('function' === typeof outputStream) {
+    callback = outputStream;
+    outputStream = null;
+  }
+  if ('function' !== typeof callback) {
+    callback = function(){};
+  }
   
-  var path = require('path').join(__dirname + '/../echo-server.js');
+  var path = require('path').join(__dirname + '/../scripts/echo-server.js');
+  
+  console.log(path);
     
   var echoServer = require('child_process').spawn('node', [ path ]);
   
@@ -14,6 +22,11 @@ function startEchoServer(callback) {
       state = 'exiting';
       echoServer.kill(signal);
     }
+  }
+  
+  if (outputStream) {
+    echoServer.stdout.pipe(outputStream);
+    echoServer.stderr.pipe(outputStream);
   }
   
   echoServer.stdout.on('data', function(chunk) {

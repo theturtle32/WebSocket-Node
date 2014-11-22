@@ -15,7 +15,7 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketServer = require('../lib/WebSocketServer');
+var WebSocketServer = require('../../lib/WebSocketServer');
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
@@ -63,7 +63,13 @@ wsServer.on('connect', function(connection) {
     if (debug) console.log((new Date()) + " Connection accepted" +
                             " - Protocol Version " + connection.webSocketVersion);
     function sendCallback(err) {
-        if (err) console.error("send() error: " + err);
+        if (err) {
+          console.error("send() error: " + err);
+          connection.drop();
+          setTimeout(function() {
+            process.exit(100);
+          }, 100);
+        }
     }
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -77,5 +83,6 @@ wsServer.on('connect', function(connection) {
     });
     connection.on('close', function(reasonCode, description) {
         if (debug) console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+        connection._debug.printOutput();
     });
 });

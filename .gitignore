@@ -6,4 +6,4 @@ build/*
 builderror.log
 npm-debug.log
 test/autobahn/reports/*
-test/heapdump/*
+test/scripts/heapdump/*

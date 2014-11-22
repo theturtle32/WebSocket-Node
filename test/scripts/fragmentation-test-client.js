@@ -15,7 +15,7 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketClient = require('../lib/WebSocketClient');
+var WebSocketClient = require('../../lib/WebSocketClient');
 
 console.log("WebSocket-Node: Test client for parsing fragmented messages.");
 

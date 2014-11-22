@@ -15,8 +15,8 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketClient = require('../lib/WebSocketClient');
-var wsVersion = require('../lib/websocket').version;
+var WebSocketClient = require('../../lib/WebSocketClient');
+var wsVersion = require('../../lib/websocket').version;
 var querystring = require('querystring');
 
 var args = { /* defaults */
