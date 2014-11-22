@@ -1,7 +1,7 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // var heapdump = require('heapdump');
-var memwatch = require('memwatch');
+// var memwatch = require('memwatch');
 var fs = require('fs');
 var WebSocketServer = require('../../lib/websocket').server;
 var https = require('https');
@@ -56,4 +56,4 @@ wsServer.on('request', function(request) {
 //     console.log("Triggering heapdump to write to %s", filename);
 //     heapdump.writeSnapshot( filename );
 // }, 10000 );
-memwatch.on('leak', function(info) { console.log(info); });
+// memwatch.on('leak', function(info) { console.log(info); });
