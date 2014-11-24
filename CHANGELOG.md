@@ -6,7 +6,7 @@ Version 1.0.11
 *Not yet released*
 
 * Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
-* Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [https://github.com/ibc](@ibc)!)
+* Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
 
 
 Version 1.0.10
