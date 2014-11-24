@@ -1,6 +1,10 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
+[![npm version](https://badge.fury.io/js/websocket.svg)](http://badge.fury.io/js/websocket)
+[![NPM](https://nodei.co/npm/websocket.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket/)
+[![NPM](https://nodei.co/npm-dl/websocket.png?height=3)](https://nodei.co/npm/websocket/)
+
 Overview
 --------
 This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
