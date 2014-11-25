@@ -1,0 +1,127 @@
+{
+   "agent": "WebSocket-Node 1.0.11",
+   "behavior": "OK",
+   "behaviorClose": "OK",
+   "case": 272,
+   "closedByMe": true,
+   "createStats": true,
+   "createWirelog": true,
+   "description": "Send fragmented binary message message with message payload of length 4 * 2**20 (4M). Sent out in fragments of 64.",
+   "droppedByMe": false,
+   "duration": 1671,
+   "expectation": "Receive echo'ed binary message (with payload as sent).",
+   "expected": {},
+   "expectedClose": {
+      "closeCode": [
+         1000
+      ],
+      "closedByMe": true,
+      "requireClean": true
+   },
+   "failedByMe": false,
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.7.0-0.9.1\r\nHost: 127.0.0.1:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: BfRz8Iv8yEfLekw0et/1qA==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: qZI9pwGpzGvGBePw2vcsOl2fQvY=\r\n\r\n",
+   "id": "9.4.1",
+   "isServer": false,
+   "localCloseCode": 1000,
+   "localCloseReason": null,
+   "received": [],
+   "remoteCloseCode": 1000,
+   "remoteCloseReason": null,
+   "reportCompressionRatio": false,
+   "reportTime": true,
+   "result": "Received binary message of length 4194304.",
+   "resultClose": "Connection was properly closed",
+   "rxFrameStats": {
+      "2": 1,
+      "8": 1
+   },
+   "rxOctetStats": {
+      "4": 1,
+      "129": 1,
+      "10542": 1,
+      "56356": 1,
+      "64184": 1,
+      "65536": 62
+   },
+   "started": "2014-11-25T20:35:31.479Z",
+   "trafficStats": null,
+   "txFrameStats": {
+      "0": 65536,
+      "2": 1,
+      "8": 1
+   },
+   "txOctetStats": {
+      "6": 1,
+      "8": 1,
+      "70": 65536,
+      "239": 1
+   },
+   "wasClean": true,
+   "wasCloseHandshakeTimeout": false,
+   "wasNotCleanReason": null,
+   "wasOpenHandshakeTimeout": false,
+   "wasServerConnectionDropTimeout": false,
+   "wirelog": [
+      [
+         "TO",
+         [
+            239,
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e372e302d302e392e310d0a486f73743a ..."
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            129,
+            "485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a557067726164653a20776562736f636b65740d0a436f6e6e656374696f6e ..."
+         ]
+      ],
+      [
+         "TI",
+         100
+      ],
+      [
+         "TF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         "ae6d3617",
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            8,
+            "8882ae6d3617ad85"
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            4,
+            "880203e8"
+         ]
+      ],
+      [
+         "RF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         false,
+         null
+      ]
+   ]
+}
