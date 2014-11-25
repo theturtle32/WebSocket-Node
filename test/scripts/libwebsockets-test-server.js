@@ -2,14 +2,14 @@
 /************************************************************************
  *  Copyright 2010-2011 Worlize Inc.
  *  
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the Apache License, Version 2.0 (the 'License');
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *  
  *      http://www.apache.org/licenses/LICENSE-2.0
  *  
  *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  distributed under the License is distributed on an 'AS IS' BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
@@ -19,9 +19,7 @@
 var WebSocketServer = require('../../lib/WebSocketServer');
 var WebSocketRouter = require('../../lib/WebSocketRouter');
 var http = require('http');
-var url = require('url');
 var fs = require('fs');
-var os = require('os');
 
 var args = { /* defaults */
     secure: false
@@ -36,27 +34,27 @@ process.argv.forEach(function(value) {
     }
 });
 
-args.protocol = args.secure ? 'wss:' : 'ws:'
+args.protocol = args.secure ? 'wss:' : 'ws:';
 
 if (!args.port) {
-    console.log("WebSocket-Node: Test Server implementing Andy Green's")
-    console.log("libwebsockets-test-server protocols.");
-    console.log("Usage: ./libwebsockets-test-server.js --port=8080 [--secure]");
-    console.log("");
+    console.log('WebSocket-Node: Test Server implementing Andy Green\'s');
+    console.log('libwebsockets-test-server protocols.');
+    console.log('Usage: ./libwebsockets-test-server.js --port=8080 [--secure]');
+    console.log('');
     return;
 }
 
 if (args.secure) {
-    console.log("WebSocket-Node: Test Server implementing Andy Green's")
-    console.log("libwebsockets-test-server protocols.");
-    console.log("ERROR: TLS is not yet supported.");
-    console.log("");
+    console.log('WebSocket-Node: Test Server implementing Andy Green\'s');
+    console.log('libwebsockets-test-server protocols.');
+    console.log('ERROR: TLS is not yet supported.');
+    console.log('');
     return;
 }
 
 var server = http.createServer(function(request, response) {
-    console.log((new Date()) + " Received request for " + request.url);
-    if (request.url == "/") {
+    console.log((new Date()) + ' Received request for ' + request.url);
+    if (request.url === '/') {
         fs.readFile('libwebsockets-test.html', 'utf8', function(err, data) {
             if (err) {
                 response.writeHead(404);
@@ -76,10 +74,10 @@ var server = http.createServer(function(request, response) {
     }
 });
 server.listen(args.port, function() {
-    console.log((new Date()) + " Server is listening on port " + args.port);
+    console.log((new Date()) + ' Server is listening on port ' + args.port);
 });
 
-wsServer = new WebSocketServer({
+var wsServer = new WebSocketServer({
     httpServer: server
 });
 
@@ -92,14 +90,14 @@ var mirrorConnections = [];
 var mirrorHistory = [];
 
 function sendCallback(err) {
-    if (err) console.error("send() error: " + err);
+    if (err) { console.error('send() error: ' + err); }
 }
 
 router.mount('*', 'lws-mirror-protocol', function(request) {
     var cookies = [
         {
-            name: "TestCookie",
-            value: "CookieValue" + Math.floor(Math.random()*1000),
+            name: 'TestCookie',
+            value: 'CookieValue' + Math.floor(Math.random()*1000),
             path: '/',
             secure: false,
             maxage: 5000,
@@ -110,14 +108,14 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin, cookies);
-    console.log((new Date()) + " lws-mirror-protocol connection accepted from " + connection.remoteAddress +
-                " - Protocol Version " + connection.webSocketVersion);
+    console.log((new Date()) + ' lws-mirror-protocol connection accepted from ' + connection.remoteAddress +
+                ' - Protocol Version ' + connection.webSocketVersion);
 
 
     
     if (mirrorHistory.length > 0) {
         var historyString = mirrorHistory.join('');
-        console.log((new Date()) + " sending mirror protocol history to client; " + connection.remoteAddress + " : " + Buffer.byteLength(historyString) + " bytes");
+        console.log((new Date()) + ' sending mirror protocol history to client; ' + connection.remoteAddress + ' : ' + Buffer.byteLength(historyString) + ' bytes');
         
         connection.send(historyString, sendCallback);
     }
@@ -146,13 +144,13 @@ router.mount('*', 'lws-mirror-protocol', function(request) {
     connection.on('close', function(closeReason, description) {
         var index = mirrorConnections.indexOf(connection);
         if (index !== -1) {
-            console.log((new Date()) + " lws-mirror-protocol peer " + connection.remoteAddress + " disconnected, code: " + closeReason + ".");
+            console.log((new Date()) + ' lws-mirror-protocol peer ' + connection.remoteAddress + ' disconnected, code: ' + closeReason + '.');
             mirrorConnections.splice(index, 1);
         }
     });
     
     connection.on('error', function(error) {
-        console.log("Connection error for peer " + connection.remoteAddress + ": " + error);
+        console.log('Connection error for peer ' + connection.remoteAddress + ': ' + error);
     });
 });
 
@@ -160,8 +158,8 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     // Should do origin verification here. You have to pass the accepted
     // origin into the accept method of the request.
     var connection = request.accept(request.origin);
-    console.log((new Date()) + " dumb-increment-protocol connection accepted from " + connection.remoteAddress +
-                " - Protocol Version " + connection.webSocketVersion);
+    console.log((new Date()) + ' dumb-increment-protocol connection accepted from ' + connection.remoteAddress +
+                ' - Protocol Version ' + connection.webSocketVersion);
 
     var number = 0;
     connection.timerInterval = setInterval(function() {
@@ -173,16 +171,16 @@ router.mount('*', 'dumb-increment-protocol', function(request) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             if (message.utf8Data === 'reset\n') {
-                console.log((new Date()) + " increment reset received");
+                console.log((new Date()) + ' increment reset received');
                 number = 0;
             }
         }
     });
     connection.on('close', function(closeReason, description) {
-        console.log((new Date()) + " dumb-increment-protocol peer " + connection.remoteAddress + " disconnected, code: " + closeReason + ".");
+        console.log((new Date()) + ' dumb-increment-protocol peer ' + connection.remoteAddress + ' disconnected, code: ' + closeReason + '.');
     });
 });
 
-console.log("WebSocket-Node: Test Server implementing Andy Green's")
-console.log("libwebsockets-test-server protocols.");
-console.log("Point your WebSocket Protocol Version 8 complant browser to http://localhost:" + args.port + "/");
+console.log('WebSocket-Node: Test Server implementing Andy Green\'s');
+console.log('libwebsockets-test-server protocols.');
+console.log('Point your WebSocket Protocol Version 8 complant browser to http://localhost:' + args.port + '/');

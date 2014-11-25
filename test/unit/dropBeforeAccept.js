@@ -37,7 +37,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
         });
         
         connection.on('error', function(error) {
-          t.fail("No error events should be received on the connection");
+          t.fail('No error events should be received on the connection');
           stopServer();
         });
         

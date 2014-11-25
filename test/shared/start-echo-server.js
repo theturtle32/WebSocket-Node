@@ -15,14 +15,14 @@ function startEchoServer(outputStream, callback) {
     
   var echoServer = require('child_process').spawn('node', [ path ]);
   
-  var state = "starting";
+  var state = 'starting';
   
   var processProxy = {
     kill: function(signal) {
       state = 'exiting';
       echoServer.kill(signal);
     }
-  }
+  };
   
   if (outputStream) {
     echoServer.stdout.pipe(outputStream);
@@ -43,7 +43,7 @@ function startEchoServer(outputStream, callback) {
     echoServer = null;
     if (state !== 'exiting') {
       state = 'exited';
-      callback(new Error("Echo Server exited unexpectedly with code " + code));
+      callback(new Error('Echo Server exited unexpectedly with code ' + code));
       process.exit(1);
     }
   });
