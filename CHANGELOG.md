@@ -3,17 +3,22 @@ Changelog
 
 Version 1.0.11
 --------------
-*Not yet released*
+*Released 2014-11-25*
 
 * Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
 * Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
+* `WebSocketConnection.prototype.close` now accepts optional `reasonCode` and `description` parameters.
+* Calling `accept` or `reject` more than once on a `WebSocketRequest` will now throw an error.  [Issue #149](https://github.com/theturtle32/WebSocket-Node/issues/149)
+* Handling connections dropped by client before accepted by server [Issue #167](https://github.com/theturtle32/WebSocket-Node/issues/167)
+* Integrating Gulp and JSHint (Thanks, [@ibc](https://github.com/ibc)!)
+* Starting to add individual unit tests (using substack's [tape](github.com/substack/tape) and [faucet](github.com/substack/faucet))
 
 
 Version 1.0.10
 --------------
 *Released 2014-10-22*
 
-* Fixed Issue #146 that was causing WebSocketClient to throw errors when instantiated if passed `tlsOptions`.
+* Fixed Issue [#146](https://github.com/theturtle32/WebSocket-Node/issues/146) that was causing WebSocketClient to throw errors when instantiated if passed `tlsOptions`.
 
 Version 1.0.9
 -------------

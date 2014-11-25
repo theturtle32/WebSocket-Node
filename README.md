@@ -9,40 +9,36 @@ WebSocket Client & Server Implementation for Node
 
 Overview
 --------
-This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test" folder.
+This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test/scripts" folder.
+
+For a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/theturtle32/AS3WebSocket) project.
+
 
 Documentation
 =============
 
 [You can read the full API documentation in the docs folder.](docs/index.md)
 
-Current News
-------------
-
-* Version 1.0.11 (Still in testing, not yet released)
-  * Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
-  * Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
-
-* Version 1.0.10 is a quick followup release to 1.0.9 that only includes one bugfix for issue #146.
-
-* Version 1.0.9 has a bunch of bug fixes, enhancements, and new features.  For a full list, check out the the [changelog](CHANGELOG.md). A few highlights:
-  * Fixed the obscure "ghost connections" bug where the `WebSocketConnection` would sometimes fail to emit the `close` event when there was an error such as ECONNRESET on the underlying socket.
-  * Adding option to ignore `X-Forwarded-For` headers when accepting connections from untrusted clients.
-  * Can now simultaneously listen on ws:// and wss://
-  * Incorporating upstream enhancements to native extensions.  Hopefully the build process on Windows will go a bit more smoothly now.
-  * Better and more fair handling of buffered incoming messges under load.
-
-* As of version 1.0.7, ***Native modules are now optional.*** If they fail to compile, WebSocket-Node will still work but will not verify that received UTF-8 data is valid, and xor masking/unmasking of payload data for security purposes will not be as efficient as it is performed in JavaScript instead of native code.
 
 Changelog
 ---------
 
-Current Version: 1.0.10
+***Current Version: 1.0.11*** — Released 2014-11-25
 
-[View the changelog](CHANGELOG.md)
+* Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
+* Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
+* `WebSocketConnection.prototype.close` now accepts optional `reasonCode` and `description` parameters.
+* Calling `accept` or `reject` more than once on a `WebSocketRequest` instance will now throw an error.  [Issue #149](https://github.com/theturtle32/WebSocket-Node/issues/149)
+* Handling connections dropped by client before accepted by server [Issue #167](https://github.com/theturtle32/WebSocket-Node/issues/167)
+* Integrating Gulp and JSHint (Thanks, [@ibc](https://github.com/ibc)!)
+* Starting to add individual unit tests (using substack's [tape](github.com/substack/tape) and [faucet](github.com/substack/faucet))
+
+[View the full changelog](CHANGELOG.md)
 
 Browser Support
 ---------------
+
+All current browsers are fully supported.
 
 * Firefox 7-9 (Old) (Protocol Version 8)
 * Firefox 10+ (Protocol Version 13)
@@ -55,18 +51,16 @@ Browser Support
 
 ***If you need to simultaneously support legacy browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
 
-For a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/Worlize/AS3WebSocket) project.
-
 Benchmarks
 ----------
-There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://worlize.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
+There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://theturtle32.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
 
 Autobahn Tests
 --------------
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
-- [View Server Test Results](http://worlize.github.com/WebSocket-Node/test-report/servers/)
-- [View Client Test Results](http://worlize.github.com/WebSocket-Node/test-report/clients/)
+- [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
+- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)
 
 Notes
 -----
