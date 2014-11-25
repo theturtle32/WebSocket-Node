@@ -17,8 +17,9 @@
   "version": "1.0.11",
   "repository": {
     "type": "git",
-    "url": "http://github.com/Worlize/WebSocket-Node.git"
+    "url": "https://github.com/theturtle32/WebSocket-Node.git"
   },
+  "homepage": "https://github.com/theturtle32/WebSocket-Node",
   "engines": {
     "node": ">=0.8.0"
   },
