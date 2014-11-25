@@ -1,42 +1,15 @@
 #!/usr/bin/env node
 
 var test = require('tape');
-var http = require('http');
 
-var WebSocketServer = require('../../lib/WebSocketServer');
 var WebSocketClient = require('../../lib/WebSocketClient');
-
-var server;
-var wsServer;
-
-function prepare(callback) {
-  server = http.createServer(function(request, response) {
-    response.writeHead(404);
-    response.end();
-  });
-
-  wsServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: false,
-    maxReceivedFrameSize: 64*1024*1024,   // 64MiB
-    maxReceivedMessageSize: 64*1024*1024, // 64MiB
-    fragmentOutgoingMessages: false,
-    keepalive: false,
-    disableNagleAlgorithm: false
-  });
-
-  server.listen(64321, callback);
-}
-
-function stopServer() {
-  wsServer.shutDown();
-  server.close();
-}
+var server = require('../shared/test-server');
+var stopServer = server.stopServer;
 
 test('Drop TCP Connection Before server accepts the request', function(t) {
   t.plan(5);
   
-  prepare(function(err) {
+  server.prepare(function(err, wsServer) {
     if (err) {
       t.fail('Unable to start test server');
       return t.end();
