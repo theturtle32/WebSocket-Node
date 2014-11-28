@@ -268,7 +268,7 @@ client.onclose = function() {
     console.log('echo-protocol Client Closed');
 };
 
-client.onmessage(e) {
+client.onmessage = function(e) {
     if (typeof e.data === 'string') {
         console.log("Received: '" + e.data + "'");
     }
