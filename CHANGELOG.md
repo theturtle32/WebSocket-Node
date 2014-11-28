@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.12
+--------------
+*Released 2014-11-28*
+
+* Fixes [issue #170](https://github.com/theturtle32/WebSocket-Node/issues/170) - Non-native XOR implementation broken after making JSHint happy
+
+
 Version 1.0.11
 --------------
 *Released 2014-11-25*

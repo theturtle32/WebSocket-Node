@@ -23,7 +23,14 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.11*** — Released 2014-11-25
+***Current Version: 1.0.12*** — Released 2014-11-28
+
+***Version 1.0.12***
+
+* Fixes [issue #170](https://github.com/theturtle32/WebSocket-Node/issues/170) - Non-native XOR implementation broken after making JSHint happy
+
+
+***Version 1.0.11***
 
 * Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
 * Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
