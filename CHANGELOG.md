@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.13
+--------------
+*Released 2014-11-29*
+
+* Fixes [issue #171](https://github.com/theturtle32/WebSocket-Node/issues/171) - Code to prevent calling req.accept/req.reject multiple times breaks sanity checks in req.accept
+
+
 Version 1.0.12
 --------------
 *Released 2014-11-28*
