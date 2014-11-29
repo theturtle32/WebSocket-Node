@@ -34,7 +34,9 @@ function stopServer() {
     wsServer.shutDown();
     server.close();
   }
-  catch(e) { /* do nothing */ }
+  catch(e) {
+    console.warn("stopServer threw", e);
+  }
 }
 
 module.exports = {
