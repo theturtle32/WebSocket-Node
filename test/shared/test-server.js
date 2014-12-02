@@ -10,7 +10,7 @@ function prepare(callback) {
     response.writeHead(404);
     response.end();
   });
-  
+
   wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: false,
@@ -20,7 +20,7 @@ function prepare(callback) {
     keepalive: false,
     disableNagleAlgorithm: false
   });
-  
+
   server.listen(64321, function(err) {
     if (err) {
       return callback(err);
@@ -35,7 +35,7 @@ function stopServer() {
     server.close();
   }
   catch(e) {
-    console.warn("stopServer threw", e);
+    console.warn('stopServer threw', e);
   }
 }
 
