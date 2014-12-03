@@ -23,7 +23,12 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.13*** — Released 2014-11-29
+***Current Version: 1.0.14*** — Released 2014-12-03
+
+***Version 1.0.14***
+
+* Resolves [issue #173](https://github.com/theturtle32/WebSocket-Node/issues/173) - To allow the W3CWebSocket interface to accept an optional non-standard configuration object as its third parameter, which will be ignored when running in a browser context.
+
 
 ***Version 1.0.13***
 
