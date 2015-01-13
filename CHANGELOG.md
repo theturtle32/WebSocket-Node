@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.15
+--------------
+*Released 2015-01-13*
+
+* Resolves [issue #177](https://github.com/theturtle32/WebSocket-Node/issues/177) - WebSocketClient ignores options unless it has a tlsOptions property
+
+
 Version 1.0.14
 --------------
 *Released 2014-12-03*

@@ -23,7 +23,11 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.14*** — Released 2014-12-03
+***Current Version: 1.0.15*** — Released 2015-01-13
+
+***Version 1.0.15***
+
+* Resolves [issue #177](https://github.com/theturtle32/WebSocket-Node/issues/177) - WebSocketClient ignores options unless it has a tlsOptions property
 
 ***Version 1.0.14***
 
@@ -34,21 +38,6 @@ Changelog
 
 * Fixes [issue #171](https://github.com/theturtle32/WebSocket-Node/issues/171) - Code to prevent calling req.accept/req.reject multiple times breaks sanity checks in req.accept
 
-
-***Version 1.0.12***
-
-* Fixes [issue #170](https://github.com/theturtle32/WebSocket-Node/issues/170) - Non-native XOR implementation broken after making JSHint happy
-
-
-***Version 1.0.11***
-
-* Fixes some undefined behavior surrounding closing WebSocket connections and more reliably handles edge cases.
-* Adds an implementation of the W3C WebSocket API for browsers to facilitate sharing code between client and server via browserify. (Thanks, [@ibc](https://github.com/ibc)!)
-* `WebSocketConnection.prototype.close` now accepts optional `reasonCode` and `description` parameters.
-* Calling `accept` or `reject` more than once on a `WebSocketRequest` instance will now throw an error.  [Issue #149](https://github.com/theturtle32/WebSocket-Node/issues/149)
-* Handling connections dropped by client before accepted by server [Issue #167](https://github.com/theturtle32/WebSocket-Node/issues/167)
-* Integrating Gulp and JSHint (Thanks, [@ibc](https://github.com/ibc)!)
-* Starting to add individual unit tests (using substack's [tape](github.com/substack/tape) and [faucet](github.com/substack/faucet))
 
 [View the full changelog](CHANGELOG.md)
 
