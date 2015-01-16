@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.16
+--------------
+*Released 2015-01-16*
+
+* Resolves [issue #178](https://github.com/theturtle32/WebSocket-Node/issues/178) - Ping Frames with no data
+
+
 Version 1.0.15
 --------------
 *Released 2015-01-13*
