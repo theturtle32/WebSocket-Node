@@ -4,7 +4,7 @@ var test = require('tape');
 var bufferEqual = require('buffer-equal');
 var WebSocketFrame = require('../../lib/WebSocketFrame');
 
-test("Serializing a WebSocket Frame with no data", function(t) {
+test('Serializing a WebSocket Frame with no data', function(t) {
   t.plan(2);
   
   // WebSocketFrame uses a per-connection buffer for the mask bytes
@@ -19,7 +19,7 @@ test("Serializing a WebSocket Frame with no data", function(t) {
   frame.opcode = 0x09; // WebSocketFrame.PING
   t.doesNotThrow(
     function() { frameBytes = frame.toBuffer(true); },
-    "should not throw an error"
+    'should not throw an error'
   );
   
   t.assert(
