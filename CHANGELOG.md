@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.17
+--------------
+*Released 2015-01-17*
+
+* Resolves [issue #179](https://github.com/theturtle32/WebSocket-Node/pull/179) - Allow toBuffer to work with empty data
+
+
 Version 1.0.16
 --------------
 *Released 2015-01-16*

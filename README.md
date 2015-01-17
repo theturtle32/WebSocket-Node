@@ -23,7 +23,11 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.16*** — Released 2015-01-16
+***Current Version: 1.0.17*** — Released 2015-01-17
+
+***Version 1.0.17***
+
+* Resolves [issue #179](https://github.com/theturtle32/WebSocket-Node/pull/179) - Allow toBuffer to work with empty data
 
 ***Version 1.0.16***
 
@@ -36,11 +40,6 @@ Changelog
 ***Version 1.0.14***
 
 * Resolves [issue #173](https://github.com/theturtle32/WebSocket-Node/issues/173) - To allow the W3CWebSocket interface to accept an optional non-standard configuration object as its third parameter, which will be ignored when running in a browser context.
-
-
-***Version 1.0.13***
-
-* Fixes [issue #171](https://github.com/theturtle32/WebSocket-Node/issues/171) - Code to prevent calling req.accept/req.reject multiple times breaks sanity checks in req.accept
 
 
 [View the full changelog](CHANGELOG.md)
