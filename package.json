@@ -29,6 +29,7 @@
     "typedarray-to-buffer": "~3.0.0"
   },
   "devDependencies": {
+    "buffer-equal": "0.0.1",
     "faucet": "0.0.1",
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
     "gulp-jshint": "^1.9.0",
