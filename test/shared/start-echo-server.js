@@ -8,27 +8,25 @@ function startEchoServer(outputStream, callback) {
   if ('function' !== typeof callback) {
     callback = function(){};
   }
-  
+
   var path = require('path').join(__dirname + '/../scripts/echo-server.js');
-  
-  console.log(path);
-    
+
   var echoServer = require('child_process').spawn('node', [ path ]);
-  
+
   var state = 'starting';
-  
+
   var processProxy = {
     kill: function(signal) {
       state = 'exiting';
       echoServer.kill(signal);
     }
   };
-  
+
   if (outputStream) {
     echoServer.stdout.pipe(outputStream);
     echoServer.stderr.pipe(outputStream);
   }
-  
+
   echoServer.stdout.on('data', function(chunk) {
     chunk = chunk.toString();
     if (/Server is listening/.test(chunk)) {
