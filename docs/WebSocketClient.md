@@ -59,6 +59,10 @@ Will establish a connection to the given `requestUrl`.  `requestedProtocols` ind
 
 `origin` must be specified if you want to pass `headers`, and both `origin` and `headers` must be specified if you want to pass `requestOptions`.  The `origin` and `headers` parameters may be passed as `null`.
 
+###abort()
+
+Will cancel an in-progress connection request before either the `connect` event or the `connectFailed` event has been emitted.  If the `connect` or `connectFailed` event has already been emitted, calling `abort()` will do nothing.
+
 
 Events
 ------
