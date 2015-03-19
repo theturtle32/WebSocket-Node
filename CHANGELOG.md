@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.0.18
+--------------
+*Released 2015-03-19*
+
+* Resolves [issue #195](https://github.com/theturtle32/WebSocket-Node/pull/179) - passing number to connection.send() causes crash
+* [Added close code/reason arguments to W3CWebSocket#close()](https://github.com/theturtle32/WebSocket-Node/issues/184)
+
+
 Version 1.0.17
 --------------
 *Released 2015-01-17*
