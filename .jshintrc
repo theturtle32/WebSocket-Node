@@ -65,11 +65,11 @@
 	"browser"       : true,     // Web Browser (window, document, etc)
 	"browserify"    : true,     // Browserify (node.js code in the browser)
 	"couch"         : false,    // CouchDB
-	"devel"         : true,     // Development/debugging (alert, confirm, etc)
+	"devel"         : false,    // Development/debugging (alert, confirm, etc)
 	"dojo"          : false,    // Dojo Toolkit
 	"jasmine"       : false,    // Jasmine
 	"jquery"        : false,    // jQuery
-	"mocha"         : false,    // Mocha
+	"mocha"         : true,     // Mocha
 	"mootools"      : false,    // MooTools
 	"node"          : true,     // Node.js
 	"nonstandard"   : false,    // Widely adopted globals (escape, unescape, etc)
@@ -82,7 +82,5 @@
 	"yui"           : false,    // Yahoo User Interface
 
 	// Custom Globals
-	"globals"       : { // additional predefined global variables
-		"WebSocket": true
-	}        
+	"globals"       : {}        // additional predefined global variables
 }
