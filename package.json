@@ -48,5 +48,6 @@
   "directories": {
     "lib": "./lib"
   },
-  "browser": "lib/browser.js"
+  "browser": "lib/browser.js",
+  "license": "Apache-2.0"
 }
