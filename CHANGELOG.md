@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.0.19
+--------------
+*Released 2015-05-28*
+
+* Updated to nan v1.8.x (tested with v1.8.4)
+* Added `"license": "Apache-2.0"` to package.json via [pull request #199](https://github.com/theturtle32/WebSocket-Node/pull/199) by [@pgilad](https://github.com/pgilad). See [npm1k.org](http://npm1k.org/).
+
+
 Version 1.0.18
 --------------
 *Released 2015-03-19*

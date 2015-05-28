@@ -27,29 +27,12 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.18*** — Released 2015-03-19
+***Current Version: 1.0.19*** — Released 2015-05-28
 
-***Version 1.0.18***
+***Version 1.0.19***
 
-* Resolves [issue #195](https://github.com/theturtle32/WebSocket-Node/pull/179) - passing number to connection.send() causes crash
-* [Added close code/reason arguments to W3CWebSocket#close()](https://github.com/theturtle32/WebSocket-Node/issues/184)
-
-***Version 1.0.17***
-
-* Resolves [issue #179](https://github.com/theturtle32/WebSocket-Node/pull/179) - Allow toBuffer to work with empty data
-
-***Version 1.0.16***
-
-* Resolves [issue #178](https://github.com/theturtle32/WebSocket-Node/issues/178) - Ping Frames with no data
-
-***Version 1.0.15***
-
-* Resolves [issue #177](https://github.com/theturtle32/WebSocket-Node/issues/177) - WebSocketClient ignores options unless it has a tlsOptions property
-
-***Version 1.0.14***
-
-* Resolves [issue #173](https://github.com/theturtle32/WebSocket-Node/issues/173) - To allow the W3CWebSocket interface to accept an optional non-standard configuration object as its third parameter, which will be ignored when running in a browser context.
-
+* Updated to nan v1.8.x (tested with v1.8.4)
+* Added `"license": "Apache-2.0"` to package.json via [pull request #199](https://github.com/theturtle32/WebSocket-Node/pull/199) by [@pgilad](https://github.com/pgilad). See [npm1k.org](http://npm1k.org/).
 
 [View the full changelog](CHANGELOG.md)
 
