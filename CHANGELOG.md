@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.21
+--------------
+*Released 2015-07-22*
+
+* Incrememnted and re-published to work around an aborted npm publish of v1.0.20.
+
 Version 1.0.20
 --------------
 *Released 2015-07-22*
