@@ -27,7 +27,7 @@
     "debug": "^2.2.0",
     "nan": "^1.8.x",
     "typedarray-to-buffer": "^3.0.3",
-    "yaeti": "^0.0.3"
+    "yaeti": "^0.0.4"
   },
   "devDependencies": {
     "buffer-equal": "^0.0.1",
