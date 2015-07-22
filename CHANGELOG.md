@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.20
+--------------
+*Released 2015-07-22*
+
+* Added EventTarget to the W3CWebSocket interface (Thanks, [@ibc](https://github.com/ibc)!)
+* Corrected an inaccurate error message. (Thanks, [@lekoaf](https://github.com/lekoaf)!)
+
 Version 1.0.19
 --------------
 *Released 2015-05-28*
