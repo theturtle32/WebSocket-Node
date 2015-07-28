@@ -88,7 +88,7 @@ Sends a ping frame to the remote peer.  `data` can be a Node `Buffer` or any obj
 
 ###pong(buffer)
 
-Sends a pong frame to the remote peer.  Pong frames may be sent unsolicited and such pong frames will trigger no action on the receiving peer.  Pong frames sent in response to a ping frame must mirror the payload data of the ping frame exactly.  The `WebSocketConnection` object handles this internally for you, so there should be no need to use this method to respond to pings.  Pong frames must not exceed 125 bytes in length.
+Sends a pong frame to the remote peer.  Pong frames may be sent unsolicited and such pong frames will trigger no action on the receiving peer.  Pong frames sent in response to a ping frame must mirror the payload data of the ping frame exactly.  The `WebSocketConnection` object handles this internally for you, so there should be no need to use this method to respond to pings unless you explicitly cancel() this internal behavior (see ping event below).  Pong frames must not exceed 125 bytes in length.
 
 ###sendFrame(webSocketFrame)
 
@@ -129,3 +129,13 @@ This event is emitted when the connection has been fully closed and the socket i
 `function(error)`
 
 This event is emitted when there has been a socket error.  If this occurs, a `close` event will also be emitted.
+
+###ping
+`function(cancel, data)`
+
+This event is emitted when the connection receives a `ping` from the peer.  `cancel` is a function taking no arguments that when called prevents the WebSocketConnection object from automatically replying with a `pong`. `data` is the binary payload contained in the ping frame.
+
+###pong
+`function(data)`
+
+This event is emitted when the connection receives a `pong` from the peer. `data` is the binary data contained in the pong frame.
