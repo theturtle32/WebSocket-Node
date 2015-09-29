@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.22
+--------------
+*Released 2015-09-28*
+
+* Updating to work with nan 2.x
+
 Version 1.0.21
 --------------
 *Released 2015-07-22*
