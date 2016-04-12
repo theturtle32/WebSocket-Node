@@ -152,6 +152,7 @@ function BufferList(opts) {
                 : { buffer : null, next : null }
             ;
         }
+        if (head.buffer === null) last = { next : null, buffer : null };
         self.emit('advance', n);
         return self;
     };
