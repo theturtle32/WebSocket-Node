@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.23
+--------------
+*Released to SMC 2016-04-12*
+
+* internal SMC version for issue #223
+
+
 Version 1.0.22
 --------------
 *Released 2015-09-28*
