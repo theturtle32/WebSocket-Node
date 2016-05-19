@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.23
+--------------
+*Released 2016-05-18*
+
+* Official support for Node 6.x
+* Updating dependencies. Specifically, updating nan to ^2.3.3
+
 Version 1.0.22
 --------------
 *Released 2015-09-28*

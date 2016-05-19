@@ -27,7 +27,12 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.22*** — Released 2015-09-28
+***Current Version: 1.0.23*** — Released 2016-05-18***
+
+***Version 1.0.23***
+
+* Official support for Node 6.x
+* Updating dependencies. Specifically, updating nan to ^2.3.3
 
 ***Version 1.0.22***
 
@@ -83,8 +88,10 @@ This library has been used in production on [worlize.com](https://www.worlize.co
 
 **Tested with the following node versions:**
 
-- 0.8.28
-- 0.10.33
+- 6.2.0
+- 5.11.1
+- 4.4.4
+- 0.10.45
 
 It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
