@@ -27,7 +27,7 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.23*** — Released 2016-05-18***
+***Current Version: 1.0.23*** — Released 2016-05-18
 
 ***Version 1.0.23***
 
