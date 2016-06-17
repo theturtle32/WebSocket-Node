@@ -6,12 +6,16 @@ var WebSocketServer = require('../../lib/WebSocketServer');
 var WebSocketClient = require('../../lib/WebSocketClient');
 
 
-function serverSide(t, sockFname) {
+function serverSide(t, sockFname, addr) {
   var server = http.createServer((request, response) => {
     response.writeHead(404);
     response.end();
   });
-  server.listen(sockFname, () => { });
+  if (addr) {
+    server.listen(sockFname, addr, () => { });
+  } else {
+    server.listen(sockFname, () => { });
+  }
   server.on('error', (e) => {
     t.assert(true, false, "errors should not happen");
   });
@@ -20,7 +24,6 @@ function serverSide(t, sockFname) {
   wsServer.on('request', (request) => {
     var connection = request.accept('sockfname-protocol', request.origin);
     connection.on('message', function(message) {
-      //console.log(">>",message);
       switch (message.utf8Data)  {
         case "ping" :
           connection.send("pong");
@@ -36,7 +39,7 @@ function serverSide(t, sockFname) {
   return server;
 }
 
-function clientSide(t, sockFname, cb) {
+function clientSide(t, sockFname, addr, cb) {
     let client = new WebSocketClient();
     client.on('connectFailed', (error) => {
       console.error(error);
@@ -57,39 +60,47 @@ function clientSide(t, sockFname, cb) {
               connection.send("bye");
           }
         });
-        //console.log("<<ping");
         connection.send("ping");
     });
     if (typeof(sockFname) == "number") {
-      client.connect('ws://localhost:'+sockFname+'/', 'sockfname-protocol');
+      if (addr.includes(':')) {
+        addr = "["+addr+"]";
+      }
+      var url = 'ws://'+addr+':'+sockFname+'/';
+      client.connect(url, 'sockfname-protocol');
+      //client.connect('ws://[::1]:'+sockFname+'/', 'sockfname-protocol');
     } else {
-      client.connect('wsf://'+sockFname+'/', 'sockfname-protocol');
+      client.connect('ws://['+sockFname+']/', 'sockfname-protocol');
     }
 }
 
-function run(t, socket, finCb) {
-  var server = serverSide(t, socket);
+function run(t, socket, adr, finCb) {
+  var server = serverSide(t, socket, adr);
   var i = 0;
   var cb = function() {
-    //console.log("i="+i)
     if (i < 10) {
       ++i;
-      clientSide(t, socket, cb);
+      clientSide(t, socket, adr, cb);
     } else {
       server.close();
       finCb && finCb();
     }
   }
-  clientSide(t, socket, cb);
+  clientSide(t, socket, adr, cb);
 }
 
-test('use wsf to connect over file sockets', function(t) {
+test('use ws over file sockets', function(t) {
   t.plan(10 + 1);
   var sock = "./S.test."+process.pid;
   run(t, sock);
 });
 
-test('use wsf to connect over tcp sockets', function(t) {
+test('use ws over ipv4 tcp sockets', function(t) {
   t.plan(10 + 1);
-  run(t, 4711);
+  run(t, 4711, "127.0.0.1");
+});
+
+test('use ws over ipv6 tcp sockets', function(t) {
+  t.plan(10 + 1);
+  run(t, 4711, "::1");
 });
