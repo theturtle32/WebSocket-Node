@@ -2,6 +2,8 @@
 
 var test = require('tape');
 var http = require('http');
+var path = require('path');
+var os = require('os');
 var WebSocketServer = require('../../lib/WebSocketServer');
 var WebSocketClient = require('../../lib/WebSocketClient');
 
@@ -91,7 +93,10 @@ function run(t, socket, adr, finCb) {
 
 test('use ws over file sockets', function(t) {
   t.plan(10 + 1);
-  var sock = "./S.test."+process.pid;
+  var sock = './S.test.' + process.pid;
+  if (os.platform() == 'win32') {
+    var sock = path.join("\\\\?\\pipe", process.cwd(), "S.test." + process.pid);
+  }
   run(t, sock);
 });
 
