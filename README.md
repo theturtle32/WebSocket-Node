@@ -85,7 +85,6 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
-- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)
 
 Notes
 -----
