@@ -27,7 +27,12 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.23*** — Released 2016-05-18
+***Current Version: 1.0.24*** — Released 2016-12-28
+
+***Version 1.0.24***
+
+* Fixed a bug when using native keepalive on Node >= 6.0. (Thanks, [@prossin](https://github.com/prossin))
+* Upgrading outdated dependencies
 
 ***Version 1.0.23***
 
@@ -41,7 +46,7 @@ Changelog
 
 ***Version 1.0.21***
 
-* Incrememnted and re-published to work around an aborted npm publish of v1.0.20.
+* Incremented and re-published to work around an aborted npm publish of v1.0.20.
 
 ***Version 1.0.20***
 
@@ -80,7 +85,6 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
-- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)
 
 Notes
 -----
