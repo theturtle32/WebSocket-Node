@@ -19,19 +19,19 @@ new WebSocketServer([serverConfig]);
 Methods
 -------
 
-###mount(serverConfig)
+### mount(serverConfig)
 
 `mount` will attach the WebSocketServer instance to a Node http.Server instance. `serverConfig` is required, and is an object with configuration values.  For those values, see **Server Config Options** below.  If you passed `serverConfig` to the constructor, this function will automatically be invoked.
 
-###unmount()
+### unmount()
 
 `unmount` will detach the WebSocketServer instance from the Node http.Server instance.  All existing connections are left alone and will not be affected, but no new WebSocket connections will be accepted.
 
-###closeAllConnections()
+### closeAllConnections()
 
 Will gracefully close all open WebSocket connections.
 
-###shutDown()
+### shutDown()
 
 Gracefully closes all open WebSocket connections and unmounts the server from the Node http.Server instance.
 
@@ -45,10 +45,10 @@ The maximum allowed received frame size in bytes.  Single frame messages will al
 
 **maxReceivedMessageSize** - uint - *Default: 1MiB*  
 The maximum allowed aggregate message size (for fragmented messages) in bytes.
-            
+
 **fragmentOutgoingMessages** - Boolean - *Default: true*  
 Whether or not to fragment outgoing messages.  If true, messages will be automatically fragmented into chunks of up to `fragmentationThreshold` bytes.
-            
+
 **fragmentationThreshold** - uint - *Default: 16KiB*  
 The maximum size of a frame in bytes before it is automatically fragmented.
 
@@ -89,17 +89,17 @@ Events
 ------
 There are three events emitted by a WebSocketServer instance that allow you to handle incoming requests, establish connections, and detect when a connection has been closed.
 
-###request
+### request
 `function(webSocketRequest)`
 
 If `autoAcceptConnections` is set to `false`, a `request` event will be emitted by the server whenever a new WebSocket request is made.  You should inspect the requested protocols and the user's origin to verify the connection, and then accept or reject it by calling webSocketRequest.accept('chosen-protocol', 'accepted-origin') or webSocketRequest.reject()
 
-###connect
+### connect
 `function(webSocketConnection)`
 
 Emitted whenever a new WebSocket connection is accepted.
 
-###close
+### close
 `function(webSocketConnection, closeReason, description)`
 
 Whenever a connection is closed for any reason, the WebSocketServer instance will emit a `close` event, passing a reference to the WebSocketConnection instance that was closed.  `closeReason` is the numeric reason status code for the connection closure, and `description` is a textual description of the close reason, if available.
