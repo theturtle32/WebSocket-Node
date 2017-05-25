@@ -5,6 +5,7 @@
       'include_dirs': ["<!(node -e \"require('nan')\")"],
       'cflags!': [ '-O3' ],
       'cflags': [ '-O2' ],
+      'defines' : ['DELAYIMP_INSECURE_WRITABLE_HOOKS'],
       'sources': [ 'src/validation.cc' ]
     },
     {
@@ -12,6 +13,7 @@
       'include_dirs': ["<!(node -e \"require('nan')\")"],
       'cflags!': [ '-O3' ],
       'cflags': [ '-O2' ],
+      'defines' : ['DELAYIMP_INSECURE_WRITABLE_HOOKS'],
       'sources': [ 'src/bufferutil.cc' ]
     }
   ]
