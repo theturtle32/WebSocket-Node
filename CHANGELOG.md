@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 1.0.25
+--------------
+*Released 2017-10-18*
+
+* Bumping minimum supported node version specified in package.json to v0.10.x because some upstream libraries no longer install on v0.8.x
+* [Allowing use of close codes 1012, 1013, 1014](https://www.iana.org/assignments/websocket/websocket.xml)
+* [Allowing the `Host` header to be overridden.](https://github.com/theturtle32/WebSocket-Node/pull/291) (Thanks, [@Juneil](https://github.com/Juneil))
+* [Mitigating infinite loop for broken connections](https://github.com/theturtle32/WebSocket-Node/pull/289) (Thanks, [@tvkit](https://github.com/tvkit))
+* [Fixed Markdown Typos](https://github.com/theturtle32/WebSocket-Node/pull/281) (Thanks, [@teramotodaiki](https://github.com/teramotodaiki))
+* [Adding old readyState constants for W3CWebSocket interface](https://github.com/theturtle32/WebSocket-Node/pull/282) (Thanks, [@thechriswalker](https://github.com/thechriswalker))
+
+
 Version 1.0.24
 --------------
 *Released 2016-12-28*
