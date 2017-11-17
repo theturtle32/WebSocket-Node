@@ -27,31 +27,14 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.23*** — Released 2016-05-18
+***Current Version: 1.0.25*** — Released 2017-10-18
 
-***Version 1.0.23***
-
-* Official support for Node 6.x
-* Updating dependencies. Specifically, updating nan to ^2.3.3
-
-***Version 1.0.22***
-
-* Updating to work with nan 2.x
-
-
-***Version 1.0.21***
-
-* Incrememnted and re-published to work around an aborted npm publish of v1.0.20.
-
-***Version 1.0.20***
-
-* Added EventTarget to the W3CWebSocket interface (Thanks, [@ibc](https://github.com/ibc)!)
-* Corrected an inaccurate error message. (Thanks, [@lekoaf](https://github.com/lekoaf)!)
-
-***Version 1.0.19***
-
-* Updated to nan v1.8.x (tested with v1.8.4)
-* Added `"license": "Apache-2.0"` to package.json via [pull request #199](https://github.com/theturtle32/WebSocket-Node/pull/199) by [@pgilad](https://github.com/pgilad). See [npm1k.org](http://npm1k.org/).
+* Bumping minimum supported node version specified in package.json to v0.10.x because some upstream libraries no longer install on v0.8.x
+* [Allowing use of close codes 1012, 1013, 1014](https://www.iana.org/assignments/websocket/websocket.xml)
+* [Allowing the `Host` header to be overridden.](https://github.com/theturtle32/WebSocket-Node/pull/291) (Thanks, [@Juneil](https://github.com/Juneil))
+* [Mitigating infinite loop for broken connections](https://github.com/theturtle32/WebSocket-Node/pull/289) (Thanks, [@tvkit](https://github.com/tvkit))
+* [Fixed Markdown Typos](https://github.com/theturtle32/WebSocket-Node/pull/281) (Thanks, [@teramotodaiki](https://github.com/teramotodaiki))
+* [Adding old readyState constants for W3CWebSocket interface](https://github.com/theturtle32/WebSocket-Node/pull/282) (Thanks, [@thechriswalker](https://github.com/thechriswalker))
 
 [View the full changelog](CHANGELOG.md)
 
@@ -80,7 +63,6 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
-- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)
 
 Notes
 -----

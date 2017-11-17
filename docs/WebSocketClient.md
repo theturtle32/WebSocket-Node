@@ -48,7 +48,7 @@ Options to pass to `https.request` if connecting via TLS.  See [Node's HTTPS doc
 
 Methods
 -------
-###connect(requestUrl, requestedProtocols, [[[origin], headers], requestOptions])
+### connect(requestUrl, requestedProtocols, [[[origin], headers], requestOptions])
 
 Will establish a connection to the given `requestUrl`.  `requestedProtocols` indicates a list of multiple subprotocols supported by the client.  The remote server will select the best subprotocol that it supports and send that back when establishing the connection.  `origin` is an optional field that can be used in user-agent scenarios to identify the page containing any scripting content that caused the connection to be requested.  (This seems unlikely in node.. probably should leave it null most of the time.)  `requestUrl` should be a standard websocket url, such as:
 `ws://www.mygreatapp.com:1234/websocketapp/`
@@ -59,24 +59,24 @@ Will establish a connection to the given `requestUrl`.  `requestedProtocols` ind
 
 `origin` must be specified if you want to pass `headers`, and both `origin` and `headers` must be specified if you want to pass `requestOptions`.  The `origin` and `headers` parameters may be passed as `null`.
 
-###abort()
+### abort()
 
 Will cancel an in-progress connection request before either the `connect` event or the `connectFailed` event has been emitted.  If the `connect` or `connectFailed` event has already been emitted, calling `abort()` will do nothing.
 
 
 Events
 ------
-###connect
+### connect
 `function(webSocketConnection)`
 
 Emitted upon successfully negotiating the WebSocket handshake with the remote server.  `webSocketConnection` is an instance of `WebSocketConnection` that can be used to send and receive messages with the remote server.
 
-###connectFailed
+### connectFailed
 `function(errorDescription)`
 
 Emitted when there is an error connecting to the remote host or the handshake response sent by the server is invalid.
 
-###httpResponse
+### httpResponse
 `function(response, webSocketClient)`
 
 Emitted when the server replies with anything other then "101 Switching Protocols".  Provides an opportunity to handle redirects for example. The `response` parameter is an instance of the [http.IncomingMessage](http://nodejs.org/api/http.html#http_http_incomingmessage) class.  This is not suitable for handling receiving of large response bodies, as the underlying socket will be immediately closed by WebSocket-Node as soon as all handlers for this event are executed.
