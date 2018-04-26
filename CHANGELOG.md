@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.26
+--------------
+*Released 2018-04-27*
+
+* No longer using the deprecated `noAssert` parameter for functions reading and writing binary numeric data. (Thanks, [@BridgeAR](https://github.com/BridgeAR))
+
 Version 1.0.25
 --------------
 *Released 2017-10-18*
