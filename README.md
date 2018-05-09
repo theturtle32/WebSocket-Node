@@ -27,36 +27,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.24*** — Released 2016-12-28
+***Current Version: 1.0.26*** — Released 2018-04-27
 
-***Version 1.0.24***
-
-* Fixed a bug when using native keepalive on Node >= 6.0. (Thanks, [@prossin](https://github.com/prossin))
-* Upgrading outdated dependencies
-
-***Version 1.0.23***
-
-* Official support for Node 6.x
-* Updating dependencies. Specifically, updating nan to ^2.3.3
-
-***Version 1.0.22***
-
-* Updating to work with nan 2.x
-
-
-***Version 1.0.21***
-
-* Incremented and re-published to work around an aborted npm publish of v1.0.20.
-
-***Version 1.0.20***
-
-* Added EventTarget to the W3CWebSocket interface (Thanks, [@ibc](https://github.com/ibc)!)
-* Corrected an inaccurate error message. (Thanks, [@lekoaf](https://github.com/lekoaf)!)
-
-***Version 1.0.19***
-
-* Updated to nan v1.8.x (tested with v1.8.4)
-* Added `"license": "Apache-2.0"` to package.json via [pull request #199](https://github.com/theturtle32/WebSocket-Node/pull/199) by [@pgilad](https://github.com/pgilad). See [npm1k.org](http://npm1k.org/).
+* No longer using the deprecated `noAssert` parameter for functions reading and writing binary numeric data. (Thanks, [@BridgeAR](https://github.com/BridgeAR))
 
 [View the full changelog](CHANGELOG.md)
 
@@ -85,19 +58,6 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
-
-Notes
------
-This library has been used in production on [worlize.com](https://www.worlize.com) since April 2011 and seems to be stable.  Your mileage may vary.
-
-**Tested with the following node versions:**
-
-- 6.2.0
-- 5.11.1
-- 4.4.4
-- 0.10.45
-
-It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
 Installation
 ------------
