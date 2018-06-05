@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "nan": "^2.3.3",
+    "nan": "^2.10.0",
     "typedarray-to-buffer": "^3.1.2",
     "yaeti": "^0.0.6"
   },
