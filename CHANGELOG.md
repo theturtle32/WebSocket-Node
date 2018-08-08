@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.24
+--------------
+*Released to SMC 2016-05-12*
+
+* internal SMC version for ignoring pong responses being late
+
 Version 1.0.23
 --------------
 *Released to SMC 2016-04-12*
