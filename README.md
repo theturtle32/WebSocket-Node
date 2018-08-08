@@ -27,26 +27,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.22*** — Released 2015-09-28
+***Current Version: 1.0.26*** — Released 2018-04-27
 
-***Version 1.0.22***
-
-* Updating to work with nan 2.x
-
-
-***Version 1.0.21***
-
-* Incrememnted and re-published to work around an aborted npm publish of v1.0.20.
-
-***Version 1.0.20***
-
-* Added EventTarget to the W3CWebSocket interface (Thanks, [@ibc](https://github.com/ibc)!)
-* Corrected an inaccurate error message. (Thanks, [@lekoaf](https://github.com/lekoaf)!)
-
-***Version 1.0.19***
-
-* Updated to nan v1.8.x (tested with v1.8.4)
-* Added `"license": "Apache-2.0"` to package.json via [pull request #199](https://github.com/theturtle32/WebSocket-Node/pull/199) by [@pgilad](https://github.com/pgilad). See [npm1k.org](http://npm1k.org/).
+* No longer using the deprecated `noAssert` parameter for functions reading and writing binary numeric data. (Thanks, [@BridgeAR](https://github.com/BridgeAR))
 
 [View the full changelog](CHANGELOG.md)
 
@@ -75,18 +58,6 @@ Autobahn Tests
 The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)
-- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)
-
-Notes
------
-This library has been used in production on [worlize.com](https://www.worlize.com) since April 2011 and seems to be stable.  Your mileage may vary.
-
-**Tested with the following node versions:**
-
-- 0.8.28
-- 0.10.33
-
-It may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.
 
 Installation
 ------------
