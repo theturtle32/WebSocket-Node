@@ -1,6 +1,6 @@
 {
-  "name": "@smc/websocket",
-  "description": "SMC's fork - Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
+  "name": "websocket",
+  "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
   "keywords": [
     "websocket",
     "websockets",
@@ -17,27 +17,28 @@
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (http://dev.sipdoc.net)"
   ],
-  "version": "1.0.23",
+  "version": "1.0.26",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FieldServer/WebSocket-Node.git"
+    "url": "https://github.com/theturtle32/WebSocket-Node.git"
   },
-  "homepage": "https://github.com/FieldServer/WebSocket-Node",
+  "homepage": "https://github.com/theturtle32/WebSocket-Node",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "dependencies": {
-    "debug": "~2.2.0",
-    "nan": "~2.0.5",
-    "typedarray-to-buffer": "~3.0.3",
-    "yaeti": "~0.0.4"
+    "debug": "^2.2.0",
+    "nan": "^2.3.3",
+    "typedarray-to-buffer": "^3.1.2",
+    "yaeti": "^0.0.6"
   },
   "devDependencies": {
-    "buffer-equal": "^0.0.1",
+    "buffer-equal": "^1.0.0",
     "faucet": "^0.0.1",
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
-    "gulp-jshint": "^1.11.2",
-    "jshint-stylish": "^1.0.2",
+    "gulp-jshint": "^2.0.4",
+    "jshint-stylish": "^2.2.1",
+    "jshint": "^2.0.0",
     "tape": "^4.0.1"
   },
   "config": {
@@ -46,8 +47,7 @@
   "scripts": {
     "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)",
     "test": "faucet test/unit",
-    "gulp": "gulp",
-    "postpublish": "npm access grant read-write smc:smc-developers @smc/websocket & npm access grant read-only smc:smc-read-only @smc/websocket"
+    "gulp": "gulp"
   },
   "main": "index",
   "directories": {

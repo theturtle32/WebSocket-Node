@@ -1,6 +1,6 @@
 .npmignore
 .gitignore
-
+docs/
 example/
 build/
 test/
