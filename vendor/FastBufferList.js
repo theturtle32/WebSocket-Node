@@ -6,6 +6,7 @@
 // Treat a linked list of buffers as a single variable-size buffer.
 var Buffer = require('buffer').Buffer;
 var EventEmitter = require('events').EventEmitter;
+var bufferAllocUnsafe = require('../lib/utils').bufferAllocUnsafe;
 
 module.exports = BufferList;
 module.exports.BufferList = BufferList; // backwards compatibility
@@ -20,9 +21,6 @@ function BufferList(opts) {
     // default encoding to use for take(). Leaving as 'undefined'
     // makes take() return a Buffer instead.
     self.encoding = opts.encoding;
-    
-    // constructor to use for Buffer-esque operations
-    self.construct = opts.construct || Buffer;
     
     var head = { next : null, buffer : null };
     var last = { next : null, buffer : null };
@@ -68,7 +66,7 @@ function BufferList(opts) {
     // If fn's result is a true value, cut out early.
     // Returns this (self).
     self.forEach = function (fn) {
-        if (!head.buffer) return new self.construct(0);
+        if (!head.buffer) return bufferAllocUnsafe(0);
         
         if (head.buffer.length - offset <= 0) return self;
         var firstBuf = head.buffer.slice(offset);
@@ -87,11 +85,11 @@ function BufferList(opts) {
     // Create a single Buffer out of all the chunks or some subset specified by
     // start and one-past the end (like slice) in bytes.
     self.join = function (start, end) {
-        if (!head.buffer) return new self.construct(0);
+        if (!head.buffer) return bufferAllocUnsafe(0);
         if (start == undefined) start = 0;
         if (end == undefined) end = self.length;
         
-        var big = new self.construct(end - start);
+        var big = bufferAllocUnsafe(end - start);
         var ix = 0;
         self.forEach(function (buffer) {
             if (start < (ix + buffer.length) && ix < end) {
@@ -111,7 +109,7 @@ function BufferList(opts) {
     };
     
     self.joinInto = function (targetBuffer, targetStart, sourceStart, sourceEnd) {
-        if (!head.buffer) return new self.construct(0);
+        if (!head.buffer) return new bufferAllocUnsafe(0);
         if (sourceStart == undefined) sourceStart = 0;
         if (sourceEnd == undefined) sourceEnd = self.length;
         
