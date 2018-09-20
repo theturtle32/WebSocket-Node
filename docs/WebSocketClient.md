@@ -42,6 +42,9 @@ If true, fragmented messages will be automatically assembled and the full messag
 **closeTimeout** - uint - *Default: 5000*  
 The number of milliseconds to wait after sending a close frame for an acknowledgement to come back before giving up and just closing the socket.
 
+**secure** - bool - *Default: false*  
+If true, `wss` will be used, otherwise `ws` will be used.
+
 **tlsOptions** - object - *Default: {}*  
 Options to pass to `https.request` if connecting via TLS.  See [Node's HTTPS documentation](http://nodejs.org/api/https.html#https_https_request_options_callback)
 
