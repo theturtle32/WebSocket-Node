@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.27
+--------------
+*Released 2018-09-19*
+
+* Allowing additional request `headers` to be specified in the `tlsOptions` config parameter for WebSocketClient. See pull request #323
+* Resolving deprecation warnings relating to usage of `new Buffer`
+
 Version 1.0.26
 --------------
 *Released 2018-04-27*

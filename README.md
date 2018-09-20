@@ -27,9 +27,10 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.26*** — Released 2018-04-27
+***Current Version: 1.0.27*** — Released 2018-09-19
 
-* No longer using the deprecated `noAssert` parameter for functions reading and writing binary numeric data. (Thanks, [@BridgeAR](https://github.com/BridgeAR))
+* Allowing additional request `headers` to be specified in the `tlsOptions` config parameter for WebSocketClient. See pull request #323
+* Resolving deprecation warnings relating to usage of `new Buffer`
 
 [View the full changelog](CHANGELOG.md)
 
