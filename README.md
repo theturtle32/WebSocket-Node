@@ -83,11 +83,17 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 
 Note for Windows Users
 ----------------------
-Because there is a small C++ component used for validating UTF-8 data, you will need to install a few other software packages in addition to Node to be able to build this module:
+Because there is a small C++ component used for validating UTF-8 data, you will need to install 
+native build tools. You can install the required components using `windows-build-tools`:
+
+```ps1
+npm install --global --production windows-build-tools
+```
+
+Alternatively, install the required components:
 
 - [Microsoft Visual C++](http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express)
 - [Python 2.7](http://www.python.org/download/) (NOT Python 3.x)
-
 
 Current Features:
 -----------------
