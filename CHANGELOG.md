@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.28
+--------------
+*Released 2018-09-19*
+
+* Updated to latest version of [nan](https://github.com/nodejs/nan)
+
 Version 1.0.27
 --------------
 *Released 2018-09-19*
