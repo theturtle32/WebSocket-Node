@@ -18,6 +18,7 @@
 
 var WebSocketServer = require('../../lib/WebSocketServer');
 var WebSocketRouter = require('../../lib/WebSocketRouter');
+var bufferAllocUnsafe = require('../../lib/utils').bufferAllocUnsafe;
 var http = require('http');
 var fs = require('fs');
 
@@ -121,7 +122,7 @@ router.mount('*', 'fragmentation-test', function(request) {
                 requestedLength = parseInt(match[1], 10);
                 
                 // Generate random binary data.
-                var buffer = new Buffer(requestedLength);
+                var buffer = bufferAllocUnsafe(requestedLength);
                 for (var i=0; i < requestedLength; i++) {
                     buffer[i] = Math.ceil(Math.random()*255);
                 }

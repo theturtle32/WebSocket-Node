@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 1.0.27 (SMC & Upstream)
+--------------
+*Released to SMC 2019-02-11*
+*Released 2018-09-19*
+
+* Allowing additional request `headers` to be specified in the `tlsOptions` config parameter for WebSocketClient. See pull request #323
+* Resolving deprecation warnings relating to usage of `new Buffer`
+* [SMC] do not throw errors, console.log them and return
+
 Version 1.0.26 (SMC & upstream)
 -------------------------------
 *Released to SMC 2018-08-08*
@@ -56,7 +65,7 @@ Version 1.0.21
 --------------
 *Released 2015-07-22*
 
-* Incrememnted and re-published to work around an aborted npm publish of v1.0.20.
+* Incremented and re-published to work around an aborted npm publish of v1.0.20.
 
 Version 1.0.20
 --------------
