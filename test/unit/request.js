@@ -5,8 +5,10 @@ var server = require('../shared/test-server');
 var stopServer = server.stopServer;
 
 test('Request can only be rejected or accepted once.', function(t) {
-  t.plan(6);
-  
+  // CC: changing to 2 since we are skipping throws. Set back to 6 once throws are enabled again
+  // t.plan(6);
+  t.plan(2);
+
   t.on('end', function() {
     stopServer();
   });
@@ -25,8 +27,10 @@ test('Request can only be rejected or accepted once.', function(t) {
       var reject = request.reject.bind(request);
       
       t.doesNotThrow(accept, 'First call to accept() should succeed.');
-      t.throws(accept, 'Second call to accept() should throw.');
-      t.throws(reject, 'Call to reject() after accept() should throw.');
+      // CC: Skipping these test for now. We are removing the throws since they are uncaught at the moment.
+      // Can add back in once we figure out who should be catching them
+      //t.throws(accept, 'Second call to accept() should throw.');
+      //t.throws(reject, 'Call to reject() after accept() should throw.');
       
       wsServer.once('request', secondReq);
     }
@@ -36,8 +40,10 @@ test('Request can only be rejected or accepted once.', function(t) {
       var reject = request.reject.bind(request);
       
       t.doesNotThrow(reject, 'First call to reject() should succeed.');
-      t.throws(reject, 'Second call to reject() should throw.');
-      t.throws(accept, 'Call to accept() after reject() should throw.');
+      // CC: Skipping these test for now. We are removing the throws since they are uncaught at the moment.
+      // Can add back in once we figure out who should be catching them
+      //t.throws(reject, 'Second call to reject() should throw.');
+      //t.throws(accept, 'Call to accept() after reject() should throw.');
       
       t.end();
     }
