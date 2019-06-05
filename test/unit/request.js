@@ -5,9 +5,7 @@ var server = require('../shared/test-server');
 var stopServer = server.stopServer;
 
 test('Request can only be rejected or accepted once.', function(t) {
-  // CC: changing to 2 since we are skipping throws. Set back to 6 once throws are enabled again
-  // t.plan(6);
-  t.plan(2);
+  t.plan(6);
 
   t.on('end', function() {
     stopServer();
@@ -27,10 +25,8 @@ test('Request can only be rejected or accepted once.', function(t) {
       var reject = request.reject.bind(request);
       
       t.doesNotThrow(accept, 'First call to accept() should succeed.');
-      // CC: Skipping these test for now. We are removing the throws since they are uncaught at the moment.
-      // Can add back in once we figure out who should be catching them
-      //t.throws(accept, 'Second call to accept() should throw.');
-      //t.throws(reject, 'Call to reject() after accept() should throw.');
+      t.throws(accept, 'Second call to accept() should throw.');
+      t.throws(reject, 'Call to reject() after accept() should throw.');
       
       wsServer.once('request', secondReq);
     }
@@ -40,10 +36,8 @@ test('Request can only be rejected or accepted once.', function(t) {
       var reject = request.reject.bind(request);
       
       t.doesNotThrow(reject, 'First call to reject() should succeed.');
-      // CC: Skipping these test for now. We are removing the throws since they are uncaught at the moment.
-      // Can add back in once we figure out who should be catching them
-      //t.throws(reject, 'Second call to reject() should throw.');
-      //t.throws(accept, 'Call to accept() after reject() should throw.');
+      t.throws(reject, 'Second call to reject() should throw.');
+      t.throws(accept, 'Call to accept() after reject() should throw.');
       
       t.end();
     }
@@ -62,29 +56,29 @@ test('Request can only be rejected or accepted once.', function(t) {
 
 test('Protocol mismatch should be handled gracefully', function(t) {
   var wsServer;
-  
+
   t.test('setup', function(t) {
     server.prepare(function(err, result) {
       if (err) {
         t.fail('Unable to start test server');
         return t.end();
       }
-      
+
       wsServer = result;
       t.end();
     });
   });
-  
+
   t.test('mismatched protocol connection', function(t) {
     t.plan(2);
     wsServer.on('request', handleRequest);
-    
+
     var client = new WebSocketClient();
-    
+
     var timer = setTimeout(function() {
       t.fail('Timeout waiting for client event');
     }, 2000);
-    
+
     client.connect('ws://localhost:64321/', 'some_protocol_here');
     client.on('connect', function(connection) {
       clearTimeout(timer);
@@ -95,15 +89,13 @@ test('Protocol mismatch should be handled gracefully', function(t) {
       clearTimeout(timer);
       t.pass('connectFailed event should be emitted on client');
     });
-    
-    
-    
+
     function handleRequest(request) {
       var accept = request.accept.bind(request, 'this_is_the_wrong_protocol', request.origin);
       t.throws(accept, 'request.accept() should throw');
     }
   });
-  
+
   t.test('teardown', function(t) {
     stopServer();
     t.end();

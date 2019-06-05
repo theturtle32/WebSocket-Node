@@ -1,8 +1,14 @@
 Changelog
 =========
 
+Version 1.0.28 (SMC)
+--------------------
+*Released to SMC 2019-06-04*
+
+* [SMC] Revert workaround for accepting/rejecting a websocket twice
+
 Version 1.0.27 (SMC & Upstream)
---------------
+-------------------------------
 *Released to SMC 2019-02-11*
 *Released 2018-09-19*
 

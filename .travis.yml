@@ -1,0 +1,17 @@
+env:
+  - INTRAVENOUS=yes
+
+os:
+  - linux
+
+branches:
+  only:
+    - master
+
+language: node_js
+node_js:
+  - "10"
+  - "12"
+
+script: "npm run test"
+after_failure: "cat /home/travis/build/happner/happner/npm-debug.log"
