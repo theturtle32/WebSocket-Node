@@ -1,6 +1,8 @@
 WebSocket Client & Server Implementation for Node
 =================================================
 
+[![Build Status](https://travis-ci.com/FieldServer/WebSocket-Node.svg?branch=master)](https://travis-ci.com/FieldServer/WebSocket-Node)
+
 [![npm version](https://badge.fury.io/js/websocket.svg)](http://badge.fury.io/js/websocket)
 
 [![NPM Downloads](https://img.shields.io/npm/dm/websocket.svg)](https://www.npmjs.com/package/websocket)
