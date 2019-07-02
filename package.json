@@ -17,12 +17,12 @@
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (http://dev.sipdoc.net)"
   ],
-  "version": "1.0.28",
+  "version": "1.0.29",
   "repository": {
     "type": "git",
-    "url": "https://github.com/theturtle32/WebSocket-Node.git"
+    "url": "https://github.com/FieldServer/WebSocket-Node.git"
   },
-  "homepage": "https://github.com/theturtle32/WebSocket-Node",
+  "homepage": "https://github.com/FieldServer/WebSocket-Node",
   "engines": {
     "node": ">=0.10.0"
   },
