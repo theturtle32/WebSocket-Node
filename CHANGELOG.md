@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.0.29 (SMC)
+--------------------
+*Released to SMC 2019-07-02*
+* Fix repo field in package.json
+
 Version 1.0.28 (SMC)
 --------------------
 *Released to SMC 2019-06-04*
