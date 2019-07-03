@@ -1,7 +1,12 @@
 .npmignore
 .gitignore
+.git/
+.DS_Store
+.lock-*
+node_modules/
 docs/
 example/
 build/
+builderror.log
+npm-debug.log
 test/
-node_modules/
