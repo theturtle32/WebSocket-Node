@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.29
+--------------
+*Released 2019-07-03*
+
+* Updated some dependencies and updated the .gitignore and .npmignore files
+
 Version 1.0.28
 --------------
 *Released 2018-09-19*

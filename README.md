@@ -27,12 +27,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.28*** — Released 2018-09-19
+***Current Version: 1.0.29*** — Released 2019-07-03
 
-* Updated to latest version of [nan](https://github.com/nodejs/nan)
-* Plus changes published in 1.0.27:
-  * Allowing additional request `headers` to be specified in the `tlsOptions` config parameter for WebSocketClient. See pull request #323
-  * Resolving deprecation warnings relating to usage of `new Buffer`
+* Updated some dependencies and updated the .gitignore and .npmignore files
 
 [View the full changelog](CHANGELOG.md)
 
