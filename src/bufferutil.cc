@@ -23,7 +23,7 @@ class BufferUtil : public ObjectWrap
 {
 public:
 
-  static void Initialize(v8::Handle<v8::Object> target)
+  static void Initialize(v8::Local<v8::Object> target)
   {
     Nan::HandleScope scope;
     Local<FunctionTemplate> t = Nan::New<FunctionTemplate>(New);
@@ -112,7 +112,7 @@ protected:
 #if !NODE_VERSION_AT_LEAST(0,10,0)
 extern "C"
 #endif
-void init (Handle<Object> target)
+void init (Local<Object> target)
 {
   Nan::HandleScope scope;
   BufferUtil::Initialize(target);
