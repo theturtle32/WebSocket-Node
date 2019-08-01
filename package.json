@@ -29,13 +29,13 @@
   "dependencies": {
     "debug": "^2.2.0",
     "nan": "^2.14.0",
-    "gulp": "^4.0.2",
     "typedarray-to-buffer": "^3.1.5",
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
     "buffer-equal": "^1.0.0",
     "faucet": "^0.0.1",
+    "gulp": "^4.0.2",
     "gulp-jshint": "^2.0.4",
     "jshint-stylish": "^2.2.1",
     "jshint": "^2.0.0",
