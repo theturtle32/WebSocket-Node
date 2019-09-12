@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.30
+--------------
+*Released 2019-09-12*
+
+* Moved gulp back to devDependencies
+
 Version 1.0.29
 --------------
 *Released 2019-07-03*

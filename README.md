@@ -27,9 +27,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.29*** — Released 2019-07-03
+***Current Version: 1.0.30*** — Released 2019-09-12
 
-* Updated some dependencies and updated the .gitignore and .npmignore files
+* Moved gulp back to devDependencies
 
 [View the full changelog](CHANGELOG.md)
 
