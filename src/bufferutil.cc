@@ -54,7 +54,7 @@ protected:
     size_t offset = 0;
     unsigned int i;
     for (i = 0; i < arrayLength; ++i) {
-      Local<Object> src = Nan::To<v8::Object>(array->Get(i)).ToLocalChecked();
+      Local<Object> src = Nan::To<v8::Object>(Nan::Get(array, Nan::New(i)).ToLocalChecked()).ToLocalChecked();
       size_t length = Buffer::Length(src);
       memcpy(buffer + offset, Buffer::Data(src), length);
       offset += length;
