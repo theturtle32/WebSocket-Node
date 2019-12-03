@@ -111,7 +111,7 @@ public:
     Local<FunctionTemplate> t = Nan::New<FunctionTemplate>(New);
     t->InstanceTemplate()->SetInternalFieldCount(1);
     Nan::SetMethod(t, "isValidUTF8", Validation::IsValidUTF8);
-    Nan::Set(target, Nan::New<String>("Validation").ToLocalChecked(), t->GetFunction());
+    Nan::Set(target, Nan::New<String>("Validation").ToLocalChecked(), Nan::GetFunction(t).ToLocalChecked());
   }
 
 protected:
@@ -130,7 +130,7 @@ protected:
     if (!Buffer::HasInstance(info[0])) {
       return Nan::ThrowTypeError("First argument needs to be a buffer");
     }
-    Local<Object> buffer_obj = info[0]->ToObject();
+    Local<Object> buffer_obj = Nan::To<v8::Object>(info[0]).ToLocalChecked();
     char *buffer_data = Buffer::Data(buffer_obj);
     size_t buffer_length = Buffer::Length(buffer_obj);
     info.GetReturnValue().Set(is_valid_utf8(buffer_length, buffer_data) == 1 ? Nan::True() : Nan::False());

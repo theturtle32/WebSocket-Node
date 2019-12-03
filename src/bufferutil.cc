@@ -31,7 +31,7 @@ public:
     Nan::SetMethod(t, "unmask", BufferUtil::Unmask);
     Nan::SetMethod(t, "mask", BufferUtil::Mask);
     Nan::SetMethod(t, "merge", BufferUtil::Merge);
-    Nan::Set(target, Nan::New<String>("BufferUtil").ToLocalChecked(), t->GetFunction());
+    Nan::Set(target, Nan::New<String>("BufferUtil").ToLocalChecked(), Nan::GetFunction(t).ToLocalChecked());
   }
 
 protected:
@@ -47,14 +47,14 @@ protected:
   static NAN_METHOD(Merge)
   {
     Nan::HandleScope scope;
-    Local<Object> bufferObj = info[0]->ToObject();
+    Local<Object> bufferObj = Nan::To<v8::Object>(info[0]).ToLocalChecked();
     char* buffer = Buffer::Data(bufferObj);
     Local<Array> array = Local<Array>::Cast(info[1]);
     unsigned int arrayLength = array->Length();
     size_t offset = 0;
     unsigned int i;
     for (i = 0; i < arrayLength; ++i) {
-      Local<Object> src = array->Get(i)->ToObject();
+      Local<Object> src = Nan::To<v8::Object>(Nan::Get(array, Nan::New(i)).ToLocalChecked()).ToLocalChecked();
       size_t length = Buffer::Length(src);
       memcpy(buffer + offset, Buffer::Data(src), length);
       offset += length;
@@ -65,9 +65,9 @@ protected:
   static NAN_METHOD(Unmask)
   {
     Nan::HandleScope scope;
-    Local<Object> buffer_obj = info[0]->ToObject();
+    Local<Object> buffer_obj = Nan::To<v8::Object>(info[0]).ToLocalChecked();
     size_t length = Buffer::Length(buffer_obj);
-    Local<Object> mask_obj = info[1]->ToObject();
+    Local<Object> mask_obj = Nan::To<v8::Object>(info[1]).ToLocalChecked();
     unsigned int *mask = (unsigned int*)Buffer::Data(mask_obj);
     unsigned int* from = (unsigned int*)Buffer::Data(buffer_obj);
     size_t len32 = length / 4;
@@ -86,12 +86,12 @@ protected:
   static NAN_METHOD(Mask)
   {
     Nan::HandleScope scope;
-    Local<Object> buffer_obj = info[0]->ToObject();
-    Local<Object> mask_obj = info[1]->ToObject();
+    Local<Object> buffer_obj = Nan::To<v8::Object>(info[0]).ToLocalChecked();
+    Local<Object> mask_obj = Nan::To<v8::Object>(info[1]).ToLocalChecked();
     unsigned int *mask = (unsigned int*)Buffer::Data(mask_obj);
-    Local<Object> output_obj = info[2]->ToObject();
-    unsigned int dataOffset = info[3]->Int32Value();
-    unsigned int length = info[4]->Int32Value();
+    Local<Object> output_obj = Nan::To<v8::Object>(info[2]).ToLocalChecked();
+    unsigned int dataOffset = Nan::To<v8::Int32>(info[3]).ToLocalChecked()->Value();
+    unsigned int length = Nan::To<v8::Int32>(info[4]).ToLocalChecked()->Value();
     unsigned int* to = (unsigned int*)(Buffer::Data(output_obj) + dataOffset);
     unsigned int* from = (unsigned int*)Buffer::Data(buffer_obj);
     unsigned int len32 = length / 4;
