@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 1.0.31
+--------------
+*Released 2019-12-06*
+
+* Fix [infinite loop in error handling](https://github.com/theturtle32/WebSocket-Node/issues/329) (Thanks, [@apirila](https://github.com/apirila))
+* Fix [memory leak with multiple WebSocket servers on the same HTTP server](https://github.com/theturtle32/WebSocket-Node/pull/339) (Thanks, [@nazar-pc](https://github.com/nazar-pc))
+* [Use es5-ext/global as a more robust way to resolve browser's window object](https://github.com/theturtle32/WebSocket-Node/pull/362) (Thanks, [@michaelsbradleyjr](https://github.com/michaelsbradleyjr))
+* [adding compatibility with V8 release greater than v7.6 (node and electron engines)](https://github.com/theturtle32/WebSocket-Node/pull/376) (Thanks, [@artynet](https://github.com/artynet))
+
 Version 1.0.30
 --------------
 *Released 2019-09-12*
