@@ -7,10 +7,6 @@ WebSocket Client & Server Implementation for Node
 
 [![NPM Downloads](https://img.shields.io/npm/dm/websocket.svg)](https://www.npmjs.com/package/websocket)
 
-[![NPM](https://nodei.co/npm/websocket.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket/)
-
-[![NPM](https://nodei.co/npm-dl/websocket.png?height=3)](https://nodei.co/npm/websocket/)
-
 [ ![Codeship Status for theturtle32/WebSocket-Node](https://codeship.com/projects/70458270-8ee7-0132-7756-0a0cf4fe8e66/status?branch=master)](https://codeship.com/projects/61106)
 
 Overview
@@ -29,10 +25,12 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.27*** — Released 2018-09-19
+***Current Version: 1.0.31*** — Released 2019-12-06
 
-* Allowing additional request `headers` to be specified in the `tlsOptions` config parameter for WebSocketClient. See pull request #323
-* Resolving deprecation warnings relating to usage of `new Buffer`
+* Fix [infinite loop in error handling](https://github.com/theturtle32/WebSocket-Node/issues/329) (Thanks, [@apirila](https://github.com/apirila))
+* Fix [memory leak with multiple WebSocket servers on the same HTTP server](https://github.com/theturtle32/WebSocket-Node/pull/339) (Thanks, [@nazar-pc](https://github.com/nazar-pc))
+* [Use es5-ext/global as a more robust way to resolve browser's window object](https://github.com/theturtle32/WebSocket-Node/pull/362) (Thanks, [@michaelsbradleyjr](https://github.com/michaelsbradleyjr))
+* [Adding compatibility with V8 release greater than v7.6 (node and electron engines)](https://github.com/theturtle32/WebSocket-Node/pull/376) (Thanks, [@artynet](https://github.com/artynet))
 
 [View the full changelog](CHANGELOG.md)
 
@@ -85,17 +83,11 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 
 Note for Windows Users
 ----------------------
-Because there is a small C++ component used for validating UTF-8 data, you will need to install 
-native build tools. You can install the required components using `windows-build-tools`:
-
-```ps1
-npm install --global --production windows-build-tools
-```
-
-Alternatively, install the required components:
+Because there is a small C++ component used for validating UTF-8 data, you will need to install a few other software packages in addition to Node to be able to build this module:
 
 - [Microsoft Visual C++](http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express)
 - [Python 2.7](http://www.python.org/download/) (NOT Python 3.x)
+
 
 Current Features:
 -----------------
