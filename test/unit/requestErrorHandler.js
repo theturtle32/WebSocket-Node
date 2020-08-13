@@ -29,7 +29,10 @@ test('W3CWebSockets adding event listeners with ws.onxxxxx', function(t) {
   wsServer.on('request', function(carrier){
     // force a write after destroyed error
     carrier.socket.destroy();
-    carrier.reject();
+
+    setTimeout(()=>{
+      carrier.reject();
+    }, 500);
   });
 
   var ws = new WebSocket('ws://localhost:8080/');
@@ -43,5 +46,5 @@ test('W3CWebSockets adding event listeners with ws.onxxxxx', function(t) {
     ws.close();
     server.close();
     t.end();
-  }, 100);
+  }, 1000);
 });
