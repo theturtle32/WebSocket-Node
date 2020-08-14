@@ -1,9 +1,9 @@
-node_modules
+node_modules/
 .DS_Store
 .lock-*
-build
-build/*
+build/
 builderror.log
 npm-debug.log
 test/autobahn/reports*/*
 test/scripts/heapdump/*
+.idea

@@ -17,7 +17,7 @@
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (http://dev.sipdoc.net)"
   ],
-  "version": "1.0.29",
+  "version": "1.0.31",
   "repository": {
     "type": "git",
     "url": "https://github.com/FieldServer/WebSocket-Node.git"
@@ -28,14 +28,15 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "nan": "^2.3.3",
+    "es5-ext": "^0.10.50",
+    "nan": "^2.14.0",
     "typedarray-to-buffer": "^3.1.5",
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
     "buffer-equal": "^1.0.0",
     "faucet": "^0.0.1",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-jshint": "^2.0.4",
     "jshint-stylish": "^2.2.1",
     "jshint": "^2.0.0",
