@@ -36,7 +36,6 @@
   },
   "devDependencies": {
     "buffer-equal": "^1.0.0",
-    "faucet": "^0.0.1",
     "gulp": "^4.0.2",
     "gulp-jshint": "^2.0.4",
     "jshint-stylish": "^2.2.1",
@@ -47,7 +46,7 @@
     "verbose": false
   },
   "scripts": {
-    "test": "faucet test/unit",
+    "test": "tape test/unit/*.js",
     "gulp": "gulp"
   },
   "main": "index",
