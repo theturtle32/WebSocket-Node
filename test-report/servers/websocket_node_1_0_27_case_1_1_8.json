@@ -1,0 +1,730 @@
+{
+   "agent": "WebSocket-Node 1.0.27",
+   "behavior": "OK",
+   "behaviorClose": "OK",
+   "case": 8,
+   "closedByMe": true,
+   "createStats": true,
+   "createWirelog": true,
+   "description": "Send text message message with payload of length 65536. Sent out data in chops of 997 octets.",
+   "droppedByMe": false,
+   "duration": 28,
+   "expectation": "Receive echo'ed text message (with payload as sent). Clean close with normal code.",
+   "expected": {
+      "OK": [
+         [
+            "message",
+            "**************************************************************** ...",
+            false
+         ]
+      ]
+   },
+   "expectedClose": {
+      "closeCode": [
+         1000
+      ],
+      "closedByMe": true,
+      "requireClean": true
+   },
+   "failedByMe": false,
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: /pCg7Y5Ty1iFjUr4KpQbjw==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 0Ag9td/YDhQZu790n0q2JTcwIx4=\r\n\r\n",
+   "id": "1.1.8",
+   "isServer": false,
+   "localCloseCode": 1000,
+   "localCloseReason": null,
+   "received": [
+      [
+         "message",
+         "**************************************************************** ...",
+         false
+      ]
+   ],
+   "remoteCloseCode": 1000,
+   "remoteCloseReason": null,
+   "reportCompressionRatio": false,
+   "reportTime": false,
+   "result": "Actual events match at least one expected.",
+   "resultClose": "Connection was properly closed",
+   "rxFrameStats": {
+      "1": 1,
+      "8": 1
+   },
+   "rxOctetStats": {
+      "4": 1,
+      "129": 1,
+      "5142": 1,
+      "7300": 1,
+      "10220": 1,
+      "18064": 1,
+      "24820": 1
+   },
+   "started": "2020-08-28T14:51:11.677Z",
+   "trafficStats": null,
+   "txFrameStats": {
+      "1": 1,
+      "8": 1
+   },
+   "txOctetStats": {
+      "8": 1,
+      "251": 1,
+      "745": 1,
+      "997": 65
+   },
+   "wasClean": true,
+   "wasCloseHandshakeTimeout": false,
+   "wasNotCleanReason": null,
+   "wasOpenHandshakeTimeout": false,
+   "wasServerConnectionDropTimeout": false,
+   "wirelog": [
+      [
+         "TO",
+         [
+            251,
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            129,
+            "485454502f312e312031303120537769746368696e672050726f746f636f6c730d0a557067726164653a20776562736f636b65740d0a436f6e6e656374696f6e ..."
+         ]
+      ],
+      [
+         "TF",
+         [
+            65536,
+            "**************************************************************** ..."
+         ],
+         1,
+         true,
+         0,
+         "db00d6d7",
+         null,
+         997,
+         false
+      ],
+      [
+         "TO",
+         [
+            997,
+            "81ff0000000000010000db00d6d7f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "KL",
+         10
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "f12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfd ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "2afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf1 ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            997,
+            "fcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12a ..."
+         ],
+         true
+      ],
+      [
+         "TO",
+         [
+            745,
+            "fdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afcfdf12afc ..."
+         ],
+         true
+      ],
+      [
+         "RO",
+         [
+            7300,
+            "817f00000000000100002a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a ..."
+         ]
+      ],
+      [
+         "RO",
+         [
+            24820,
+            "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a ..."
+         ]
+      ],
+      [
+         "RO",
+         [
+            18064,
+            "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a ..."
+         ]
+      ],
+      [
+         "RO",
+         [
+            10220,
+            "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a ..."
+         ]
+      ],
+      [
+         "RO",
+         [
+            5142,
+            "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a ..."
+         ]
+      ],
+      [
+         "RF",
+         [
+            65536,
+            "**************************************************************** ..."
+         ],
+         1,
+         true,
+         0,
+         false,
+         null
+      ],
+      [
+         "TF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         "8ca2eaa8",
+         null,
+         null,
+         false
+      ],
+      [
+         "TO",
+         [
+            8,
+            "88828ca2eaa88f4a"
+         ],
+         false
+      ],
+      [
+         "RO",
+         [
+            4,
+            "880203e8"
+         ]
+      ],
+      [
+         "RF",
+         [
+            2,
+            "0x03e8"
+         ],
+         8,
+         true,
+         0,
+         false,
+         null
+      ]
+   ]
+}
