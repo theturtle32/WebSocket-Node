@@ -8,4 +8,4 @@ docker run -it --rm \
     -p 9001:9001 \
     --name fuzzingclient \
     crossbario/autobahn-testsuite \
-    /usr/local/bin/wstest -m fuzzingclient --spec /config/fuzzingclient.json
+    wstest -m fuzzingclient --spec /config/fuzzingclient.json
