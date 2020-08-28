@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 1.0.32
+--------------
+*Released 2020-08-28*
+
+* Refactor to use [N-API modules](https://nodejs.org/api/n-api.html) from [ws project](https://github.com/websockets). (Thanks, [@andreek](https://github.com/andreek))
+  * Specifically:
+    * [utf-8-validate](https://github.com/websockets/utf-8-validate)
+    * [bufferutil](https://github.com/websockets/bufferutil)
+* Removed some documentation notations about very old browsers and very old Websocket protocol drafts that are no longer relevant today in 2020.
+* Removed outdated notations and instructions about building native extensions, since those functions are now delegated to dependencies.
+* Add automated unit test executionn via Github Actions (Thanks, [@nebojsa94](https://github.com/nebojsa94))
+* Accept new connection close code `1015` ("TLS Handshake"). (More information at the [WebSocket Close Code Number Registry](https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number))
+
 Version 1.0.31
 --------------
 *Released 2019-12-06*

@@ -11,8 +11,6 @@ Overview
 --------
 This is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the "test/scripts" folder.
 
-For a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/theturtle32/AS3WebSocket) project.
-
 
 Documentation
 =============
@@ -23,12 +21,16 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.31*** — Released 2019-12-06
+***Current Version: 1.0.32*** - Release 2020-08-28
 
-* Fix [infinite loop in error handling](https://github.com/theturtle32/WebSocket-Node/issues/329) (Thanks, [@apirila](https://github.com/apirila))
-* Fix [memory leak with multiple WebSocket servers on the same HTTP server](https://github.com/theturtle32/WebSocket-Node/pull/339) (Thanks, [@nazar-pc](https://github.com/nazar-pc))
-* [Use es5-ext/global as a more robust way to resolve browser's window object](https://github.com/theturtle32/WebSocket-Node/pull/362) (Thanks, [@michaelsbradleyjr](https://github.com/michaelsbradleyjr))
-* [Adding compatibility with V8 release greater than v7.6 (node and electron engines)](https://github.com/theturtle32/WebSocket-Node/pull/376) (Thanks, [@artynet](https://github.com/artynet))
+* Refactor to use [N-API modules](https://nodejs.org/api/n-api.html) from [ws project](https://github.com/websockets). (Thanks, [@andreek](https://github.com/andreek))
+  * Specifically:
+    * [utf-8-validate](https://github.com/websockets/utf-8-validate)
+    * [bufferutil](https://github.com/websockets/bufferutil)
+* Removed some documentation notations about very old browsers and very old Websocket protocol drafts that are no longer relevant today in 2020.
+* Removed outdated notations and instructions about building native extensions, since those functions are now delegated to dependencies.
+* Add automated unit test executionn via Github Actions (Thanks, [@nebojsa94](https://github.com/nebojsa94))
+* Accept new connection close code `1015` ("TLS Handshake"). (More information at the [WebSocket Close Code Number Registry](https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number))
 
 [View the full changelog](CHANGELOG.md)
 
@@ -44,13 +46,11 @@ All current browsers are fully supported.
 * Internet Explorer 10+ (Protocol Version 13)
 * Safari 6+ (Protocol Version 13)
 
-***Safari older than 6.0 is not supported since it uses a very old draft of WebSockets***
-
-***If you need to simultaneously support legacy browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***
-
 Benchmarks
 ----------
 There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://theturtle32.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
+
+(These benchmarks are quite a bit outdated at this point, so take them with a grain of salt. Anyone up for running new benchmarks? I'll link to your report.)
 
 Autobahn Tests
 --------------
@@ -60,10 +60,6 @@ The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used b
 
 Installation
 ------------
-
-A few users have reported difficulties building the native extensions without first manually installing node-gyp.  If you have trouble building the native extensions, make sure you've got a C++ compiler, and have done `npm install -g node-gyp` first. 
-
-Native extensions are optional, however, and WebSocket-Node will work even if the extensions cannot be compiled.
 
 In your project root:
 
@@ -78,14 +74,6 @@ var WebSocketFrame  = require('websocket').frame;
 var WebSocketRouter = require('websocket').router;
 var W3CWebSocket = require('websocket').w3cwebsocket;
 ```
-
-Note for Windows Users
-----------------------
-Because there is a small C++ component used for validating UTF-8 data, you will need to install a few other software packages in addition to Node to be able to build this module:
-
-- [Microsoft Visual C++](http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express)
-- [Python 2.7](http://www.python.org/download/) (NOT Python 3.x)
-
 
 Current Features:
 -----------------
