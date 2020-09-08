@@ -17,25 +17,25 @@
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (http://dev.sipdoc.net)"
   ],
-  "version": "1.0.31",
+  "version": "1.0.32",
   "repository": {
     "type": "git",
     "url": "https://github.com/FieldServer/WebSocket-Node.git"
   },
   "homepage": "https://github.com/FieldServer/WebSocket-Node",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.0.0"
   },
   "dependencies": {
+    "bufferutil": "^4.0.1",
     "debug": "^2.2.0",
     "es5-ext": "^0.10.50",
-    "nan": "^2.14.0",
     "typedarray-to-buffer": "^3.1.5",
+    "utf-8-validate": "^5.0.2",
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
     "buffer-equal": "^1.0.0",
-    "faucet": "^0.0.1",
     "gulp": "^4.0.2",
     "gulp-jshint": "^2.0.4",
     "jshint-stylish": "^2.2.1",
@@ -46,8 +46,7 @@
     "verbose": false
   },
   "scripts": {
-    "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)",
-    "test": "faucet test/unit",
+    "test": "tape test/unit/*.js",
     "gulp": "gulp"
   },
   "main": "index",
