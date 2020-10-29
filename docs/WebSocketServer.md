@@ -85,6 +85,12 @@ by a trusted proxy or other intermediary within your own
 infrastructure.
 More info: [X-Forwarded-For on Wikipedia](http://en.wikipedia.org/wiki/X-Forwarded-For)
 
+**parseExtensions** - Boolean - *Default: true*
+Whether or not to parse 'sec-websocket-extension' headers. Array is exposed to WebSocketRequest.requestedExtensions.
+
+**parseCookies** - Boolean - *Default: true*
+Whether or not to parse 'cookie' headers. Array is exposed to WebSocketRequest.cookies.
+
 Events
 ------
 There are three events emitted by a WebSocketServer instance that allow you to handle incoming requests, establish connections, and detect when a connection has been closed.
@@ -103,3 +109,6 @@ Emitted whenever a new WebSocket connection is accepted.
 `function(webSocketConnection, closeReason, description)`
 
 Whenever a connection is closed for any reason, the WebSocketServer instance will emit a `close` event, passing a reference to the WebSocketConnection instance that was closed.  `closeReason` is the numeric reason status code for the connection closure, and `description` is a textual description of the close reason, if available.
+
+### close
+`function(webSocketConnection, closeReason, description)`
