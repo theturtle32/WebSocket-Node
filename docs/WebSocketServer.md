@@ -110,5 +110,7 @@ Emitted whenever a new WebSocket connection is accepted.
 
 Whenever a connection is closed for any reason, the WebSocketServer instance will emit a `close` event, passing a reference to the WebSocketConnection instance that was closed.  `closeReason` is the numeric reason status code for the connection closure, and `description` is a textual description of the close reason, if available.
 
-### close
-`function(webSocketConnection, closeReason, description)`
+### upgradeError
+`function(error)`
+
+Emitted whenever a WebSocket error happens during the connection upgrade phase. Note that the WS connection is automatically rejected with a 400 error code, this event just exposes the error.
