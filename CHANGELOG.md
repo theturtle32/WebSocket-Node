@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.33
+--------------
+*Released 2020-12-08*
+
+* Added new configuration options to WebSocketServer allowing implementors to bypass parsing WebSocket extensions and HTTP Cookies if they are not needed. (Thanks, [@aetheon](https://github.com/aetheon))
+* Added new `upgradeError` event to WebSocketServer to allow for visibility into and logging of any parsing errors that might occur during the HTTP Upgrade phase. (Thanks, [@aetheon](https://github.com/aetheon))
+
 Version 1.0.32
 --------------
 *Released 2020-08-28*

@@ -21,16 +21,10 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.32*** - Release 2020-08-28
+***Current Version: 1.0.33*** - Release 2020-12-08
 
-* Refactor to use [N-API modules](https://nodejs.org/api/n-api.html) from [ws project](https://github.com/websockets). (Thanks, [@andreek](https://github.com/andreek))
-  * Specifically:
-    * [utf-8-validate](https://github.com/websockets/utf-8-validate)
-    * [bufferutil](https://github.com/websockets/bufferutil)
-* Removed some documentation notations about very old browsers and very old Websocket protocol drafts that are no longer relevant today in 2020.
-* Removed outdated notations and instructions about building native extensions, since those functions are now delegated to dependencies.
-* Add automated unit test executionn via Github Actions (Thanks, [@nebojsa94](https://github.com/nebojsa94))
-* Accept new connection close code `1015` ("TLS Handshake"). (More information at the [WebSocket Close Code Number Registry](https://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number))
+* Added new configuration options to WebSocketServer allowing implementors to bypass parsing WebSocket extensions and HTTP Cookies if they are not needed. (Thanks, [@aetheon](https://github.com/aetheon))
+* Added new `upgradeError` event to WebSocketServer to allow for visibility into and logging of any parsing errors that might occur during the HTTP Upgrade phase. (Thanks, [@aetheon](https://github.com/aetheon))
 
 [View the full changelog](CHANGELOG.md)
 
