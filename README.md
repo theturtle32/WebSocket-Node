@@ -31,7 +31,7 @@ Changelog
 Browser Support
 ---------------
 
-All current browsers are fully supported.
+All current browsers are fully* supported.
 
 * Firefox 7-9 (Old) (Protocol Version 8)
 * Firefox 10+ (Protocol Version 13)
@@ -39,6 +39,8 @@ All current browsers are fully supported.
 * Chrome 16+ (Protocol Version 13)
 * Internet Explorer 10+ (Protocol Version 13)
 * Safari 6+ (Protocol Version 13)
+
+(Not all W3C WebSocket features are supported by browsers. More info in the [Full API documentation](docs/index.md))
 
 Benchmarks
 ----------
