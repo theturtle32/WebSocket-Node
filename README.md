@@ -245,7 +245,7 @@ client.onmessage = function(e) {
 Request Router Example
 ----------------------
 
-For an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.
+For an example of using the request router, see `websockets-test-server.js` in the `test/scripts` folder.
 
 
 Resources
