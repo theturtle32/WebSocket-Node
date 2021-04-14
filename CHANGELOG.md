@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.34
+--------------
+*Released 2021-04-14*
+
+* Updated browser shim to use the native `globalThis` property when available. See [this MDN page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) for context. Resolves [#415](https://github.com/theturtle32/WebSocket-Node/issues/415)
+
 Version 1.0.33
 --------------
 *Released 2020-12-08*

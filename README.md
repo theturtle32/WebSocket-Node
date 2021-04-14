@@ -21,10 +21,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.33*** - Release 2020-12-08
+***Current Version: 1.0.34*** - Release 2021-04-14
 
-* Added new configuration options to WebSocketServer allowing implementors to bypass parsing WebSocket extensions and HTTP Cookies if they are not needed. (Thanks, [@aetheon](https://github.com/aetheon))
-* Added new `upgradeError` event to WebSocketServer to allow for visibility into and logging of any parsing errors that might occur during the HTTP Upgrade phase. (Thanks, [@aetheon](https://github.com/aetheon))
+* Updated browser shim to use the native `globalThis` property when available. See [this MDN page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) for context. Resolves [#415](https://github.com/theturtle32/WebSocket-Node/issues/415)
 
 [View the full changelog](CHANGELOG.md)
 
