@@ -58,6 +58,9 @@ If true, the server will automatically send a ping to all clients every `keepali
 **keepaliveInterval** - uint - *Default: 20000*  
 The interval in milliseconds to send keepalive pings to connected clients.
 
+**keepaliveForce** - boolean - *Default: false*  
+if true, the server will not reset the keepalive timer when any data is received from the client, forcing to send the ping on the Interval.
+
 **dropConnectionOnKeepaliveTimeout** - boolean - *Default: true*  
 If true, the server will consider any connection that has not received any data within the amount of time specified by `keepaliveGracePeriod` after a keepalive ping has been sent. Ignored if `keepalive` is false.
 
