@@ -103,3 +103,57 @@ test('Protocol mismatch should be handled gracefully', function(t) {
     t.end();
   });
 });
+
+test('Server pushing and closing should not loose data', function(t) {
+  var wsServer;
+  
+  t.test('setup', function(t) {
+    server.prepare(function(err, result) {
+      if (err) {
+        t.fail('Unable to start test server');
+        return t.end();
+      }
+      
+      wsServer = result;
+      t.end();
+    });
+  });
+  
+  t.test('server push and close', function(t) {
+    t.plan(2);
+    var count = 100;
+    var received = 0;
+    wsServer.on('request', handleRequest);
+    
+    var client = new WebSocketClient();
+    
+    var timer = setTimeout(function() {
+      t.fail('Timeout waiting for client event - received ' + received + ' frames out of ' + count);
+    }, 2000);
+    
+    client.connect('ws://localhost:64321/', 'echo');
+    client.on('connect', function(connection) {
+      connection.on('message', function (msg) {
+        received++;
+        if (count === received) {
+          clearTimeout(timer);
+          t.pass('received enough frames');
+        }
+      });
+    });
+    
+    function handleRequest(request) {
+      t.pass('connected');
+      var connection = request.accept('echo', request.origin);
+      for (var i = 0; i < count; i++) {
+        connection.sendUTF('some content');
+      }
+      connection.close();
+    }
+  });
+  
+  t.test('teardown', function(t) {
+    stopServer();
+    t.end();
+  });
+});
