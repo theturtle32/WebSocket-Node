@@ -120,7 +120,7 @@ server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
-wsServer = new WebSocketServer({
+var wsServer = new WebSocketServer({
     httpServer: server,
     // You should not use autoAcceptConnections for production
     // applications, as it defeats all standard cross-origin protection
@@ -131,8 +131,8 @@ wsServer = new WebSocketServer({
 });
 
 function originIsAllowed(origin) {
-  // put logic here to detect whether the specified origin is allowed.
-  return true;
+    // put logic here to detect whether the specified origin is allowed.
+    return true;
 }
 
 wsServer.on('request', function(request) {
