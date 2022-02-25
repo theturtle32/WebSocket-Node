@@ -36,7 +36,7 @@ Limitations
 
 * This resulting W3CWebSocket does not fire an open event
 
-The same as the [W3CWebSocket client](./W3CWebSocketClient.md)
+The same as the [W3CWebSocket client](./W3CWebSocket.md)
 
 * `bufferedAmount` attribute is always 0.
 * `binaryType` is "arraybuffer" by default given that "blob" is not supported (Node does not implement the `Blob` class).
