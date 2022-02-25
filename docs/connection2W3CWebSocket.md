@@ -1,7 +1,7 @@
 connection2w3cwebsocket
 ============
 
-* [Constructor](#constructor)
+* [Usage](#usage)
 * [Limitations](#limitations)
 
 `var connToW3C = require('websocket').connection2w3cwebsocket`
