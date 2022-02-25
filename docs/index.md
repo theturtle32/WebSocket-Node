@@ -11,3 +11,4 @@ Click on one of the classes below to view its API documentation.
 * [WebSocketRequest](./WebSocketRequest.md)
 * [WebSocketServer](./WebSocketServer.md)
 * [W3CWebSocket](./W3CWebSocket.md)
+* [connection2W3CWebSocket](./connection2W3CWebSocket.md)
