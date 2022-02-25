@@ -34,6 +34,8 @@ connection2w3cwebsocket(connection)
 Limitations
 -----------
 
+* This resulting W3CWebSocket does not fire an open event
+
 The same as the W3CWebSocket client
 
 * `bufferedAmount` attribute is always 0.
