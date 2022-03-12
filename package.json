@@ -29,7 +29,7 @@
   "dependencies": {
     "bufferutil": "^4.0.1",
     "debug": "^2.2.0",
-    "es5-ext": "^0.10.50",
+    "es5-ext": "0.10.53",
     "typedarray-to-buffer": "^3.1.5",
     "utf-8-validate": "^5.0.2",
     "yaeti": "^0.0.6"
