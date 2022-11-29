@@ -320,7 +320,7 @@ wsServer.on('request', function (request) {
 });
 ```
 
-[Github Repo](http://www.w3.org/TR/websockets/).
+[Github Repo](https://github.com/asadalibest1/web-sockets-with-react).
 
 Request Router Example
 ----------------------
