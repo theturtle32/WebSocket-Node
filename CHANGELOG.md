@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.0.35
+--------------
+*Released 2024-05-12*
+
+* [Updated](https://github.com/theturtle32/WebSocket-Node/pull/455) from [vulnerable version](https://security.snyk.io/vuln/SNYK-JS-ES5EXT-6095076) of es5-ext to a newer version that has been patched. Thanks, [@Tringapps-Dharshan](https://github.com/Tringapps-Dharshan)
+
 Version 1.0.34
 --------------
 *Released 2021-04-14*

@@ -21,9 +21,9 @@ Documentation
 Changelog
 ---------
 
-***Current Version: 1.0.34*** - Release 2021-04-14
+***Current Version: 1.0.35*** - Release 2024-05-12
 
-* Updated browser shim to use the native `globalThis` property when available. See [this MDN page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) for context. Resolves [#415](https://github.com/theturtle32/WebSocket-Node/issues/415)
+* [Updated](https://github.com/theturtle32/WebSocket-Node/pull/455) from [vulnerable version](https://security.snyk.io/vuln/SNYK-JS-ES5EXT-6095076) of es5-ext to a newer version that has been patched. Thanks, [@Tringapps-Dharshan](https://github.com/Tringapps-Dharshan)
 
 [View the full changelog](CHANGELOG.md)
 
