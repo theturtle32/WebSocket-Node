@@ -15,10 +15,10 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketServer = require('../../lib/websocket').server;
-var express = require('express');
+const WebSocketServer = require('../../lib/websocket').server;
+const express = require('express');
 
-var app = express.createServer();
+const app = express.createServer();
 
 app.configure(function() {
     app.use(express.static(__dirname + "/public"));
@@ -31,7 +31,7 @@ app.get('/', function(req, res) {
 app.listen(8080);
 
 
-var wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: app,
     
     // Firefox 7 alpha has a bug that drops the
@@ -39,14 +39,14 @@ var wsServer = new WebSocketServer({
     fragmentOutgoingMessages: false
 });
 
-var connections = [];
-var canvasCommands = [];
+const connections = [];
+const canvasCommands = [];
 
 wsServer.on('request', function(request) {
-    var connection = request.accept('whiteboard-example', request.origin);
+    const connection = request.accept('whiteboard-example', request.origin);
     connections.push(connection);
 
-    console.log(connection.remoteAddress + " connected - Protocol Version " + connection.webSocketVersion);
+    console.log(`${connection.remoteAddress} connected - Protocol Version ${connection.webSocketVersion}`);
     
     // Send all the existing canvas commands to the new client
     connection.sendUTF(JSON.stringify({
@@ -56,9 +56,9 @@ wsServer.on('request', function(request) {
     
     // Handle closed connections
     connection.on('close', function() {
-        console.log(connection.remoteAddress + " disconnected");
+        console.log(`${connection.remoteAddress} disconnected`);
         
-        var index = connections.indexOf(connection);
+        const index = connections.indexOf(connection);
         if (index !== -1) {
             // remove the connection from the pool
             connections.splice(index, 1);
@@ -69,10 +69,10 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             try {
-                var command = JSON.parse(message.utf8Data);
+                const command = JSON.parse(message.utf8Data);
 
                 if (command.msg === 'clear') {
-                    canvasCommands = [];
+                    canvasCommands.length = 0; // Clear array without replacing reference
                 }
                 else {
                     canvasCommands.push(command);
