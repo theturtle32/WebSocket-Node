@@ -37,8 +37,6 @@
   "devDependencies": {
     "buffer-equal": "^1.0.0",
     "eslint": "^8.0.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint": "^6.0.0",
     "tape": "^4.9.1"
   },
   "config": {
@@ -46,7 +44,8 @@
   },
   "scripts": {
     "test": "tape test/unit/*.js",
-    "gulp": "gulp"
+    "lint": "eslint lib/**/*.js test/**/*.js",
+    "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
   },
   "main": "index",
   "directories": {

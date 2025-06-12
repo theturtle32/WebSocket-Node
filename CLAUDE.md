@@ -3,7 +3,8 @@
 ## Build/Test Commands
 - Run all tests: `npm test`
 - Run single test: `npx tape test/unit/[filename].js`
-- Lint codebase: `npm run gulp` or `npx gulp lint`
+- Lint codebase: `npm run lint`
+- Fix lint issues: `npm run lint:fix`
 - Run autobahn tests: `cd test/autobahn && ./run-wstest.sh`
 
 ## Coding Style
