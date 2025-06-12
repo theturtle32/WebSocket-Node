@@ -25,7 +25,7 @@ const args = { /* defaults */
 
 /* Parse command line options */
 const pattern = /^--(.*?)(?:=(.*))?$/;
-process.argv.forEach(function(value) {
+process.argv.forEach((value) => {
     const match = pattern.exec(value);
     if (match) {
         args[match[1]] = match[2] ? match[2] : true;
