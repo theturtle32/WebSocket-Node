@@ -58,8 +58,8 @@ If true, the server will automatically send a ping to all clients every `keepali
 **keepaliveInterval** - uint - *Default: 20000*  
 The interval in milliseconds to send keepalive pings to connected clients.
 
-**dropConnectionOnKeepaliveTimeout** - boolean - *Default: true*  
-If true, the server will consider any connection that has not received any data within the amount of time specified by `keepaliveGracePeriod` after a keepalive ping has been sent. Ignored if `keepalive` is false.
+**dropConnectionOnKeepaliveTimeout** - boolean - *Default: true*
+If true, the server will consider any connection that has not received any data within the amount of time specified by `keepaliveGracePeriod` after a keepalive ping has been sent to be dead and will drop the connection once that grace period has elapsed without any incoming data. Ignored if `keepalive` is false.
 
 **keepaliveGracePeriod** - uint - *Default: 10000*  
 The amount of time to wait after sending a keepalive ping before closing the connection if the connected peer does not respond. Ignored if `keepalive` or `dropConnectionOnKeepaliveTimeout` are false.  The grace period timer is reset when any data is received from the client.
