@@ -1,25 +1,25 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// var heapdump = require('heapdump');
-// var memwatch = require('memwatch');
-var fs = require('fs');
-var WebSocketServer = require('../../lib/websocket').server;
-var https = require('https');
+// const heapdump = require('heapdump');
+// const memwatch = require('memwatch');
+const fs = require('fs');
+const WebSocketServer = require('../../lib/websocket').server;
+const https = require('https');
 
-var activeCount = 0;
+let activeCount = 0;
 
-var config = { 
+const config = { 
     key: fs.readFileSync( 'privatekey.pem' ), 
     cert: fs.readFileSync( 'certificate.pem' )  
 };
 
-var server = https.createServer( config );
+const server = https.createServer( config );
 
 server.listen(8080, function() {
-    console.log((new Date()) + ' Server is listening on port 8080 (wss)');
+    console.log(`${new Date()} Server is listening on port 8080 (wss)`);
 });
 
-var wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: false    
 });
@@ -27,11 +27,11 @@ var wsServer = new WebSocketServer({
 wsServer.on('request', function(request) {
     activeCount++;
     console.log('Opened from: %j\n---activeCount---: %d', request.remoteAddresses, activeCount);
-    var connection = request.accept(null, request.origin);
-    console.log((new Date()) + ' Connection accepted.');
+    const connection = request.accept(null, request.origin);
+    console.log(`${new Date()} Connection accepted.`);
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
+            console.log(`Received Message: ${message.utf8Data}`);
             setTimeout(function() {
               if (connection.connected) {
                 connection.sendUTF(message.utf8Data);
@@ -41,12 +41,11 @@ wsServer.on('request', function(request) {
     });
     connection.on('close', function(reasonCode, description) {
         activeCount--;
-        console.log('Closed. (' + reasonCode + ') ' + description +
-                    '\n---activeCount---: ' + activeCount);
+        console.log(`Closed. (${reasonCode}) ${description}\n---activeCount---: ${activeCount}`);
         // connection._debug.printOutput();
     });
     connection.on('error', function(error) {
-        console.log('Connection error: ' + error);
+        console.log(`Connection error: ${error}`);
     });
 });
 

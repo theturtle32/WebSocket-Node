@@ -15,11 +15,11 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketClient = require('../../lib/WebSocketClient');
+const WebSocketClient = require('../../lib/WebSocketClient');
 
 console.log('WebSocket-Node: Test client for parsing fragmented messages.');
 
-var args = { /* defaults */
+const args = { /* defaults */
     secure: false,
     port: '8080',
     host: '127.0.0.1',
@@ -28,9 +28,9 @@ var args = { /* defaults */
 };
 
 /* Parse command line options */
-var pattern = /^--(.*?)(?:=(.*))?$/;
-process.argv.forEach(function(value) {
-    var match = pattern.exec(value);
+const pattern = /^--(.*?)(?:=(.*))?$/;
+process.argv.forEach((value) => {
+    const match = pattern.exec(value);
     if (match) {
         args[match[1]] = match[2] ? match[2] : true;
     }
@@ -48,53 +48,53 @@ else {
 }
 
 
-var client = new WebSocketClient({
+const client = new WebSocketClient({
     maxReceivedMessageSize: 128*1024*1024, // 128 MiB
     maxReceivedFrameSize: 1*1024*1024, // 1 MiB
     assembleFragments: !args['no-defragment']
 });
 
-client.on('connectFailed', function(error) {
-    console.log('Client Error: ' + error.toString());
+client.on('connectFailed', (error) => {
+    console.log(`Client Error: ${error.toString()}`);
 });
 
 
-var requestedLength = 100;
-var messageSize = 0;
-var startTime;
-var byteCounter;
+let requestedLength = 100;
+let messageSize = 0;
+let startTime;
+let byteCounter;
 
-client.on('connect', function(connection) {
+client.on('connect', (connection) => {
     console.log('Connected');
     startTime = new Date();
     byteCounter = 0;
 
-    connection.on('error', function(error) {
-        console.log('Connection Error: ' + error.toString());
+    connection.on('error', (error) => {
+        console.log(`Connection Error: ${error.toString()}`);
     });
 
-    connection.on('close', function() {
+    connection.on('close', () => {
         console.log('Connection Closed');
     });  
 
-    connection.on('message', function(message) {
+    connection.on('message', (message) => {
         if (message.type === 'utf8') {
-            console.log('Received utf-8 message of ' + message.utf8Data.length + ' characters.');
+            console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`);
             logThroughput(message.utf8Data.length);
             requestData();
         }
         else {
-            console.log('Received binary message of ' + message.binaryData.length + ' bytes.');
+            console.log(`Received binary message of ${message.binaryData.length} bytes.`);
             logThroughput(message.binaryData.length);
             requestData();
         }
     });
     
-    connection.on('frame', function(frame) {
-        console.log('Frame: 0x' + frame.opcode.toString(16) + '; ' + frame.length + ' bytes; Flags: ' + renderFlags(frame));
+    connection.on('frame', (frame) => {
+        console.log(`Frame: 0x${frame.opcode.toString(16)}; ${frame.length} bytes; Flags: ${renderFlags(frame)}`);
         messageSize += frame.length;
         if (frame.fin) {
-            console.log('Total message size: ' + messageSize + ' bytes.');
+            console.log(`Total message size: ${messageSize} bytes.`);
             logThroughput(messageSize);
             messageSize = 0;
             requestData();
@@ -103,10 +103,10 @@ client.on('connect', function(connection) {
     
     function logThroughput(numBytes) {
         byteCounter += numBytes;
-        var duration = (new Date()).valueOf() - startTime.valueOf();
+        const duration = (new Date()).valueOf() - startTime.valueOf();
         if (duration > 1000) {
-            var kiloBytesPerSecond = Math.round((byteCounter / 1024) / (duration/1000));
-            console.log('                                     Throughput: ' + kiloBytesPerSecond + ' KBps');
+            const kiloBytesPerSecond = Math.round((byteCounter / 1024) / (duration/1000));
+            console.log(`                                     Throughput: ${kiloBytesPerSecond} KBps`);
             startTime = new Date();
             byteCounter = 0;
         }
@@ -118,16 +118,16 @@ client.on('connect', function(connection) {
     
     function requestData() {
         if (args.binary) {
-            connection.sendUTF('sendBinaryMessage|' + requestedLength, sendUTFCallback);
+            connection.sendUTF(`sendBinaryMessage|${requestedLength}`, sendUTFCallback);
         }
         else {
-            connection.sendUTF('sendMessage|' + requestedLength, sendUTFCallback);
+            connection.sendUTF(`sendMessage|${requestedLength}`, sendUTFCallback);
         }
         requestedLength += Math.ceil(Math.random() * 1024);
     }
     
     function renderFlags(frame) {
-        var flags = [];
+        const flags = [];
         if (frame.fin) {
             flags.push('[FIN]');
         }
@@ -156,8 +156,8 @@ if (args['no-defragment']) {
     console.log('Not automatically re-assembling fragmented messages.');
 }
 else {
-    console.log('Maximum aggregate message size: ' + client.config.maxReceivedMessageSize + ' bytes.');
+    console.log(`Maximum aggregate message size: ${client.config.maxReceivedMessageSize} bytes.`);
 }
 console.log('Connecting');
 
-client.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'fragmentation-test');
+client.connect(`${args.protocol}//${args.host}:${args.port}/`, 'fragmentation-test');

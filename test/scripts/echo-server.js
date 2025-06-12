@@ -15,39 +15,39 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketServer = require('../../lib/WebSocketServer');
-var http = require('http');
+const WebSocketServer = require('../../lib/WebSocketServer');
+const http = require('http');
 
-var args = { /* defaults */
+const args = { /* defaults */
     port: '8080',
     debug: false
 };
 
 /* Parse command line options */
-var pattern = /^--(.*?)(?:=(.*))?$/;
+const pattern = /^--(.*?)(?:=(.*))?$/;
 process.argv.forEach(function(value) {
-    var match = pattern.exec(value);
+    const match = pattern.exec(value);
     if (match) {
         args[match[1]] = match[2] ? match[2] : true;
     }
 });
 
-var port = parseInt(args.port, 10);
-var debug = args.debug;
+const port = parseInt(args.port, 10);
+const debug = args.debug;
 
 console.log('WebSocket-Node: echo-server');
 console.log('Usage: ./echo-server.js [--port=8080] [--debug]');
 
-var server = http.createServer(function(request, response) {
-    if (debug) { console.log((new Date()) + ' Received request for ' + request.url); }
+const server = http.createServer(function(request, response) {
+    if (debug) { console.log(`${new Date()} Received request for ${request.url}`); }
     response.writeHead(404);
     response.end();
 });
 server.listen(port, function() {
-    console.log((new Date()) + ' Server is listening on port ' + port);
+    console.log(`${new Date()} Server is listening on port ${port}`);
 });
 
-var wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: true,
     maxReceivedFrameSize: 64*1024*1024,   // 64MiB
@@ -58,11 +58,10 @@ var wsServer = new WebSocketServer({
 });
 
 wsServer.on('connect', function(connection) {
-    if (debug) { console.log((new Date()) + ' Connection accepted' + 
-                            ' - Protocol Version ' + connection.webSocketVersion); }
+    if (debug) { console.log(`${new Date()} Connection accepted - Protocol Version ${connection.webSocketVersion}`); }
     function sendCallback(err) {
         if (err) {
-          console.error('send() error: ' + err);
+          console.error(`send() error: ${err}`);
           connection.drop();
           setTimeout(function() {
             process.exit(100);
@@ -71,16 +70,16 @@ wsServer.on('connect', function(connection) {
     }
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
-            if (debug) { console.log('Received utf-8 message of ' + message.utf8Data.length + ' characters.'); }
+            if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
             connection.sendUTF(message.utf8Data, sendCallback);
         }
         else if (message.type === 'binary') {
-            if (debug) { console.log('Received Binary Message of ' + message.binaryData.length + ' bytes'); }
+            if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
             connection.sendBytes(message.binaryData, sendCallback);
         }
     });
     connection.on('close', function(reasonCode, description) {
-        if (debug) { console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.'); }
+        if (debug) { console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected.`); }
         connection._debug.printOutput();
     });
 });

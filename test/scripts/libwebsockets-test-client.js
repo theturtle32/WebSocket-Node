@@ -15,17 +15,17 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketClient = require('../../lib/WebSocketClient');
+const WebSocketClient = require('../../lib/WebSocketClient');
 
-var args = { /* defaults */
+const args = { /* defaults */
     secure: false,
     version: 13
 };
 
 /* Parse command line options */
-var pattern = /^--(.*?)(?:=(.*))?$/;
-process.argv.forEach(function(value) {
-    var match = pattern.exec(value);
+const pattern = /^--(.*?)(?:=(.*))?$/;
+process.argv.forEach((value) => {
+    const match = pattern.exec(value);
     if (match) {
         args[match[1]] = match[2] ? match[2] : true;
     }
@@ -41,20 +41,20 @@ if (!args.host || !args.port) {
     return;
 }
 
-var mirrorClient = new WebSocketClient({
+const mirrorClient = new WebSocketClient({
     webSocketVersion: args.version
 });
 
-mirrorClient.on('connectFailed', function(error) {
-    console.log('Connect Error: ' + error.toString());
+mirrorClient.on('connectFailed', (error) => {
+    console.log(`Connect Error: ${error.toString()}`);
 });
 
-mirrorClient.on('connect', function(connection) {
+mirrorClient.on('connect', (connection) => {
     console.log('lws-mirror-protocol connected');
-    connection.on('error', function(error) {
-        console.log('Connection Error: ' + error.toString());
+    connection.on('error', (error) => {
+        console.log(`Connection Error: ${error.toString()}`);
     });
-    connection.on('close', function() {
+    connection.on('close', () => {
         console.log('lws-mirror-protocol Connection Closed');
     });  
     function sendCallback(err) {
@@ -63,39 +63,39 @@ mirrorClient.on('connect', function(connection) {
     function spamCircles() {
         if (connection.connected) {
             // c #7A9237 487 181 14;
-            var color = 0x800000 + Math.round(Math.random() * 0x7FFFFF);
-            var x = Math.round(Math.random() * 502);
-            var y = Math.round(Math.random() * 306);
-            var radius = Math.round(Math.random() * 30);
-            connection.send('c #' + color.toString(16) + ' ' + x + ' ' + y + ' ' + radius + ';', sendCallback);
+            const color = 0x800000 + Math.round(Math.random() * 0x7FFFFF);
+            const x = Math.round(Math.random() * 502);
+            const y = Math.round(Math.random() * 306);
+            const radius = Math.round(Math.random() * 30);
+            connection.send(`c #${color.toString(16)} ${x} ${y} ${radius};`, sendCallback);
             setTimeout(spamCircles, 10);
         }
     }
     spamCircles();
 });
 
-mirrorClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'lws-mirror-protocol');
+mirrorClient.connect(`${args.protocol}//${args.host}:${args.port}/`, 'lws-mirror-protocol');
 
 
-var incrementClient = new WebSocketClient({
+const incrementClient = new WebSocketClient({
     webSocketVersion: args.version
 });
 
-incrementClient.on('connectFailed', function(error) {
-    console.log('Connect Error: ' + error.toString());
+incrementClient.on('connectFailed', (error) => {
+    console.log(`Connect Error: ${error.toString()}`);
 });
 
-incrementClient.on('connect', function(connection) {
+incrementClient.on('connect', (connection) => {
     console.log('dumb-increment-protocol connected');
-    connection.on('error', function(error) {
-        console.log('Connection Error: ' + error.toString());
+    connection.on('error', (error) => {
+        console.log(`Connection Error: ${error.toString()}`);
     });
-    connection.on('close', function() {
+    connection.on('close', () => {
         console.log('dumb-increment-protocol Connection Closed');
     });
-    connection.on('message', function(message) {
-        console.log('Number: \'' + message.utf8Data + '\'');
+    connection.on('message', (message) => {
+        console.log(`Number: '${message.utf8Data}'`);
     });
 });
 
-incrementClient.connect(args.protocol + '//' + args.host + ':' + args.port + '/', 'dumb-increment-protocol');
+incrementClient.connect(`${args.protocol}//${args.host}:${args.port}/`, 'dumb-increment-protocol');

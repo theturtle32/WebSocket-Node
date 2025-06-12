@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var test = require('tape');
+const test = require('tape');
 
-var WebSocketClient = require('../../lib/WebSocketClient');
-var server = require('../shared/test-server');
-var stopServer = server.stopServer;
+const WebSocketClient = require('../../lib/WebSocketClient');
+const server = require('../shared/test-server');
+const stopServer = server.stopServer;
 
 test('Drop TCP Connection Before server accepts the request', function(t) {
   t.plan(5);
@@ -24,7 +24,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
 
       // Wait 500 ms before accepting connection
       setTimeout(function() {
-        var connection = request.accept(request.requestedProtocols[0], request.origin);
+        const connection = request.accept(request.requestedProtocols[0], request.origin);
         
         connection.on('close', function(reasonCode, description) {
           t.pass('Connection should emit close event');
@@ -44,7 +44,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
       }, 500);
     });
     
-    var client = new WebSocketClient();
+    const client = new WebSocketClient();
     client.on('connect', function(connection) {
       t.fail('Client should never connect.');
       connection.drop();

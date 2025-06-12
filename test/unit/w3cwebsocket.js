@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-var test = require('tape');
-var WebSocket = require('../../lib/W3CWebSocket');
-var startEchoServer = require('../shared/start-echo-server');
+const test = require('tape');
+const WebSocket = require('../../lib/W3CWebSocket');
+const startEchoServer = require('../shared/start-echo-server');
 
 test('W3CWebSockets adding event listeners with ws.onxxxxx', function(t) {
-  var counter = 0;
-  var message = 'This is a test message.';
+  let counter = 0;
+  const message = 'This is a test message.';
 
   startEchoServer(function(err, echoServer) {
     if (err) { return t.fail('Unable to start echo server: ' + err); }
 
-    var ws = new WebSocket('ws://localhost:8080/');
+    const ws = new WebSocket('ws://localhost:8080/');
 
     ws.onopen = function() {
       t.equal(++counter, 1, 'onopen should be called first');
@@ -39,13 +39,13 @@ test('W3CWebSockets adding event listeners with ws.onxxxxx', function(t) {
 });
 
 test('W3CWebSockets adding event listeners with ws.addEventListener', function(t) {
-  var counter = 0;
-  var message = 'This is a test message.';
+  let counter = 0;
+  const message = 'This is a test message.';
 
   startEchoServer(function(err, echoServer) {
     if (err) { return t.fail('Unable to start echo server: ' + err); }
 
-    var ws = new WebSocket('ws://localhost:8080/');
+    const ws = new WebSocket('ws://localhost:8080/');
 
     ws.addEventListener('open', function() {
       t.equal(++counter, 1, '"open" should be fired first');

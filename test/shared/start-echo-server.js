@@ -6,18 +6,18 @@ function startEchoServer(outputStream, callback) {
     outputStream = null;
   }
   if ('function' !== typeof callback) {
-    callback = function(){};
+    callback = () => {};
   }
   
-  var path = require('path').join(__dirname + '/../scripts/echo-server.js');
+  const path = require('path').join(__dirname + '/../scripts/echo-server.js');
   
   console.log(path);
     
-  var echoServer = require('child_process').spawn('node', [ path ]);
+  let echoServer = require('child_process').spawn('node', [ path ]);
   
-  var state = 'starting';
+  let state = 'starting';
   
-  var processProxy = {
+  const processProxy = {
     kill: function(signal) {
       state = 'exiting';
       echoServer.kill(signal);
@@ -43,7 +43,7 @@ function startEchoServer(outputStream, callback) {
     echoServer = null;
     if (state !== 'exiting') {
       state = 'exited';
-      callback(new Error('Echo Server exited unexpectedly with code ' + code));
+      callback(new Error(`Echo Server exited unexpectedly with code ${code}`));
       process.exit(1);
     }
   });
