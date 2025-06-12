@@ -6,18 +6,18 @@ function startEchoServer(outputStream, callback) {
     outputStream = null;
   }
   if ('function' !== typeof callback) {
-    callback = function(){};
+    callback = () => {};
   }
   
-  var path = require('path').join(__dirname + '/../scripts/echo-server.js');
+  const path = require('path').join(__dirname + '/../scripts/echo-server.js');
   
   console.log(path);
     
-  var echoServer = require('child_process').spawn('node', [ path ]);
+  let echoServer = require('child_process').spawn('node', [ path ]);
   
-  var state = 'starting';
+  let state = 'starting';
   
-  var processProxy = {
+  const processProxy = {
     kill: function(signal) {
       state = 'exiting';
       echoServer.kill(signal);
@@ -29,7 +29,7 @@ function startEchoServer(outputStream, callback) {
     echoServer.stderr.pipe(outputStream);
   }
   
-  echoServer.stdout.on('data', function(chunk) {
+  echoServer.stdout.on('data', (chunk) => {
     chunk = chunk.toString();
     if (/Server is listening/.test(chunk)) {
       if (state === 'starting') {
@@ -39,16 +39,16 @@ function startEchoServer(outputStream, callback) {
     }
   });
 
-  echoServer.on('exit', function(code, signal) {
+  echoServer.on('exit', (code, signal) => {
     echoServer = null;
     if (state !== 'exiting') {
       state = 'exited';
-      callback(new Error('Echo Server exited unexpectedly with code ' + code));
+      callback(new Error(`Echo Server exited unexpectedly with code ${code}`));
       process.exit(1);
     }
   });
 
-  process.on('exit', function() {
+  process.on('exit', () => {
     if (echoServer && state === 'ready') {
       echoServer.kill();
     }
