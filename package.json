@@ -36,10 +36,9 @@
   },
   "devDependencies": {
     "buffer-equal": "^1.0.0",
+    "eslint": "^8.0.0",
     "gulp": "^4.0.2",
-    "gulp-jshint": "^2.0.4",
-    "jshint-stylish": "^2.2.1",
-    "jshint": "^2.0.0",
+    "gulp-eslint": "^6.0.0",
     "tape": "^4.9.1"
   },
   "config": {

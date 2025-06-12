@@ -7,7 +7,7 @@
 - Run autobahn tests: `cd test/autobahn && ./run-wstest.sh`
 
 ## Coding Style
-- Use tabs for indentation
+- Use 2 spaces for indentation
 - Constants: ALL_CAPS with underscores
 - Variables/Functions: camelCase
 - Classes: PascalCase

@@ -19,17 +19,17 @@ const WebSocketServer = require('../../lib/WebSocketServer');
 const http = require('http');
 
 const args = { /* defaults */
-    port: '8080',
-    debug: false
+  port: '8080',
+  debug: false
 };
 
 /* Parse command line options */
 const pattern = /^--(.*?)(?:=(.*))?$/;
 process.argv.forEach((value) => {
-    const match = pattern.exec(value);
-    if (match) {
-        args[match[1]] = match[2] ? match[2] : true;
-    }
+  const match = pattern.exec(value);
+  if (match) {
+    args[match[1]] = match[2] ? match[2] : true;
+  }
 });
 
 const port = parseInt(args.port, 10);
@@ -39,47 +39,47 @@ console.log('WebSocket-Node: echo-server');
 console.log('Usage: ./echo-server.js [--port=8080] [--debug]');
 
 const server = http.createServer((request, response) => {
-    if (debug) { console.log(`${new Date()} Received request for ${request.url}`); }
-    response.writeHead(404);
-    response.end();
+  if (debug) { console.log(`${new Date()} Received request for ${request.url}`); }
+  response.writeHead(404);
+  response.end();
 });
 server.listen(port, () => {
-    console.log(`${new Date()} Server is listening on port ${port}`);
+  console.log(`${new Date()} Server is listening on port ${port}`);
 });
 
 const wsServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: true,
-    maxReceivedFrameSize: 64*1024*1024,   // 64MiB
-    maxReceivedMessageSize: 64*1024*1024, // 64MiB
-    fragmentOutgoingMessages: false,
-    keepalive: false,
-    disableNagleAlgorithm: false
+  httpServer: server,
+  autoAcceptConnections: true,
+  maxReceivedFrameSize: 64*1024*1024,   // 64MiB
+  maxReceivedMessageSize: 64*1024*1024, // 64MiB
+  fragmentOutgoingMessages: false,
+  keepalive: false,
+  disableNagleAlgorithm: false
 });
 
 wsServer.on('connect', (connection) => {
-    if (debug) { console.log(`${new Date()} Connection accepted - Protocol Version ${connection.webSocketVersion}`); }
-    function sendCallback(err) {
-        if (err) {
-          console.error(`send() error: ${err}`);
-          connection.drop();
-          setTimeout(() => {
-            process.exit(100);
-          }, 100);
-        }
+  if (debug) { console.log(`${new Date()} Connection accepted - Protocol Version ${connection.webSocketVersion}`); }
+  function sendCallback(err) {
+    if (err) {
+      console.error(`send() error: ${err}`);
+      connection.drop();
+      setTimeout(() => {
+        process.exit(100);
+      }, 100);
     }
-    connection.on('message', (message) => {
-        if (message.type === 'utf8') {
-            if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
-            connection.sendUTF(message.utf8Data, sendCallback);
-        }
-        else if (message.type === 'binary') {
-            if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
-            connection.sendBytes(message.binaryData, sendCallback);
-        }
-    });
-    connection.on('close', (reasonCode, description) => {
-        if (debug) { console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected.`); }
-        connection._debug.printOutput();
-    });
+  }
+  connection.on('message', (message) => {
+    if (message.type === 'utf8') {
+      if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
+      connection.sendUTF(message.utf8Data, sendCallback);
+    }
+    else if (message.type === 'binary') {
+      if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
+      connection.sendBytes(message.binaryData, sendCallback);
+    }
+  });
+  connection.on('close', (reasonCode, description) => {
+    if (debug) { console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected.`); }
+    connection._debug.printOutput();
+  });
 });

@@ -9,44 +9,44 @@ const https = require('https');
 let activeCount = 0;
 
 const config = { 
-    key: fs.readFileSync( 'privatekey.pem' ), 
-    cert: fs.readFileSync( 'certificate.pem' )  
+  key: fs.readFileSync( 'privatekey.pem' ), 
+  cert: fs.readFileSync( 'certificate.pem' )  
 };
 
 const server = https.createServer( config );
 
 server.listen(8080, () => {
-    console.log(`${new Date()} Server is listening on port 8080 (wss)`);
+  console.log(`${new Date()} Server is listening on port 8080 (wss)`);
 });
 
 const wsServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: false    
+  httpServer: server,
+  autoAcceptConnections: false    
 });
 
 wsServer.on('request', (request) => {
-    activeCount++;
-    console.log('Opened from: %j\n---activeCount---: %d', request.remoteAddresses, activeCount);
-    const connection = request.accept(null, request.origin);
-    console.log(`${new Date()} Connection accepted.`);
-    connection.on('message', (message) => {
-        if (message.type === 'utf8') {
-            console.log(`Received Message: ${message.utf8Data}`);
-            setTimeout(() => {
-              if (connection.connected) {
-                connection.sendUTF(message.utf8Data);
-              }
-            }, 1000);
-        }       
-    });
-    connection.on('close', (reasonCode, description) => {
-        activeCount--;
-        console.log(`Closed. (${reasonCode}) ${description}\n---activeCount---: ${activeCount}`);
-        // connection._debug.printOutput();
-    });
-    connection.on('error', (error) => {
-        console.log(`Connection error: ${error}`);
-    });
+  activeCount++;
+  console.log('Opened from: %j\n---activeCount---: %d', request.remoteAddresses, activeCount);
+  const connection = request.accept(null, request.origin);
+  console.log(`${new Date()} Connection accepted.`);
+  connection.on('message', (message) => {
+    if (message.type === 'utf8') {
+      console.log(`Received Message: ${message.utf8Data}`);
+      setTimeout(() => {
+        if (connection.connected) {
+          connection.sendUTF(message.utf8Data);
+        }
+      }, 1000);
+    }       
+  });
+  connection.on('close', (reasonCode, description) => {
+    activeCount--;
+    console.log(`Closed. (${reasonCode}) ${description}\n---activeCount---: ${activeCount}`);
+    // connection._debug.printOutput();
+  });
+  connection.on('error', (error) => {
+    console.log(`Connection error: ${error}`);
+  });
 });
 
 // setInterval( function(){
