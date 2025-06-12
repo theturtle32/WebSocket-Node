@@ -28,11 +28,11 @@ function connect( i ){
     client._clientID = i;
     deviceList[i] = client;
 
-    client.on('connectFailed', function(error) {
+    client.on('connectFailed', (error) => {
         console.log(`${i} - connect Error: ${error.toString()}`);
     });
 
-    client.on('connect', function(connection) {
+    client.on('connect', (connection) => {
         console.log(`${i} - connect`);
         activeCount ++;
         client.connection = connection;
@@ -40,11 +40,11 @@ function connect( i ){
         
         maybeScheduleSend(i);
 
-        connection.on('error', function(error) {
+        connection.on('error', (error) => {
             console.log(`${i} - ${error.toString()}`);
         });
 
-        connection.on('close', function(reasonCode, closeDescription) {
+        connection.on('close', (reasonCode, closeDescription) => {
             console.log(`${i} - close (${reasonCode}) ${closeDescription}`);
             activeCount --;
             if (client._flakeTimeout) {
@@ -54,7 +54,7 @@ function connect( i ){
             connect(i);
         });
 
-        connection.on('message', function(message) {
+        connection.on('message', (message) => {
             if ( message.type === 'utf8' ) {
                 console.log(`${i} received: '${message.utf8Data}'`);
             }
@@ -77,7 +77,7 @@ function maybeScheduleSend(i) {
     const random = Math.round(Math.random() * 100);
     console.log(`${i} - scheduling send.  Random: ${random}`);
     if (random < 50) {
-        setTimeout(function() {
+        setTimeout(() => {
             console.log(`${i} - send timeout.  Connected? ${client.connection.connected}`);
             if (client && client.connection.connected) {
                 console.log(`${i} - Sending test data! random: ${random}`);
@@ -90,7 +90,7 @@ function maybeScheduleSend(i) {
 function flake(i) {
     const client = deviceList[i];
     const timeBeforeDisconnect = Math.round(Math.random() * 2000);
-    client._flakeTimeout = setTimeout( function() {
+    client._flakeTimeout = setTimeout(() => {
         disconnect(i);
     }, timeBeforeDisconnect);
 }

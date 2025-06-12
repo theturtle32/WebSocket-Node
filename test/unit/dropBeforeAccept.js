@@ -9,24 +9,24 @@ const stopServer = server.stopServer;
 test('Drop TCP Connection Before server accepts the request', function(t) {
   t.plan(5);
   
-  server.prepare(function(err, wsServer) {
+  server.prepare((err, wsServer) => {
     if (err) {
       t.fail('Unable to start test server');
       return t.end();
     }
     
-    wsServer.on('connect', function(connection) {
+    wsServer.on('connect', (connection) => {
       t.pass('Server should emit connect event');
     });
     
-    wsServer.on('request', function(request) {
+    wsServer.on('request', (request) => {
       t.pass('Request received');
 
       // Wait 500 ms before accepting connection
-      setTimeout(function() {
+      setTimeout(() => {
         const connection = request.accept(request.requestedProtocols[0], request.origin);
         
-        connection.on('close', function(reasonCode, description) {
+        connection.on('close', (reasonCode, description) => {
           t.pass('Connection should emit close event');
           t.equal(reasonCode, 1006, 'Close reason code should be 1006');
           t.equal(description,
@@ -36,7 +36,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
           stopServer();
         });
         
-        connection.on('error', function(error) {
+        connection.on('error', (error) => {
           t.fail('No error events should be received on the connection');
           stopServer();
         });
@@ -45,7 +45,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
     });
     
     const client = new WebSocketClient();
-    client.on('connect', function(connection) {
+    client.on('connect', (connection) => {
       t.fail('Client should never connect.');
       connection.drop();
       stopServer();
@@ -54,7 +54,7 @@ test('Drop TCP Connection Before server accepts the request', function(t) {
     
     client.connect('ws://localhost:64321/', ['test']);
     
-    setTimeout(function() {
+    setTimeout(() => {
       // Bail on the connection before we hear back from the server.
       client.abort();
     }, 250);

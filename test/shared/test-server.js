@@ -6,7 +6,7 @@ let wsServer;
 
 function prepare(callback) {
   if (typeof(callback) !== 'function') { callback = () => {}; }
-  server = http.createServer(function(request, response) {
+  server = http.createServer((request, response) => {
     response.writeHead(404);
     response.end();
   });
@@ -21,7 +21,7 @@ function prepare(callback) {
     disableNagleAlgorithm: false
   });
 
-  server.listen(64321, function(err) {
+  server.listen(64321, (err) => {
     if (err) {
       return callback(err);
     }

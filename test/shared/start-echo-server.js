@@ -29,7 +29,7 @@ function startEchoServer(outputStream, callback) {
     echoServer.stderr.pipe(outputStream);
   }
   
-  echoServer.stdout.on('data', function(chunk) {
+  echoServer.stdout.on('data', (chunk) => {
     chunk = chunk.toString();
     if (/Server is listening/.test(chunk)) {
       if (state === 'starting') {
@@ -39,7 +39,7 @@ function startEchoServer(outputStream, callback) {
     }
   });
 
-  echoServer.on('exit', function(code, signal) {
+  echoServer.on('exit', (code, signal) => {
     echoServer = null;
     if (state !== 'exiting') {
       state = 'exited';
@@ -48,7 +48,7 @@ function startEchoServer(outputStream, callback) {
     }
   });
 
-  process.on('exit', function() {
+  process.on('exit', () => {
     if (echoServer && state === 'ready') {
       echoServer.kill();
     }

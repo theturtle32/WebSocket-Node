@@ -7,11 +7,11 @@ const stopServer = server.stopServer;
 test('Request can only be rejected or accepted once.', function(t) {
   t.plan(6);
   
-  t.on('end', function() {
+  t.on('end', () => {
     stopServer();
   });
   
-  server.prepare(function(err, wsServer) {
+  server.prepare((err, wsServer) => {
     if (err) {
       t.fail('Unable to start test server');
       return t.end();
@@ -47,7 +47,7 @@ test('Request can only be rejected or accepted once.', function(t) {
       for (let i=0; i < numTimes; i++) {
         client = new WebSocketClient();
         client.connect('ws://localhost:64321/', 'foo');
-        client.on('connect', function(connection) { connection.close(); });
+        client.on('connect', (connection) => { connection.close(); });
       }
     }
   });
@@ -58,7 +58,7 @@ test('Protocol mismatch should be handled gracefully', function(t) {
   let wsServer;
   
   t.test('setup', function(t) {
-    server.prepare(function(err, result) {
+    server.prepare((err, result) => {
       if (err) {
         t.fail('Unable to start test server');
         return t.end();
@@ -75,17 +75,17 @@ test('Protocol mismatch should be handled gracefully', function(t) {
     
     const client = new WebSocketClient();
     
-    const timer = setTimeout(function() {
+    const timer = setTimeout(() => {
       t.fail('Timeout waiting for client event');
     }, 2000);
     
     client.connect('ws://localhost:64321/', 'some_protocol_here');
-    client.on('connect', function(connection) {
+    client.on('connect', (connection) => {
       clearTimeout(timer);
       connection.close();
       t.fail('connect event should not be emitted on client');
     });
-    client.on('connectFailed', function() {
+    client.on('connectFailed', () => {
       clearTimeout(timer);
       t.pass('connectFailed event should be emitted on client');
     });

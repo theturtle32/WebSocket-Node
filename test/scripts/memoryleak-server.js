@@ -15,7 +15,7 @@ const config = {
 
 const server = https.createServer( config );
 
-server.listen(8080, function() {
+server.listen(8080, () => {
     console.log(`${new Date()} Server is listening on port 8080 (wss)`);
 });
 
@@ -24,27 +24,27 @@ const wsServer = new WebSocketServer({
     autoAcceptConnections: false    
 });
 
-wsServer.on('request', function(request) {
+wsServer.on('request', (request) => {
     activeCount++;
     console.log('Opened from: %j\n---activeCount---: %d', request.remoteAddresses, activeCount);
     const connection = request.accept(null, request.origin);
     console.log(`${new Date()} Connection accepted.`);
-    connection.on('message', function(message) {
+    connection.on('message', (message) => {
         if (message.type === 'utf8') {
             console.log(`Received Message: ${message.utf8Data}`);
-            setTimeout(function() {
+            setTimeout(() => {
               if (connection.connected) {
                 connection.sendUTF(message.utf8Data);
               }
             }, 1000);
         }       
     });
-    connection.on('close', function(reasonCode, description) {
+    connection.on('close', (reasonCode, description) => {
         activeCount--;
         console.log(`Closed. (${reasonCode}) ${description}\n---activeCount---: ${activeCount}`);
         // connection._debug.printOutput();
     });
-    connection.on('error', function(error) {
+    connection.on('error', (error) => {
         console.log(`Connection error: ${error}`);
     });
 });

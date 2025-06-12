@@ -25,7 +25,7 @@ const args = { /* defaults */
 
 /* Parse command line options */
 const pattern = /^--(.*?)(?:=(.*))?$/;
-process.argv.forEach(function(value) {
+process.argv.forEach((value) => {
     const match = pattern.exec(value);
     if (match) {
         args[match[1]] = match[2] ? match[2] : true;
@@ -38,12 +38,12 @@ const debug = args.debug;
 console.log('WebSocket-Node: echo-server');
 console.log('Usage: ./echo-server.js [--port=8080] [--debug]');
 
-const server = http.createServer(function(request, response) {
+const server = http.createServer((request, response) => {
     if (debug) { console.log(`${new Date()} Received request for ${request.url}`); }
     response.writeHead(404);
     response.end();
 });
-server.listen(port, function() {
+server.listen(port, () => {
     console.log(`${new Date()} Server is listening on port ${port}`);
 });
 
@@ -57,18 +57,18 @@ const wsServer = new WebSocketServer({
     disableNagleAlgorithm: false
 });
 
-wsServer.on('connect', function(connection) {
+wsServer.on('connect', (connection) => {
     if (debug) { console.log(`${new Date()} Connection accepted - Protocol Version ${connection.webSocketVersion}`); }
     function sendCallback(err) {
         if (err) {
           console.error(`send() error: ${err}`);
           connection.drop();
-          setTimeout(function() {
+          setTimeout(() => {
             process.exit(100);
           }, 100);
         }
     }
-    connection.on('message', function(message) {
+    connection.on('message', (message) => {
         if (message.type === 'utf8') {
             if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
             connection.sendUTF(message.utf8Data, sendCallback);
@@ -78,7 +78,7 @@ wsServer.on('connect', function(connection) {
             connection.sendBytes(message.binaryData, sendCallback);
         }
     });
-    connection.on('close', function(reasonCode, description) {
+    connection.on('close', (reasonCode, description) => {
         if (debug) { console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected.`); }
         connection._debug.printOutput();
     });

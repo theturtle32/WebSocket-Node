@@ -22,7 +22,7 @@ test('Serializing a WebSocket Frame with no data', function(t) {
   frame.mask = true;
   frame.opcode = 0x09; // WebSocketFrame.PING
   t.doesNotThrow(
-    function() { frameBytes = frame.toBuffer(true); },
+    () => { frameBytes = frame.toBuffer(true); },
     'should not throw an error'
   );
   
