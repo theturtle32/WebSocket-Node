@@ -71,8 +71,9 @@ RUN npm install -g @anthropic-ai/claude-code
 
 # Copy and set up firewall script
 COPY init-firewall.sh /usr/local/bin/
+COPY post-create.sh /usr/local/bin/
 USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-firewall
+RUN chmod +x /usr/local/bin/post-create.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/post-create.sh" > /etc/sudoers.d/devcontainer-post-create && \
+  chmod 0440 /etc/sudoers.d/devcontainer-post-create
 USER node

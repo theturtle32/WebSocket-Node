@@ -2,6 +2,8 @@
 set -euo pipefail  # Exit on error, undefined vars, and pipeline failures
 IFS=$'\n\t'       # Stricter word splitting
 
+echo 'Setting up Firewall Rules...'
+
 # Flush existing rules and delete existing ipsets
 iptables -F
 iptables -X
@@ -116,3 +118,5 @@ if ! curl --connect-timeout 5 https://api.github.com/zen >/dev/null 2>&1; then
 else
     echo "Firewall verification passed - able to reach https://api.github.com as expected"
 fi
+
+echo 'Firewall configuration complete.'
