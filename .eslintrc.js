@@ -19,9 +19,7 @@ module.exports = {
         'no-console': 'off',
         'no-useless-escape': 'off',
         'no-prototype-builtins': 'off',
-        'no-control-regex': 'off',
-        'no-empty': 'off',
-        'no-unsafe-finally': 'off'
+        'no-control-regex': 'off'
     },
     globals: {
         'WebSocket': 'readonly',
