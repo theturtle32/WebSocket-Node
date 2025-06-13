@@ -13,6 +13,11 @@ function parseResults() {
 
   const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
   
+  if (!results || Object.keys(results).length === 0) {
+    console.error('Results file is empty or invalid.');
+    process.exit(1);
+  }
+  
   // Get the first (and presumably only) server implementation
   const serverName = Object.keys(results)[0];
   const testResults = results[serverName];
