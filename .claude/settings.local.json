@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git diff:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(npm run gulp:*)",
+      "Bash(git add:*)",
+      "Bash(git checkout:*)",
+      "Bash(rg:*)",
+      "Bash(npm test)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:*)",
+      "Bash(gh pr view:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(npm install)",
+      "Bash(git pull:*)",
+      "Bash(npm run test:autobahn:*)",
+      "Bash(gh api:*)"
+    ],
+    "deny": []
+  }
+}
