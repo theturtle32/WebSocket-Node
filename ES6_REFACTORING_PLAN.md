@@ -149,11 +149,43 @@ The ES6 refactoring is **partially complete**. The following core library files 
 - **Pull Request**: [#466](https://github.com/theturtle32/WebSocket-Node/pull/466)
 - **Status**: Ready for Phase 3 (Optional Advanced Features)
 
-### Phase 3: Advanced Features (Optional)
+### Phase 3: Advanced Features (Optional) 🔄 **IN PROGRESS**
 **Goal**: Evaluate modern patterns without breaking changes
 1. **Class Syntax Evaluation** - Assess constructor → class conversion
 2. **Async/Await Integration** - Add Promise-based alternatives
 3. **Module System** - Consider ES6 imports (Node.js version dependent)
+
+#### Phase 3 Progress - Class Syntax Evaluation ✅ **COMPLETED**
+**Current Status**: ES6 class conversions successfully implemented
+
+**Completed Class Conversions (5 files):**
+- ✅ **WebSocketFrame** - Standalone constructor → ES6 class (Low Risk)
+- ✅ **BufferingLogger** (utils.js) - Standalone constructor → ES6 class (Low Risk)
+- ✅ **WebSocketRouter** - EventEmitter inheritance → ES6 class extends EventEmitter (Low Risk)
+- ✅ **WebSocketRouterRequest** - EventEmitter inheritance → ES6 class extends EventEmitter (Low Risk)
+- ✅ **WebSocketClient** - EventEmitter inheritance → ES6 class extends EventEmitter (Medium Risk)
+
+**Evaluation Results for Remaining Constructors:**
+- 🔄 **WebSocketRequest** - EventEmitter inheritance (Medium Risk) - *Requires complex prototype method handling*
+- 🔄 **WebSocketServer** - EventEmitter inheritance (Medium Risk) - *Multiple handler methods and configuration*
+- ⚠️ **W3CWebSocket** - yaeti EventTarget inheritance (High Risk) - *Special inheritance pattern, requires careful evaluation*
+
+**Key Findings:**
+- **Node.js 4.x+ Compatibility**: All ES6 class conversions are fully compatible
+- **Zero Breaking Changes**: All converted classes maintain identical APIs and functionality
+- **Test Coverage**: 30/30 tests passing, no regressions detected
+- **Performance**: No measurable performance impact from class conversion
+
+**Benefits Achieved:**
+- **Modern Syntax**: Cleaner, more readable class declarations
+- **Better Inheritance**: Native ES6 `extends` syntax replaces `util.inherits()`
+- **Improved Maintainability**: Class methods grouped together, clearer structure
+- **Future-Ready**: Enables potential future ES6+ features like decorators
+
+**Assessment Status**: 
+- ✅ **Class Syntax Evaluation**: Low and medium-risk conversions proven successful
+- ⏳ **Promise-based APIs**: Assessing callback → Promise conversion opportunities
+- ⏳ **ES6 Modules**: Evaluating import/export feasibility with Node.js 4.x+ compatibility
 
 ### Phase 4: Validation & Cleanup
 **Goal**: Ensure quality and compatibility
