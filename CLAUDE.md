@@ -26,6 +26,6 @@
 
 ## Workflow
 
-- Before committing to git, make sure to check for lint errors with `npm run lint:fix` and verify that all the tests pass.
+- Before committing to git, make sure to check for lint errors with `npm run lint:fix` and verify that all the tests pass, including the autobahn tests.
 - Before beginning on work in the ES6_REFACTORING_PLAN.md file, update it to reflect what will be in progress.
 - After completing work in the ES6_REFACTORING_PLAN.md file, update it to reflect what was completed.
