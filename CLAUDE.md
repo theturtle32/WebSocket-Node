@@ -2,15 +2,16 @@
 
 ## Build/Test Commands
 
-- Run all tests: `npm test`
-- Run single test: `npx tape test/unit/[filename].js`
-- Lint codebase: `npm run lint`
-- Fix lint issues: `npm run lint:fix`
-- Run autobahn tests (full integration test suite): `npm run test:autobahn`
+- Run all tests: `pnpm test`
+- Run single test: `pnpx tape test/unit/[filename].js`
+- Lint codebase: `pnpm lint`
+- Fix lint issues: `pnpm lint:fix`
+- Run autobahn tests (full integration test suite): `pnpm test:autobahn`
 
 ## Coding Style
 
 - Use 2 spaces for indentation
+- Use pnpm instead of npm
 - Constants: ALL_CAPS with underscores
 - Variables/Functions: camelCase
 - Classes: PascalCase
@@ -26,6 +27,6 @@
 
 ## Workflow
 
-- Before committing to git, make sure to check for lint errors with `npm run lint:fix` and verify that all the tests pass, including the autobahn tests.
-- Before beginning on work in the ES6_REFACTORING_PLAN.md file, update it to reflect what will be in progress.
-- After completing work in the ES6_REFACTORING_PLAN.md file, update it to reflect what was completed.
+- Before committing to git, make sure to check for lint errors with `pnpm lint:fix` and verify that all the tests pass, including the autobahn tests.
+- Before beginning work on a section of a project plan, update the project plan file to reflect what will be in progress.
+- After completing work on a section of a project plan, update it to reflect what was completed before committing your changes to git.

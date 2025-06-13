@@ -117,10 +117,10 @@ export PNPM_HOME="/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 sudo mkdir -p $PNPM_HOME
 sudo chown -R node:node $PNPM_HOME
-curl -fsSL https://get.pnpm.io/install.sh | SHELL=zsh sh -
+curl -fsSL https://get.pnpm.io/install.sh | sudo -u node PNPM_HOME="/pnpm" PATH="$PNPM_HOME:$PATH" SHELL=zsh sh -
 
 # Install dependencies (CI=true avoids prompting for confirmation)
-CI=true pnpm install
+sudo -u node bash -c 'cd /workspace && CI=true pnpm install'
 
 ./init-firewall.sh
 
