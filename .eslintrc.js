@@ -8,7 +8,7 @@ module.exports = {
     extends: 'eslint:recommended',
     parserOptions: {
         ecmaVersion: 2018,
-        sourceType: 'module'
+        sourceType: 'script'
     },
     rules: {
         'indent': ['error', 2],
@@ -16,9 +16,15 @@ module.exports = {
         'quotes': ['error', 'single'],
         'semi': ['error', 'always'],
         'no-unused-vars': ['error', { 'args': 'none' }],
-        'no-console': 'off'
+        'no-console': 'off',
+        'no-useless-escape': 'off',
+        'no-prototype-builtins': 'off',
+        'no-control-regex': 'off',
+        'no-empty': 'off',
+        'no-unsafe-finally': 'off'
     },
     globals: {
-        'WebSocket': 'readonly'
+        'WebSocket': 'readonly',
+        'globalThis': 'readonly'
     }
 };
