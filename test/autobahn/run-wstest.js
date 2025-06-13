@@ -122,11 +122,8 @@ class AutobahnTestRunner {
         stdio: ['ignore', 'pipe', 'pipe']
       });
 
-      let testOutput = '';
-      
       this.dockerProcess.stdout.on('data', (data) => {
         const output = data.toString();
-        testOutput += output;
         // Show progress without overwhelming the console
         if (output.includes('Case ') || output.includes('OK') || output.includes('PASS') || output.includes('FAIL')) {
           process.stdout.write('.');
@@ -169,29 +166,13 @@ class AutobahnTestRunner {
     }
 
     try {
-      // Use the existing parseResults function but capture its output
-      const originalConsoleLog = console.log;
-      const originalConsoleError = console.error;
       const originalProcessExit = process.exit;
-      
-      let captured = '';
-      console.log = (...args) => {
-        captured += args.join(' ') + '\n';
-        originalConsoleLog(...args);
-      };
-      console.error = (...args) => {
-        captured += args.join(' ') + '\n';
-        originalConsoleError(...args);
-      };
-      
       // Prevent parseResults from exiting the process
       process.exit = () => {};
       
       parseResults();
       
-      // Restore original functions
-      console.log = originalConsoleLog;
-      console.error = originalConsoleError;
+      // Restore original function
       process.exit = originalProcessExit;
       
     } catch (error) {
