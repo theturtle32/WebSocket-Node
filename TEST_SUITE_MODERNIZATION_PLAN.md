@@ -781,15 +781,30 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
     - [x] Better spy management and state isolation between tests
     - [x] **Achievement**: 58/77 tests passing (75%) with 0 failures, 19 skipped
 
-- [ ] **3.2.A.2** Frame Generation and Processing Foundation
-  - [ ] **Task**: Enhance frame generation for realistic test scenarios
-    - [ ] Fix frame generation to produce WebSocket-compliant frames
-    - [ ] Ensure proper masking/unmasking for client/server scenarios
-    - [ ] Add comprehensive frame validation before injection
-  - [ ] **Task**: Establish reliable frame processing test patterns
-    - [ ] Create consistent patterns for testing frame reception
-    - [ ] Implement proper async coordination for multi-frame scenarios
-    - [ ] Add frame processing pipeline timing synchronization
+- [x] **3.2.A.2** Frame Generation and Processing Foundation ✅ **COMPLETED**
+  - [x] **Task**: Enhance frame generation for realistic test scenarios
+    - [x] Fix frame generation to produce WebSocket-compliant frames with full RFC 6455 validation
+    - [x] Ensure proper masking/unmasking for client/server scenarios via `generateClientFrame()` and `generateServerFrame()`
+    - [x] Add comprehensive frame validation before injection with `validateGeneratedFrame()`
+  - [x] **Task**: Establish reliable frame processing test patterns
+    - [x] Create consistent patterns for testing frame reception via `injectFrameIntoConnection()`
+    - [x] Implement proper async coordination for multi-frame scenarios with enhanced timing utilities
+    - [x] Add frame processing pipeline timing synchronization with `waitForFrameProcessing()` and `FrameProcessor` class
+
+**Phase 3.2.A.2 Achievements**:
+- **Enhanced Frame Generation**: Created comprehensive WebSocket-compliant frame generation with full RFC 6455 validation system
+- **Frame Validation Pipeline**: Added `validateGeneratedFrame()` function ensuring all frames meet protocol requirements
+- **Client/Server Conventions**: Implemented `generateClientFrame()` (masked) and `generateServerFrame()` (unmasked) helpers
+- **Advanced Processing Utilities**: Created `frame-processing-utils.mjs` with `FrameProcessor`, `WebSocketTestPatterns`, and `AdvancedFrameProcessing` classes
+- **Reliable Frame Injection**: Implemented `injectFrameIntoConnection()` with chunked transmission and timing control
+- **Enhanced Async Coordination**: Improved `waitForFrameProcessing()` with proper WebSocket processing pipeline timing
+- **Test Pattern Library**: Created reusable patterns for text/binary messages, fragmented messages, ping-pong, protocol violations
+- **Infrastructure Files**:
+  - Enhanced `test/helpers/generators.mjs` (+200 lines): Frame validation, injection utilities, client/server helpers
+  - New `test/helpers/frame-processing-utils.mjs` (+500 lines): Advanced test patterns and processing coordination
+  - Documentation: `PHASE_3_2_A_2_COMPLETION_SUMMARY.md` with detailed implementation guide
+
+**Ready for Phase 3.2.B**: Enhanced frame generation and processing foundation provides reliable infrastructure for systematic test improvement and achieving 95%+ test success rate.
 
 - [ ] **3.2.A.3** Event System Testing Architecture
   - [ ] **Task**: Create robust event testing patterns
