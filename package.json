@@ -37,13 +37,21 @@
   "devDependencies": {
     "buffer-equal": "^1.0.0",
     "eslint": "^8.0.0",
-    "tape": "^4.9.1"
+    "tape": "^4.9.1",
+    "vitest": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0"
   },
   "config": {
     "verbose": false
   },
   "scripts": {
     "test": "tape test/unit/*.js",
+    "test:vitest": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:watch": "vitest --coverage",
     "test:autobahn": "cd test/autobahn && ./run-wstest.js",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
