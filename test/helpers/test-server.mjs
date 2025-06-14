@@ -284,12 +284,29 @@ export async function stopAllServers() {
 }
 
 // Auto-cleanup on process exit
+// Note: 'exit' event handlers must be synchronous, so we do basic cleanup only
 process.on('exit', () => {
   for (const server of activeServers) {
     try {
-      server.stop();
+      // Synchronous cleanup only - close HTTP server and connections immediately
+      if (server.wsServer) {
+        server.wsServer.shutDown();
+      }
+      if (server.server && server.server.listening) {
+        server.server.close();
+      }
+      for (const connection of server.connections) {
+        connection.close();
+      }
     } catch (e) {
-      // Ignore errors during cleanup
+      // Ignore errors during emergency cleanup
     }
+  }
+});
+
+// Better cleanup using beforeExit (allows async operations)
+process.on('beforeExit', async () => {
+  if (activeServers.size > 0) {
+    await stopAllServers();
   }
 });

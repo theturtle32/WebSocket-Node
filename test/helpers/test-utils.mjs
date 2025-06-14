@@ -287,18 +287,5 @@ export function createMemoryTracker() {
   };
 }
 
-export function enforceTestTimeout(timeout = 30000) {
-  let timeoutHandle;
-  
-  beforeEach(() => {
-    timeoutHandle = setTimeout(() => {
-      throw new Error(`Test exceeded ${timeout}ms timeout`);
-    }, timeout);
-  });
-  
-  afterEach(() => {
-    if (timeoutHandle) {
-      clearTimeout(timeoutHandle);
-    }
-  });
-}
+// Note: enforceTestTimeout removed - use Vitest's built-in testTimeout and hookTimeout
+// configurations in vitest.config.mjs instead for better integration and reliability

@@ -44,15 +44,29 @@ export function expectValidWebSocketFrame(frame, options = {}) {
   } else if (payloadLength === 127) {
     expect(frame.length).toBeGreaterThanOrEqual(10);
     headerSize += 8;
-    // For simplicity, assume high 32 bits are 0
-    payloadLength = frame.readUInt32BE(6);
+    // Read 64-bit payload length (big-endian)
+    const high32 = frame.readUInt32BE(2);
+    const low32 = frame.readUInt32BE(6);
+    
+    // Check if high 32 bits are non-zero (payload > 4GB)
+    if (high32 > 0) {
+      // For very large payloads, we can't validate the exact frame length due to JS number limitations
+      // Just ensure the frame has at least the header
+      expect(frame.length).toBeGreaterThanOrEqual(headerSize);
+      payloadLength = Number.MAX_SAFE_INTEGER; // Mark as very large
+    } else {
+      payloadLength = low32;
+    }
   }
 
   if (masked) {
     headerSize += 4;
   }
 
-  expect(frame.length).toBe(headerSize + payloadLength);
+  // Validate frame length (skip for very large payloads due to JS number limitations)
+  if (payloadLength !== Number.MAX_SAFE_INTEGER) {
+    expect(frame.length).toBe(headerSize + payloadLength);
+  }
 
   return {
     fin,
