@@ -14,7 +14,7 @@ describe('WebSocketFrame', () => {
       const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, {});
       frame.fin = true;
       frame.mask = true;
-      frame.opcode = 0x09; // WebSocketFrame.PING
+      frame.opcode = 0x09; // PING opcode
       
       let frameBytes;
       expect(() => {

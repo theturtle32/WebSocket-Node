@@ -1,5 +1,4 @@
 onlyBuiltDependencies:
   - bufferutil
-  - es5-ext
   - esbuild
   - utf-8-validate
