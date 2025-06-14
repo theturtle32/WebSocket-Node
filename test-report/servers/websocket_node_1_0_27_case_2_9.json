@@ -8,7 +8,7 @@
    "createWirelog": true,
    "description": "Send unsolicited pong with payload. Send ping with payload. Verify pong for ping is received.",
    "droppedByMe": false,
-   "duration": 4,
+   "duration": 1,
    "expectation": "Nothing in reply to own Pong, but Pong with payload echo'ed in reply to Ping. Clean close with normal code.",
    "expected": {
       "OK": [
@@ -26,8 +26,8 @@
       "requireClean": true
    },
    "failedByMe": false,
-   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: m7mbgli/9zkEkhSYFkNOSA==\r\nSec-WebSocket-Version: 13\r\n\r\n",
-   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: oF0EKDkACQVckFmlCsVZl5bIK3c=\r\n\r\n",
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: R4YonMLnPtgHusyC4F6UdQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: KDPftv3qdAo8Ifnruo+0tinKcUc=\r\n\r\n",
    "id": "2.9",
    "isServer": false,
    "localCloseCode": 1000,
@@ -53,7 +53,7 @@
       "14": 1,
       "129": 1
    },
-   "started": "2020-08-28T14:51:11.923Z",
+   "started": "2025-06-14T02:05:06.777Z",
    "trafficStats": null,
    "txFrameStats": {
       "8": 1,
@@ -76,7 +76,7 @@
          "TO",
          [
             251,
-            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
          ],
          false
       ],
@@ -96,7 +96,7 @@
          10,
          true,
          0,
-         "605cf6f5",
+         "4f50994c",
          null,
          null,
          false
@@ -105,7 +105,7 @@
          "TO",
          [
             30,
-            "8a98605cf6f51532859a0c35959c143992d510339892402c978c0c339791"
+            "8a984f50994c3a3eea232339fa253b35fd6c3f3ff72b6f20f835233ff828"
          ],
          false
       ],
@@ -118,7 +118,7 @@
          9,
          true,
          0,
-         "c353f3d2",
+         "d178b92f",
          null,
          null,
          false
@@ -127,7 +127,7 @@
          "TO",
          [
             18,
-            "898cc353f3d2b33a9db5e32392abaf3c92b6"
+            "898cd178b92fa111d748f108d856bd17d84b"
          ],
          false
       ],
@@ -163,7 +163,7 @@
          8,
          true,
          0,
-         "859a2edc",
+         "c7767d8c",
          null,
          null,
          false
@@ -172,7 +172,7 @@
          "TO",
          [
             8,
-            "8882859a2edc8672"
+            "8882c7767d8cc49e"
          ],
          false
       ],

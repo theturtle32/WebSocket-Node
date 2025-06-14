@@ -8,7 +8,7 @@
    "createWirelog": true,
    "description": "Send fragmented text message, 3 fragments each of length 0.",
    "droppedByMe": false,
-   "duration": 6,
+   "duration": 8,
    "expectation": "A message is echo'ed back to us (with empty payload).",
    "expected": {
       "OK": [
@@ -27,8 +27,8 @@
       "requireClean": true
    },
    "failedByMe": false,
-   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: TTza162eWo6z+YWO5p4oOQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
-   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: yhOsj2f8BiSRvvwI92pKw/KG8mk=\r\n\r\n",
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: FVKuW3vbhMfHy5fC3YCeNQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: BcpYbDj6Zj+1S5ixpgtGdi24a9U=\r\n\r\n",
    "id": "6.1.2",
    "isServer": false,
    "localCloseCode": 1000,
@@ -55,7 +55,7 @@
       "4": 1,
       "129": 1
    },
-   "started": "2020-08-28T14:51:14.377Z",
+   "started": "2025-06-14T02:05:09.055Z",
    "trafficStats": null,
    "txFrameStats": {
       "0": 2,
@@ -77,7 +77,7 @@
          "TO",
          [
             251,
-            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
          ],
          false
       ],
@@ -97,7 +97,7 @@
          1,
          false,
          0,
-         "9b8cc31c",
+         "361f35d5",
          null,
          null,
          false
@@ -106,7 +106,7 @@
          "TO",
          [
             6,
-            "01809b8cc31c"
+            "0180361f35d5"
          ],
          false
       ],
@@ -119,7 +119,7 @@
          0,
          false,
          0,
-         "8c74afbd",
+         "1b1079fe",
          null,
          null,
          false
@@ -128,7 +128,7 @@
          "TO",
          [
             6,
-            "00808c74afbd"
+            "00801b1079fe"
          ],
          false
       ],
@@ -141,7 +141,7 @@
          0,
          true,
          0,
-         "1e56a490",
+         "4fda992d",
          null,
          null,
          false
@@ -150,7 +150,7 @@
          "TO",
          [
             6,
-            "80801e56a490"
+            "80804fda992d"
          ],
          false
       ],
@@ -186,7 +186,7 @@
          8,
          true,
          0,
-         "41d08808",
+         "976445a6",
          null,
          null,
          false
@@ -195,7 +195,7 @@
          "TO",
          [
             8,
-            "888241d088084238"
+            "8882976445a6948c"
          ],
          false
       ],

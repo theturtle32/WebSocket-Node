@@ -8,7 +8,7 @@
    "createWirelog": true,
    "description": "Send binary message message with payload of length 65535.",
    "droppedByMe": false,
-   "duration": 21,
+   "duration": 6,
    "expectation": "Receive echo'ed binary message (with payload as sent). Clean close with normal code.",
    "expected": {
       "OK": [
@@ -27,8 +27,8 @@
       "requireClean": true
    },
    "failedByMe": false,
-   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: oWDviWS8Z8sOrcebKoJ8+g==\r\nSec-WebSocket-Version: 13\r\n\r\n",
-   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: CwRtwadta0uJpG+wjz0sbi1k/DE=\r\n\r\n",
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: iq41i4naUd416xZ7rIM6WA==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 6wTkOh0OrwYF0kBWJjXJBZaDYHg=\r\n\r\n",
    "id": "1.2.6",
    "isServer": false,
    "localCloseCode": 1000,
@@ -51,15 +51,12 @@
       "8": 1
    },
    "rxOctetStats": {
+      "3": 1,
       "4": 1,
       "129": 1,
-      "2920": 2,
-      "7300": 2,
-      "11680": 1,
-      "14600": 1,
-      "18819": 1
+      "65536": 1
    },
-   "started": "2020-08-28T14:51:11.744Z",
+   "started": "2025-06-14T02:05:06.686Z",
    "trafficStats": null,
    "txFrameStats": {
       "2": 1,
@@ -80,7 +77,7 @@
          "TO",
          [
             251,
-            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
          ],
          false
       ],
@@ -100,7 +97,7 @@
          2,
          true,
          0,
-         "0c5e8ed5",
+         "82a52d9c",
          null,
          null,
          false
@@ -109,7 +106,7 @@
          "TO",
          [
             65543,
-            "82feffff0c5e8ed5f2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702bf2a0702b ..."
+            "82feffff82a52d9c7c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd3627c5bd362 ..."
          ],
          false
       ],
@@ -120,50 +117,15 @@
       [
          "RO",
          [
-            2920,
+            65536,
             "827efffffefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
          ]
       ],
       [
          "RO",
          [
-            7300,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
-         ]
-      ],
-      [
-         "RO",
-         [
-            7300,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
-         ]
-      ],
-      [
-         "RO",
-         [
-            11680,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
-         ]
-      ],
-      [
-         "RO",
-         [
-            14600,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
-         ]
-      ],
-      [
-         "RO",
-         [
-            2920,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
-         ]
-      ],
-      [
-         "RO",
-         [
-            18819,
-            "fefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe ..."
+            3,
+            "fefefe"
          ]
       ],
       [
@@ -187,7 +149,7 @@
          8,
          true,
          0,
-         "23845a8b",
+         "3d52361b",
          null,
          null,
          false
@@ -196,7 +158,7 @@
          "TO",
          [
             8,
-            "888223845a8b206c"
+            "88823d52361b3eba"
          ],
          false
       ],

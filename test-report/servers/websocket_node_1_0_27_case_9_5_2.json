@@ -8,7 +8,7 @@
    "createWirelog": true,
    "description": "Send text message message with payload of length 1 * 2**20 (1M). Sent out data in chops of 128 octets.",
    "droppedByMe": false,
-   "duration": 939,
+   "duration": 229,
    "expectation": "Receive echo'ed text message (with payload as sent).",
    "expected": {},
    "expectedClose": {
@@ -19,8 +19,8 @@
       "requireClean": true
    },
    "failedByMe": false,
-   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: EF/mvi3kuE+snIU1bjTE7w==\r\nSec-WebSocket-Version: 13\r\n\r\n",
-   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: x6frS3BNIvSQE9SlxCzATIOP+Nk=\r\n\r\n",
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: VxOp2+gd2HhKlpouNFv8rA==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: qnCkL+7bJNHhiH9SiTtIwMlYZP4=\r\n\r\n",
    "id": "9.5.2",
    "isServer": false,
    "localCloseCode": 1000,
@@ -38,32 +38,11 @@
    },
    "rxOctetStats": {
       "4": 1,
+      "10": 1,
       "129": 1,
-      "139": 1,
-      "1296": 2,
-      "1460": 14,
-      "2920": 21,
-      "4216": 2,
-      "4380": 23,
-      "5676": 3,
-      "5840": 22,
-      "7136": 2,
-      "7300": 20,
-      "8467": 1,
-      "8596": 1,
-      "8760": 15,
-      "10056": 1,
-      "10220": 7,
-      "11516": 2,
-      "11680": 6,
-      "13140": 6,
-      "14436": 1,
-      "14600": 4,
-      "16060": 2,
-      "17356": 1,
-      "24820": 1
+      "65536": 16
    },
-   "started": "2020-08-28T14:51:33.747Z",
+   "started": "2025-06-13T03:03:38.783Z",
    "trafficStats": null,
    "txFrameStats": {
       "1": 1,
@@ -85,7 +64,7 @@
          "TO",
          [
             251,
-            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
          ],
          false
       ],
@@ -109,7 +88,7 @@
          8,
          true,
          0,
-         "63c78a80",
+         "883fba15",
          null,
          null,
          false
@@ -118,7 +97,7 @@
          "TO",
          [
             8,
-            "888263c78a80602f"
+            "8882883fba158bd7"
          ],
          false
       ],

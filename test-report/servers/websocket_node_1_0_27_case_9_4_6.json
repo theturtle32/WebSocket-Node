@@ -8,7 +8,7 @@
    "createWirelog": true,
    "description": "Send fragmented binary message message with message payload of length 4 * 2**20 (4M). Sent out in fragments of 64k.",
    "droppedByMe": false,
-   "duration": 186,
+   "duration": 23,
    "expectation": "Receive echo'ed binary message (with payload as sent).",
    "expected": {},
    "expectedClose": {
@@ -19,8 +19,8 @@
       "requireClean": true
    },
    "failedByMe": false,
-   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.1-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: NsDlNHU7gSiQUZdo8cUwrg==\r\nSec-WebSocket-Version: 13\r\n\r\n",
-   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 1ifa2Q3j9rqJAfEBTb+y/9xWzbU=\r\n\r\n",
+   "httpRequest": "GET / HTTP/1.1\r\nUser-Agent: AutobahnTestSuite/0.8.2-0.10.9\r\nHost: host.docker.internal:8080\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nPragma: no-cache\r\nCache-Control: no-cache\r\nSec-WebSocket-Key: fwt8JMyk/gn4PQR0/GCpEQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+   "httpResponse": "HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: 7p7GwflYKcBdRVrNb1s8920XzD0=\r\n\r\n",
    "id": "9.4.6",
    "isServer": false,
    "localCloseCode": 1000,
@@ -39,42 +39,14 @@
    "rxOctetStats": {
       "4": 1,
       "129": 1,
-      "139": 1,
-      "1296": 6,
-      "1460": 23,
-      "2756": 8,
-      "2920": 41,
-      "3271": 1,
-      "4216": 7,
-      "4380": 62,
-      "5676": 7,
-      "5840": 83,
-      "6656": 1,
-      "7136": 5,
-      "7300": 74,
-      "8596": 8,
-      "8760": 48,
-      "10056": 6,
-      "10220": 33,
-      "11516": 4,
-      "11680": 23,
-      "12976": 3,
-      "13140": 30,
-      "14436": 3,
-      "14600": 15,
-      "15896": 4,
-      "16060": 10,
-      "17520": 8,
-      "18980": 1,
-      "20276": 1,
-      "20440": 3,
-      "21900": 4,
-      "23360": 1,
-      "27740": 1,
-      "33580": 1,
-      "65536": 1
+      "1726": 1,
+      "31832": 1,
+      "32768": 1,
+      "64964": 1,
+      "65328": 1,
+      "65536": 61
    },
-   "started": "2020-08-28T14:51:31.130Z",
+   "started": "2025-06-13T03:03:37.890Z",
    "trafficStats": null,
    "txFrameStats": {
       "0": 64,
@@ -97,7 +69,7 @@
          "TO",
          [
             251,
-            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e312d302e31302e390d0a486f7374 ..."
+            "474554202f20485454502f312e310d0a557365722d4167656e743a204175746f6261686e5465737453756974652f302e382e322d302e31302e390d0a486f7374 ..."
          ],
          false
       ],
@@ -121,7 +93,7 @@
          8,
          true,
          0,
-         "ba0f3e10",
+         "8aefa50a",
          null,
          null,
          false
@@ -130,7 +102,7 @@
          "TO",
          [
             8,
-            "8882ba0f3e10b9e7"
+            "88828aefa50a8907"
          ],
          false
       ],
