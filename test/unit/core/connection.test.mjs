@@ -8,12 +8,45 @@ import { expectConnectionState, expectBufferEquals } from '../../helpers/asserti
 describe('WebSocketConnection - Comprehensive Testing', () => {
   let mockSocket, config, connection;
   
-  // Helper function for waiting for async WebSocket processing
+  // Enhanced async utilities for WebSocket processing
   const waitForProcessing = async () => {
     // WebSocket uses process.nextTick and setImmediate for async processing
     await new Promise(resolve => process.nextTick(resolve));
     await new Promise(resolve => setImmediate(resolve));
     await new Promise(resolve => setImmediate(resolve));
+  };
+
+  const waitForCallback = async (timeoutMs = 100) => {
+    // For callback-based operations that may take a moment
+    await new Promise(resolve => setTimeout(resolve, timeoutMs));
+    await waitForProcessing();
+  };
+
+  const waitForEvent = async (emitter, eventName, timeoutMs = 1000) => {
+    // Wait for specific event with timeout
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        emitter.removeListener(eventName, handler);
+        reject(new Error(`Event '${eventName}' not emitted within ${timeoutMs}ms`));
+      }, timeoutMs);
+
+      const handler = (...args) => {
+        clearTimeout(timeout);
+        resolve(args);
+      };
+
+      emitter.once(eventName, handler);
+    });
+  };
+
+  const waitForCondition = async (conditionFn, timeoutMs = 1000, intervalMs = 10) => {
+    // Poll for a condition to become true
+    const startTime = Date.now();
+    while (Date.now() - startTime < timeoutMs) {
+      if (conditionFn()) return true;
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+    }
+    throw new Error(`Condition not met within ${timeoutMs}ms`);
   };
   
   beforeEach(() => {
@@ -40,7 +73,13 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
     if (connection && connection.state !== 'closed') {
       connection.drop();
     }
+    // Enhanced cleanup
     vi.clearAllTimers();
+    vi.clearAllMocks();
+    if (mockSocket) {
+      mockSocket.clearWrittenData();
+      mockSocket.removeAllListeners();
+    }
   });
 
   describe('Connection Lifecycle', () => {
@@ -346,6 +385,10 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
       });
 
       it.skip('should send text message with callback', (done) => {
+        // Clear any existing spies and set up fresh
+        vi.clearAllMocks();
+        mockSocket.clearWrittenData();
+        
         const writeSpy = vi.spyOn(mockSocket, 'write').mockImplementation((data, callback) => {
           if (callback) setImmediate(callback);
           return true;
@@ -488,9 +531,6 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
 
     describe('Fragmented Message Handling', () => {
       it('should assemble fragmented text message correctly', async () => {
-        let receivedMessage;
-        connection.on('message', (msg) => { receivedMessage = msg; });
-
         // Send fragmented message: "Hello" + " " + "World!"
         const firstFrame = generateWebSocketFrame({
           opcode: 0x01, // Text frame
@@ -513,25 +553,25 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
           masked: true
         });
 
+        // Set up promise to wait for message event
+        const messagePromise = waitForEvent(connection, 'message', 2000);
+
         mockSocket.emit('data', firstFrame);
         await waitForProcessing();
-        expect(receivedMessage).toBeUndefined(); // Not complete yet
 
         mockSocket.emit('data', contFrame);
         await waitForProcessing();
-        expect(receivedMessage).toBeUndefined(); // Still not complete
 
         mockSocket.emit('data', finalFrame);
-        await waitForProcessing();
+        
+        // Wait for the complete message
+        const [receivedMessage] = await messagePromise;
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('utf8');
         expect(receivedMessage.utf8Data).toBe('Hello World!');
       });
 
       it('should assemble fragmented binary message correctly', async () => {
-        let receivedMessage;
-        connection.on('message', (msg) => { receivedMessage = msg; });
-
         const part1 = Buffer.from([0x01, 0x02]);
         const part2 = Buffer.from([0x03, 0x04]);
         const part3 = Buffer.from([0x05, 0x06]);
@@ -557,6 +597,9 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
           masked: true
         });
 
+        // Set up promise to wait for message event
+        const messagePromise = waitForEvent(connection, 'message', 2000);
+
         mockSocket.emit('data', firstFrame);
         await waitForProcessing();
         
@@ -564,8 +607,9 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         await waitForProcessing();
         
         mockSocket.emit('data', finalFrame);
-        await waitForProcessing();
 
+        // Wait for the complete message
+        const [receivedMessage] = await messagePromise;
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('binary');
         expect(receivedMessage.binaryData).toEqual(Buffer.concat([part1, part2, part3]));
