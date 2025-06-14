@@ -91,6 +91,13 @@ export function expectConnectionState(connection, expectedState) {
     case 'closed':
       expect(connection.connected).toBe(false);
       break;
+    case 'ending':
+      expect(connection.connected).toBe(false); // Actually set to false in close()
+      expect(connection.waitingForCloseResponse).toBe(true);
+      break;
+    case 'peer_requested_close':
+      expect(connection.connected).toBe(false); // Actually set to false when processing close frame
+      break;
     case 'connecting':
       // May or may not be connected yet
       break;
