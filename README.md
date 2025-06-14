@@ -43,13 +43,13 @@ All current browsers are fully* supported.
 
 Benchmarks
 ----------
-There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://theturtle32.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
+There are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](https://theturtle32.github.io/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.
 
 (These benchmarks are quite a bit outdated at this point, so take them with a grain of salt. Anyone up for running new benchmarks? I'll link to your report.)
 
 Autobahn Tests
 --------------
-The very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.
+The very complete [Autobahn Test Suite](https://github.com/crossbario/autobahn-testsuite) is used by most WebSocket implementations to test spec compliance and interoperability.
 
 - [View Server Test Results](https://theturtle32.github.io/WebSocket-Node/test-report/servers/index.html)
 
