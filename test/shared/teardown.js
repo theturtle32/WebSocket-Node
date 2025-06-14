@@ -2,7 +2,9 @@
 // This file runs after all tests
 
 // Global teardown function
-export function teardown() {
+function teardown() {
   // Global test cleanup logic can be added here
   console.log('Tearing down WebSocket-Node test environment...');
 }
+
+module.exports = { teardown };
