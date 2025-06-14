@@ -54,7 +54,7 @@ export class TestServerManager extends EventEmitter {
   }
 
   async stop() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       try {
         // Close all connections
         for (const connection of this.connections) {
