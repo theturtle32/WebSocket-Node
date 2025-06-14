@@ -684,25 +684,34 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 
 **Objective**: Dramatically expand test coverage for critical WebSocket components.
 
-#### 3.1 WebSocketFrame Comprehensive Testing
+#### 3.1 WebSocketFrame Comprehensive Testing ✅ **COMPLETED**
 
 **Dependencies**: Phase 2 complete (Test helpers and infrastructure ready)
 **Tasks**:
 
-- [ ] **3.1.1** Frame serialization tests
-  - [ ] All payload sizes (0, small, 16-bit, 64-bit)
-  - [ ] All frame types (text, binary, close, ping, pong)
-  - [ ] Masking/unmasking scenarios
-  - [ ] Control frame validation
-- [ ] **3.1.2** Frame parsing tests
-  - [ ] Valid frame parsing across all types
-  - [ ] Malformed frame detection and handling
-  - [ ] Incomplete frame data handling
-  - [ ] Reserved bit and opcode handling
-- [ ] **3.1.3** Edge case testing
-  - [ ] Maximum frame sizes
-  - [ ] Zero-length payloads
-  - [ ] Buffer boundary conditions
+- [x] **3.1.1** Frame serialization tests
+  - [x] All payload sizes (0, small, 16-bit, 64-bit)
+  - [x] All frame types (text, binary, close, ping, pong)
+  - [x] Masking/unmasking scenarios
+  - [x] Control frame validation
+- [x] **3.1.2** Frame parsing tests
+  - [x] Valid frame parsing across all types
+  - [x] Malformed frame detection and handling
+  - [x] Incomplete frame data handling
+  - [x] Reserved bit and opcode handling
+- [x] **3.1.3** Edge case testing
+  - [x] Maximum frame sizes
+  - [x] Zero-length payloads
+  - [x] Buffer boundary conditions
+
+**Achievements**:
+- **Created comprehensive test suite**: 43 tests covering all aspects of WebSocketFrame functionality
+- **Achieved 83.87% statement coverage and 96.87% branch coverage** for WebSocketFrame.js (up from ~30%)
+- **Implemented robust frame serialization tests**: All payload sizes, frame types, masking scenarios
+- **Added comprehensive frame parsing tests**: Valid frames, malformed detection, incomplete handling
+- **Extensive edge case coverage**: Reserved bits, opcodes, buffer boundaries, performance tests
+- **Test file created**: `test/unit/core/frame.test.mjs` (43 comprehensive tests)
+- **Legacy compatibility maintained**: `test/unit/core/frame-legacy-compat.test.mjs` (3 original tests)
 
 #### 3.2 WebSocketConnection Comprehensive Testing
 
