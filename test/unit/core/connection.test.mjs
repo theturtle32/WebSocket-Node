@@ -8,6 +8,14 @@ import { expectConnectionState, expectBufferEquals } from '../../helpers/asserti
 describe('WebSocketConnection - Comprehensive Testing', () => {
   let mockSocket, config, connection;
   
+  // Helper function for waiting for async WebSocket processing
+  const waitForProcessing = async () => {
+    // WebSocket uses process.nextTick and setImmediate for async processing
+    await new Promise(resolve => process.nextTick(resolve));
+    await new Promise(resolve => setImmediate(resolve));
+    await new Promise(resolve => setImmediate(resolve));
+  };
+  
   beforeEach(() => {
     mockSocket = new MockSocket();
     config = {
@@ -128,7 +136,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', closeFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expectConnectionState(connection, 'peer_requested_close');
       });
@@ -221,7 +229,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         connection.drop(); // Second call should not emit another event
         
         // Wait for any potential delayed events
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(closeCount).toBe(1);
         expect(connection.closeEventEmitted).toBe(true);
@@ -287,7 +295,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', textFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('utf8');
@@ -308,7 +316,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', invalidFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(errorEmitted).toBe(true);
         expectConnectionState(connection, 'closed');
@@ -327,7 +335,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', emptyTextFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('utf8');
@@ -375,7 +383,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', binaryFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('binary');
@@ -396,7 +404,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', binaryFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('binary');
@@ -430,7 +438,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         mockSocket.emit('data', emptyBinaryFrame);
         
         // Wait for async processing
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('binary');
@@ -503,15 +511,15 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         });
 
         mockSocket.emit('data', firstFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         expect(receivedMessage).toBeUndefined(); // Not complete yet
 
         mockSocket.emit('data', contFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         expect(receivedMessage).toBeUndefined(); // Still not complete
 
         mockSocket.emit('data', finalFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('utf8');
         expect(receivedMessage.utf8Data).toBe('Hello World!');
@@ -547,13 +555,13 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         });
 
         mockSocket.emit('data', firstFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         mockSocket.emit('data', contFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
         
         mockSocket.emit('data', finalFrame);
-        await new Promise(resolve => setImmediate(resolve));
+        await waitForProcessing();
 
         expect(receivedMessage).toBeDefined();
         expect(receivedMessage.type).toBe('binary');
@@ -651,7 +659,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         expect(writtenData[0]).toBe(0x89); // FIN + ping opcode
       });
 
-      it('should handle received ping frame and auto-respond with pong', () => {
+      it('should handle received ping frame and auto-respond with pong', async () => {
         const writeSpy = vi.spyOn(mockSocket, 'write').mockReturnValue(true);
         
         const pingFrame = generateWebSocketFrame({
@@ -662,13 +670,16 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
 
         mockSocket.emit('data', pingFrame);
         
+        // Wait for async processing
+        await waitForProcessing();
+        
         // Should automatically send pong response
         expect(writeSpy).toHaveBeenCalledOnce();
         const pongData = writeSpy.mock.calls[0][0];
         expect(pongData[0]).toBe(0x8A); // FIN + pong opcode
       });
 
-      it('should emit ping event when listeners exist', () => {
+      it('should emit ping event when listeners exist', async () => {
         let pingReceived = false;
         let pingData;
         
@@ -685,11 +696,14 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
 
         mockSocket.emit('data', pingFrame);
         
+        // Wait for async processing
+        await waitForProcessing();
+        
         expect(pingReceived).toBe(true);
         expect(pingData).toEqual(Buffer.from('custom-ping'));
       });
 
-      it('should allow canceling auto-pong response', () => {
+      it('should allow canceling auto-pong response', async () => {
         const writeSpy = vi.spyOn(mockSocket, 'write').mockReturnValue(true);
         
         connection.on('ping', (cancelAutoResponse) => {
@@ -703,6 +717,9 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         });
 
         mockSocket.emit('data', pingFrame);
+        
+        // Wait for async processing
+        await waitForProcessing();
         
         // Should not have sent automatic pong
         expect(writeSpy).not.toHaveBeenCalled();
@@ -718,7 +735,7 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         expect(writtenData[0]).toBe(0x8A); // FIN + pong opcode
       });
 
-      it('should emit pong event when pong frame is received', () => {
+      it('should emit pong event when pong frame is received', async () => {
         let pongReceived = false;
         let pongData;
         
@@ -735,11 +752,14 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
 
         mockSocket.emit('data', pongFrame);
         
+        // Wait for async processing
+        await waitForProcessing();
+        
         expect(pongReceived).toBe(true);
         expect(pongData).toEqual(Buffer.from('pong-response'));
       });
 
-      it('should handle control frames with maximum payload size', () => {
+      it('should handle control frames with maximum payload size', async () => {
         const maxPayload = Buffer.alloc(125, 0x42); // Maximum allowed for control frames
         
         const pingFrame = generateWebSocketFrame({
@@ -752,6 +772,9 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
         connection.on('ping', () => { pingReceived = true; });
 
         mockSocket.emit('data', pingFrame);
+        
+        // Wait for async processing
+        await waitForProcessing();
         
         expect(pingReceived).toBe(true);
       });
