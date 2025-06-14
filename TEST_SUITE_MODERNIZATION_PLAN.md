@@ -4,6 +4,22 @@
 
 This document outlines the comprehensive modernization of the WebSocket-Node test suite, migrating from `tape` to `Vitest` and implementing extensive test coverage across all components. The goal is to create a robust, maintainable, and comprehensive testing infrastructure.
 
+## ⚠️ Important: ES Module File Extensions
+
+**All new test files created as part of the Vitest modernization MUST use the `.mjs` extension to ensure proper ES module handling.**
+
+This is required because:
+- The core WebSocket library maintains CommonJS compatibility for ecosystem users
+- Test files use ES module syntax (`import`/`export`)
+- Without `"type": "module"` in package.json, `.js` files are treated as CommonJS
+- Using `.mjs` extension explicitly marks files as ES modules
+
+**File Extension Guidelines:**
+- ✅ New Vitest test files: `*.test.mjs` or `*.spec.mjs`
+- ✅ Test helper modules: `*.mjs` (e.g., `config.mjs`, `setup.mjs`)
+- ✅ Vitest configuration: `vitest.config.mjs`
+- ❌ Do NOT use `.js` extension for files with ES module syntax
+
 ## Current State Analysis
 
 ### Existing Test Infrastructure

@@ -30,3 +30,11 @@
 - Before committing to git, make sure to check for lint errors with `pnpm lint:fix` and verify that all the tests pass, including the autobahn tests.
 - Before beginning work on a section of a project plan, update the project plan file to reflect what will be in progress.
 - After completing work on a section of a project plan, update it to reflect what was completed before committing your changes to git.
+- All the work we are doing right now is in service of preparing a version 2.0 release. All of our work should feed back into the `v2` branch.
+- Always create a new branch for each project execution phase, push the work to github, and open a pull request into `v2` so I can review it before merging.
+
+## Before Committing to Git
+
+- Update any relevant project plan markdown files.
+- Ensure that you have created an appropriately named branch for the work in progress.
+- Make sure `pnpm lint:fix` is run and not showing any errors.
