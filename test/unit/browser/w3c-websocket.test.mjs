@@ -4,7 +4,7 @@ import startEchoServer from '../../helpers/start-echo-server.mjs';
 
 describe('W3CWebSocket', () => {
   describe('Event Listeners with ws.onxxxxx', () => {
-    it('should call event handlers in correct order', async () => {
+    it('should call event handlers in correct order', () => {
       return new Promise((resolve, reject) => {
         let counter = 0;
         const message = 'This is a test message.';
@@ -23,7 +23,7 @@ describe('W3CWebSocket', () => {
           
           ws.onerror = (event) => {
             echoServer.kill();
-            reject(new Error('No errors are expected: ' + event));
+            reject(new Error(`No errors are expected: ${event.type || JSON.stringify(event)}`));
           };
           
           ws.onmessage = (event) => {
@@ -43,7 +43,7 @@ describe('W3CWebSocket', () => {
   });
 
   describe('Event Listeners with ws.addEventListener', () => {
-    it('should support addEventListener with multiple listeners', async () => {
+    it('should support addEventListener with multiple listeners', () => {
       return new Promise((resolve, reject) => {
         let counter = 0;
         const message = 'This is a test message.';

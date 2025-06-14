@@ -165,7 +165,7 @@ export function generateMalformedFrame(type = 'invalid_opcode') {
     case 'invalid_utf8':
       // Create invalid UTF-8 sequence
       const invalidUtf8 = Buffer.from([0xc0, 0x80]); // Overlong encoding
-      return generateWebSocketFrame({ payload: invalidUt8 });
+      return generateWebSocketFrame({ payload: invalidUtf8 });
     
     case 'unmasked_client':
       // Client frames must be masked, server frames must not be

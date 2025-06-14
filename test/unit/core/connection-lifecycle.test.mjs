@@ -15,7 +15,7 @@ describe('Connection Lifecycle', () => {
     await stopServer();
   });
 
-  it('should handle TCP connection drop before server accepts request', async () => {
+  it('should handle TCP connection drop before server accepts request', () => {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Test timed out - client connection was not handled properly'));
@@ -33,7 +33,7 @@ describe('Connection Lifecycle', () => {
       }
 
       wsServer.on('request', (request) => {
-        expect(true).toBe(true); // Request received
+        expect(request).toBeDefined(); // Request received
         checkCompletion();
 
         // Wait 500 ms before accepting connection
@@ -41,7 +41,7 @@ describe('Connection Lifecycle', () => {
           const connection = request.accept(request.requestedProtocols[0], request.origin);
 
           connection.on('close', (reasonCode, description) => {
-            expect(true).toBe(true); // Connection should emit close event
+            expect(reasonCode).toBeDefined(); // Connection should emit close event
             checkCompletion();
             
             expect(reasonCode).toBe(1006);
@@ -63,7 +63,7 @@ describe('Connection Lifecycle', () => {
       
       client.on('connectFailed', (error) => {
         // This is expected - the client should fail to connect
-        expect(true).toBe(true); // Expected connection failure
+        expect(error).toBeDefined(); // Expected connection failure
         checkCompletion();
       });
 

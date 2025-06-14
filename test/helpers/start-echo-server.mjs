@@ -7,11 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default function startEchoServer(outputStream, callback) {
-  if ('function' === typeof outputStream) {
+  if (typeof outputStream === 'function') {
     callback = outputStream;
     outputStream = null;
   }
-  if ('function' !== typeof callback) {
+  if (typeof callback !== 'function') {
     callback = () => {};
   }
   

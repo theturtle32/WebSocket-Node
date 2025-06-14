@@ -13,7 +13,7 @@ describe('WebSocketRequest', () => {
     await stopServer();
   });
 
-  it('can only be rejected or accepted once', async () => {
+  it('can only be rejected or accepted once', () => {
     return new Promise((resolve, reject) => {
       let testsCompleted = 0;
       const totalTests = 6;
@@ -69,7 +69,7 @@ describe('WebSocketRequest', () => {
     });
   });
 
-  it('should handle protocol mismatch gracefully', async () => {
+  it('should handle protocol mismatch gracefully', () => {
     return new Promise((resolve, reject) => {
       let requestHandled = false;
       let clientEventReceived = false;
