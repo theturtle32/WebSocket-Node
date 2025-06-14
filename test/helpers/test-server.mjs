@@ -76,8 +76,13 @@ export class TestServerManager extends EventEmitter {
           resolve();
         }
       } catch (e) {
-        console.warn('stopServer threw', e);
-        resolve();
+        // In test environment, we want to know about cleanup issues but not fail tests
+        if (process.env.NODE_ENV === 'test') {
+          console.warn('Warning: Server cleanup encountered an error:', e.message);
+          resolve(); // Don't fail tests during cleanup
+        } else {
+          reject(e); // In non-test environments, propagate the error
+        }
       }
     });
   }

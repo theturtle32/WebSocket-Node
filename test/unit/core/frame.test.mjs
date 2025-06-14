@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import bufferEqual from 'buffer-equal';
 import WebSocketFrame from '../../../lib/WebSocketFrame.js';
-import { bufferAllocUnsafe, bufferFromString } from '../../../lib/utils.js';
+// import { Buffer.allocUnsafe, Buffer.from } from '../../../lib/utils.js';
 
 describe('WebSocketFrame', () => {
   describe('Frame Serialization', () => {
     it('should serialize a WebSocket Frame with no data', () => {
       // WebSocketFrame uses a per-connection buffer for the mask bytes
       // and the frame header to avoid allocating tons of small chunks of RAM.
-      const maskBytesBuffer = bufferAllocUnsafe(4);
-      const frameHeaderBuffer = bufferAllocUnsafe(10);
+      const maskBytesBuffer = Buffer.allocUnsafe(4);
+      const frameHeaderBuffer = Buffer.allocUnsafe(10);
       
       const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, {});
       frame.fin = true;
@@ -21,14 +21,14 @@ describe('WebSocketFrame', () => {
         frameBytes = frame.toBuffer(true);
       }).not.toThrow();
       
-      expect(bufferEqual(frameBytes, bufferFromString('898000000000', 'hex'))).toBe(true);
+      expect(bufferEqual(frameBytes, Buffer.from('898000000000', 'hex'))).toBe(true);
     });
 
     it('should serialize a WebSocket Frame with 16-bit length payload', () => {
-      const maskBytesBuffer = bufferAllocUnsafe(4);
-      const frameHeaderBuffer = bufferAllocUnsafe(10);
+      const maskBytesBuffer = Buffer.allocUnsafe(4);
+      const frameHeaderBuffer = Buffer.allocUnsafe(10);
 
-      const payload = bufferAllocUnsafe(200);
+      const payload = Buffer.allocUnsafe(200);
       for (let i = 0; i < payload.length; i++) {
         payload[i] = i % 256;
       }
@@ -44,7 +44,7 @@ describe('WebSocketFrame', () => {
         frameBytes = frame.toBuffer(true);
       }).not.toThrow();
 
-      const expected = bufferAllocUnsafe(2 + 2 + 4 + payload.length);
+      const expected = Buffer.allocUnsafe(2 + 2 + 4 + payload.length);
       expected[0] = 0x82;
       expected[1] = 0xFE;
       expected.writeUInt16BE(payload.length, 2);
@@ -55,10 +55,10 @@ describe('WebSocketFrame', () => {
     });
 
     it('should serialize a WebSocket Frame with 64-bit length payload', () => {
-      const maskBytesBuffer = bufferAllocUnsafe(4);
-      const frameHeaderBuffer = bufferAllocUnsafe(10);
+      const maskBytesBuffer = Buffer.allocUnsafe(4);
+      const frameHeaderBuffer = Buffer.allocUnsafe(10);
 
-      const payload = bufferAllocUnsafe(66000);
+      const payload = Buffer.allocUnsafe(66000);
       for (let i = 0; i < payload.length; i++) {
         payload[i] = i % 256;
       }
@@ -74,7 +74,7 @@ describe('WebSocketFrame', () => {
         frameBytes = frame.toBuffer(true);
       }).not.toThrow();
 
-      const expected = bufferAllocUnsafe(2 + 8 + 4 + payload.length);
+      const expected = Buffer.allocUnsafe(2 + 8 + 4 + payload.length);
       expected[0] = 0x82;
       expected[1] = 0xFF;
       expected.writeUInt32BE(0, 2);
