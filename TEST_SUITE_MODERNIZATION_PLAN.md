@@ -618,7 +618,7 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 - [ ] **1.3.3** Test CI/CD integration with basic test
 - [ ] **1.3.4** Validate test discovery and execution
 
-### Phase 2: Test Migration and Helper Infrastructure
+### Phase 2: Test Migration and Helper Infrastructure ⚠️ IN PROGRESS
 
 **Objective**: Migrate existing tests and create foundational testing utilities.
 
@@ -627,17 +627,17 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 **Dependencies**: Phase 1 complete (Vitest infrastructure operational)
 **Tasks**:
 
-- [ ] **2.1.1** Migrate `websocketFrame.js` tests
-  - [ ] Convert tape syntax to Vitest syntax
-  - [ ] Update imports and assertions
-  - [ ] Verify test functionality matches original
-- [ ] **2.1.2** Migrate `request.js` tests
-  - [ ] Handle server setup/teardown in Vitest context
-  - [ ] Convert async test patterns
-- [ ] **2.1.3** Migrate `w3cwebsocket.js` tests
-- [ ] **2.1.4** Migrate `regressions.js` tests
-- [ ] **2.1.5** Migrate `dropBeforeAccept.js` tests
-- [ ] **2.1.6** Validate all migrated tests pass consistently
+- [x] **2.1.1** Migrate `websocketFrame.js` tests
+  - [x] Convert tape syntax to Vitest syntax
+  - [x] Update imports and assertions
+  - [x] Verify test functionality matches original
+- [x] **2.1.2** Migrate `request.js` tests
+  - [x] Handle server setup/teardown in Vitest context
+  - [x] Convert async test patterns
+- [x] **2.1.3** Migrate `w3cwebsocket.js` tests
+- [x] **2.1.4** Migrate `regressions.js` tests
+- [x] **2.1.5** Migrate `dropBeforeAccept.js` tests
+- [x] **2.1.6** Validate all migrated tests pass consistently
 
 #### 2.2 Test Helper Infrastructure
 
