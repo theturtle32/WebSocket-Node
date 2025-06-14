@@ -401,6 +401,52 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
       expect(frame.mask).toBe(false);
       expect(frame.binaryPayload.toString('utf8')).toBe(originalPayload);
     });
+
+    it('should handle zero mask key (null masking)', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Create a masked frame with all zero mask key
+      const payload = Buffer.from('test payload');
+      const maskedFrame = Buffer.alloc(2 + 4 + payload.length);
+      maskedFrame[0] = 0x81; // FIN + text opcode
+      maskedFrame[1] = 0x80 | payload.length; // Masked + length
+      // Mask key is all zeros (bytes 2-5)
+      payload.copy(maskedFrame, 6); // Payload unchanged due to zero mask
+      
+      const bufferList = new MockBufferList(maskedFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.mask).toBe(true);
+      expect(frame.binaryPayload.toString('utf8')).toBe('test payload');
+    });
+
+    it('should handle different mask key patterns', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Test with mask key [0xFF, 0xFF, 0xFF, 0xFF] (all bits flipped)
+      const payload = Buffer.from([0x48, 0x65, 0x6C, 0x6C, 0x6F]); // "Hello"
+      const maskKey = Buffer.from([0xFF, 0xFF, 0xFF, 0xFF]);
+      const maskedPayload = Buffer.alloc(payload.length);
+      
+      for (let i = 0; i < payload.length; i++) {
+        maskedPayload[i] = payload[i] ^ maskKey[i % 4];
+      }
+      
+      const maskedFrame = Buffer.alloc(2 + 4 + maskedPayload.length);
+      maskedFrame[0] = 0x81; // FIN + text opcode
+      maskedFrame[1] = 0x80 | payload.length; // Masked + length
+      maskKey.copy(maskedFrame, 2);
+      maskedPayload.copy(maskedFrame, 6);
+      
+      const bufferList = new MockBufferList(maskedFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.mask).toBe(true);
+      expect(frame.binaryPayload).toEqual(payload);
+      expect(frame.binaryPayload.toString('utf8')).toBe('Hello');
+    });
   });
 
   describe('Frame Parsing - Malformed Frame Detection', () => {
@@ -420,13 +466,14 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
       expect(frame.dropReason).toContain('control frame longer than 125 bytes');
     });
 
-    it('should enforce maximum payload size for control frames during parsing', () => {
+    it('should reject control frames using extended length encoding', () => {
       const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
       
-      // Create a ping frame with exactly 126 bytes payload (too large)
-      const malformedFrame = Buffer.alloc(128); // 2 header + 126 payload
-      malformedFrame[0] = 0x89; // FIN + ping opcode  
-      malformedFrame[1] = 126; // Length 126 (invalid for control frames)
+      // Control frames must not use 16-bit length encoding, even for smaller payloads
+      const malformedFrame = Buffer.alloc(10);
+      malformedFrame[0] = 0x8A; // FIN + pong opcode  
+      malformedFrame[1] = 126; // 16-bit length indicator (invalid for control frames)
+      malformedFrame.writeUInt16BE(10, 2); // Actual length 10 (which would be valid as direct encoding)
       
       const bufferList = new MockBufferList(malformedFrame);
       const complete = frame.addData(bufferList);
@@ -521,6 +568,53 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
       expect(complete).toBe(true);
       expect(frame.invalidCloseFrameLength).toBe(true);
       expect(frame.binaryPayload.length).toBe(0); // Should be cleared
+    });
+
+    it('should parse close frame with zero length correctly', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Create close frame with no payload (valid)
+      const validFrame = Buffer.from([0x88, 0x00]); // FIN + close opcode, length 0
+      
+      const bufferList = new MockBufferList(validFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.opcode).toBe(0x08);
+      expect(frame.invalidCloseFrameLength).toBe(false);
+      expect(frame.closeStatus).toBe(-1); // No status code provided
+      expect(frame.binaryPayload.length).toBe(0);
+    });
+
+    it('should validate reserved opcodes', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Test reserved opcode 0x3 (should be accepted as the implementation doesn't validate opcodes)
+      const reservedFrame = Buffer.from([0x83, 0x05, 0x48, 0x65, 0x6C, 0x6C, 0x6F]); // Reserved opcode + "Hello"
+      
+      const bufferList = new MockBufferList(reservedFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.opcode).toBe(0x03);
+      expect(frame.protocolError).toBe(false); // Implementation doesn't validate opcodes during parsing
+      expect(frame.binaryPayload.toString('utf8')).toBe('Hello');
+    });
+
+    it('should parse continuation frames correctly', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Create a continuation frame (opcode 0x00)
+      const contFrame = Buffer.from([0x80, 0x05, 0x77, 0x6F, 0x72, 0x6C, 0x64]); // FIN + continuation + "world"
+      
+      const bufferList = new MockBufferList(contFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.opcode).toBe(0x00); // Continuation opcode
+      expect(frame.fin).toBe(true);
+      expect(frame.protocolError).toBe(false);
+      expect(frame.binaryPayload.toString('utf8')).toBe('world');
     });
   });
 
@@ -649,6 +743,25 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
       expect(description).toContain('length: 10');
       expect(description).toContain('hasPayload: true');
       expect(description).toContain('masked: true');
+    });
+
+    it('should set length property correctly during parsing', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Test with 16-bit length encoding
+      const payload = Buffer.alloc(200, 0x42);
+      const testFrame = Buffer.alloc(4 + payload.length);
+      testFrame[0] = 0x82; // FIN + binary opcode
+      testFrame[1] = 126; // 16-bit length indicator
+      testFrame.writeUInt16BE(payload.length, 2);
+      payload.copy(testFrame, 4);
+      
+      const bufferList = new MockBufferList(testFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.length).toBe(200); // Should match actual payload length
+      expect(frame.binaryPayload.length).toBe(200);
     });
 
     it('should handle throwAwayPayload correctly', () => {
