@@ -55,9 +55,8 @@ describe('WebSocketRequest', () => {
   it('should handle protocol mismatch gracefully', async () => {
     const client = new WebSocketClient();
     
-    // Set up promises for the events we expect
+    // Set up promise for the request we expect
     const requestPromise = waitForEvent(wsServer, 'request', 5000);
-    const connectFailedPromise = waitForEvent(client, 'connectFailed', 5000);
     
     // Ensure client never connects successfully (would be an error)
     client.on('connect', (connection) => {
@@ -68,16 +67,21 @@ describe('WebSocketRequest', () => {
     // Start the connection with a specific protocol
     client.connect(`ws://localhost:${getPort()}/`, 'some_protocol_here');
     
-    // Wait for both the request and the connection failure
-    const [[request], [error]] = await Promise.all([
-      requestPromise,
-      connectFailedPromise
-    ]);
+    // Wait for the server to receive the request
+    const [request] = await requestPromise;
     
-    // Test that accepting with wrong protocol throws an error
+    // Verify the request has the expected protocol
     expect(request.requestedProtocols).toContain('some_protocol_here');
+    
+    // Set up promise for connectFailed event that should happen after we reject
+    const connectFailedPromise = waitForEvent(client, 'connectFailed', 5000);
+    
+    // Test that accepting with wrong protocol throws an error AND triggers connection failure
     const accept = request.accept.bind(request, 'this_is_the_wrong_protocol', request.origin);
     expect(() => accept()).toThrow();
+    
+    // Now wait for the client to receive the connection failure
+    const [error] = await connectFailedPromise;
     
     // Verify the client received the expected connection failure
     expect(error).toBeDefined();
