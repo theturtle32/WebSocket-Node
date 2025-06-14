@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TEST_CONFIG } from './shared/config.js';
+import { TEST_CONFIG } from './shared/config.mjs';
 
 describe('Vitest Setup Validation', () => {
   it('should run basic test', () => {
