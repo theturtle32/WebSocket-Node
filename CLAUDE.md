@@ -36,4 +36,5 @@
 ## Before Committing to Git
 
 - Update any relevant project plan markdown files.
+- Ensure that you have created an appropriately named branch for the work in progress.
 - Make sure `pnpm lint:fix` is run and not showing any errors.

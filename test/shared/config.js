@@ -1,6 +1,6 @@
 // Test configuration constants for WebSocket-Node test suite
 
-const TEST_CONFIG = {
+export const TEST_CONFIG = {
   // Server configuration
   SERVER: {
     HOST: 'localhost',
@@ -32,5 +32,3 @@ const TEST_CONFIG = {
     LARGE_TEXT: 'A'.repeat(1000)
   }
 };
-
-module.exports = { TEST_CONFIG };

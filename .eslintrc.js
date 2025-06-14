@@ -24,5 +24,19 @@ module.exports = {
     globals: {
         'WebSocket': 'readonly',
         'globalThis': 'readonly'
-    }
+    },
+    overrides: [
+        {
+            files: ['test/**/*.js'],
+            excludedFiles: ['test/scripts/**/*.js'],
+            parserOptions: {
+                ecmaVersion: 2020,
+                sourceType: 'module'
+            },
+            env: {
+                es6: true,
+                node: true
+            }
+        }
+    ]
 };
