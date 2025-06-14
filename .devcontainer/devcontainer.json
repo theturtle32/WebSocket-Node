@@ -53,6 +53,9 @@
   "mounts": [
     "source=claude-code-bashhistory,target=/commandhistory,type=volume",
     "source=claude-code-config,target=/home/node/.claude,type=volume",
+    "source=dotconfig,target=/home/node/.config,type=volume",
+    "source=pnpm-home,target=/pnpm,type=volume",
+    "source=node-modules,target=/workspace/node_modules,type=volume",
     "source=${localEnv:HOME}/.gitconfig,target=/tmp/host-gitconfig,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.config/gh,target=/tmp/host-gh-config,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.ssh,target=/tmp/host-ssh,type=bind,consistency=cached,readonly"
