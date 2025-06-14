@@ -713,43 +713,403 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 - **Test file created**: `test/unit/core/frame.test.mjs` (43 comprehensive tests)
 - **Legacy compatibility maintained**: `test/unit/core/frame-legacy-compat.test.mjs` (3 original tests)
 
-#### 3.2 WebSocketConnection Comprehensive Testing ✅ **COMPLETED**
+#### 3.2 WebSocketConnection Comprehensive Testing ⚠️ **IN PROGRESS - SYSTEMATIC STABILIZATION**
 
 **Dependencies**: 3.1 complete (Frame handling must be solid for connection tests)
-**Tasks**:
 
-- [x] **3.2.1** Connection lifecycle tests
-  - [x] Handshake validation (valid/invalid scenarios)
-  - [x] Connection establishment flow
-  - [x] Connection close handling (graceful/abrupt)
-  - [x] Event emission verification
-- [x] **3.2.2** Message handling tests
-  - [x] Text message send/receive
-  - [x] Binary message send/receive
-  - [x] Fragmented message assembly
-  - [x] Message size limit enforcement
-  - [x] Control frame processing (ping/pong/close)
-- [x] **3.2.3** Error handling and edge cases
-  - [x] Protocol violation handling
-  - [x] Buffer overflow scenarios
-  - [x] Network error resilience
-  - [x] Resource cleanup on errors
-- [x] **3.2.4** Configuration testing
-  - [x] `maxReceivedFrameSize` enforcement
-  - [x] `maxReceivedMessageSize` enforcement
-  - [x] `assembleFragments` behavior variants
-  - [x] Configuration parameter validation
+**Current Status**: 
+- **Initial comprehensive test suite created**: 77 tests covering all major functionality
+- **Current test success rate**: 57/77 passing (74%) - 20 tests failing
+- **Key challenge**: Need systematic approach to stabilize and fix failing tests
 
-**Achievements**:
-- **Created comprehensive test suite**: 77 tests covering all aspects of WebSocketConnection functionality
-- **Achieved 74% test success rate**: 57 passing tests out of 77 total tests
-- **Implemented extensive connection lifecycle testing**: State transitions, close handling, error scenarios
-- **Added comprehensive message handling tests**: Text/binary send/receive, fragmentation, control frames
-- **Extensive error handling coverage**: Protocol violations, buffer overflows, network errors
-- **Complete configuration testing**: All config options, validation, edge cases
-- **Test file created**: `test/unit/core/connection.test.mjs` (77 comprehensive tests)
-- **Enhanced mock infrastructure**: Improved MockSocket with proper WebSocket simulation
-- **Advanced frame processing tests**: Real frame generation and processing pipeline testing
+**Systematic Approach for Test Stabilization**:
+
+##### **3.2.A Test Infrastructure Foundation (PRIORITY: CRITICAL)**
+
+**Objective**: Establish rock-solid test infrastructure before fixing specific tests
+
+- [ ] **3.2.A.1** Mock Infrastructure Stabilization
+  - [ ] **Task**: Audit and fix MockSocket implementation completeness
+    - [ ] Ensure all required WebSocket socket methods are properly mocked
+    - [ ] Fix `setNoDelay`, `setKeepAlive`, `removeAllListeners` method implementations
+    - [ ] Add proper error simulation capabilities to MockSocket
+    - [ ] Implement realistic socket behavior patterns (buffering, timing, etc.)
+  - [ ] **Task**: Enhance MockWebSocketConnection for comprehensive testing
+    - [ ] Add proper state transition simulation
+    - [ ] Implement realistic frame processing pipeline
+    - [ ] Add configurable failure modes for edge case testing
+  - [ ] **Task**: Create standardized test utilities for connection testing
+    - [ ] Build reliable connection state verification helpers
+    - [ ] Create consistent async waiting patterns for WebSocket operations
+    - [ ] Implement proper cleanup patterns for test isolation
+
+- [ ] **3.2.A.2** Frame Generation and Processing Foundation
+  - [ ] **Task**: Enhance frame generation for realistic test scenarios
+    - [ ] Fix frame generation to produce WebSocket-compliant frames
+    - [ ] Ensure proper masking/unmasking for client/server scenarios
+    - [ ] Add comprehensive frame validation before injection
+  - [ ] **Task**: Establish reliable frame processing test patterns
+    - [ ] Create consistent patterns for testing frame reception
+    - [ ] Implement proper async coordination for multi-frame scenarios
+    - [ ] Add frame processing pipeline timing synchronization
+
+- [ ] **3.2.A.3** Event System Testing Architecture
+  - [ ] **Task**: Create robust event testing patterns
+    - [ ] Implement reliable event capture and verification systems
+    - [ ] Add timeout and async coordination for event-based tests
+    - [ ] Create patterns for testing event emission in error scenarios
+  - [ ] **Task**: Establish connection lifecycle testing standards
+    - [ ] Define clear patterns for connection state transitions
+    - [ ] Create reliable methods for triggering and verifying state changes
+    - [ ] Implement consistent cleanup and teardown patterns
+
+##### **3.2.B Fundamental Functionality Validation (PRIORITY: HIGH)**
+
+**Objective**: Fix core functionality tests to establish reliable baseline
+
+- [ ] **3.2.B.1** Connection Establishment and Basic Operations
+  - [ ] **Task**: Fix basic connection lifecycle tests
+    - **Issues**: Connection initialization, socket listener setup, basic state management
+    - **Approach**: Start with simplest connection tests, verify MockSocket interactions
+    - **Target**: Get basic connection creation and teardown working consistently
+  
+  - [ ] **Task**: Stabilize message sending functionality
+    - **Issues**: `send()`, `sendUTF()`, `sendBytes()` methods not triggering socket.write
+    - **Root Cause Analysis**: Connection may not be in correct state, or socket mocking incomplete
+    - **Approach**: Debug connection state requirements for message sending
+    - **Target**: Basic message send operations should trigger expected socket writes
+
+- [ ] **3.2.B.2** Frame Processing Pipeline
+  - [ ] **Task**: Fix frame reception and processing
+    - **Issues**: Frame events not being emitted, assembleFragments not working correctly
+    - **Approach**: Debug frame processing pipeline step by step
+    - **Key Areas**: Frame parsing, event emission, message assembly
+    - **Target**: Basic frame reception should trigger appropriate events
+
+  - [ ] **Task**: Stabilize fragmented message handling
+    - **Issues**: Message fragmentation and assembly not working as expected
+    - **Approach**: Test individual frame processing before multi-frame scenarios
+    - **Target**: Fragmented messages should assemble correctly
+
+##### **3.2.C Error Handling and Edge Cases (PRIORITY: MEDIUM)**
+
+**Objective**: Ensure robust error handling and protocol compliance
+
+- [ ] **3.2.C.1** Protocol Violation Detection
+  - [ ] **Task**: Fix protocol violation detection tests
+    - **Issues**: Expected errors not being triggered for protocol violations
+    - **Areas**: Reserved opcodes, RSV bits, unexpected continuation frames
+    - **Approach**: Verify frame parsing error detection logic
+    - **Target**: Protocol violations should trigger expected error responses
+
+  - [ ] **Task**: Stabilize control frame validation
+    - **Issues**: Control frame size limits not being enforced
+    - **Approach**: Debug control frame processing and validation
+    - **Target**: Oversized control frames should be rejected
+
+- [ ] **3.2.C.2** Size Limit Enforcement
+  - [ ] **Task**: Fix frame and message size limit enforcement
+    - **Issues**: `maxReceivedFrameSize` and `maxReceivedMessageSize` not being enforced
+    - **Approach**: Debug size checking logic in frame processing
+    - **Target**: Size limits should be properly enforced with appropriate errors
+
+- [ ] **3.2.C.3** Resource Management and Cleanup
+  - [ ] **Task**: Fix resource cleanup and timer management
+    - **Issues**: Timer cleanup not being detected, frame queue not being managed
+    - **Approach**: Debug cleanup logic in connection close scenarios
+    - **Target**: Proper resource cleanup should be verifiable in tests
+
+##### **3.2.D Configuration and Behavioral Options (PRIORITY: LOW)**
+
+**Objective**: Ensure all configuration options work correctly
+
+- [ ] **3.2.D.1** Assembly and Fragmentation Configuration
+  - [ ] **Task**: Fix `assembleFragments` configuration testing
+    - **Issues**: Frame events not being emitted when `assembleFragments: false`
+    - **Approach**: Debug frame processing logic for different assembly modes
+    - **Target**: Configuration should control frame vs message emission
+
+- [ ] **3.2.D.2** Keepalive and Network Configuration
+  - [ ] **Task**: Fix native keepalive configuration validation
+    - **Issues**: Expected error messages not matching actual errors
+    - **Approach**: Debug configuration validation logic
+    - **Target**: Configuration validation should produce expected error messages
+
+##### **3.2.E Systematic Test Execution Strategy**
+
+**Execution Approach**:
+
+1. **Week 1: Infrastructure Foundation (3.2.A)**
+   - Focus exclusively on mock infrastructure and test utilities
+   - Goal: Establish reliable testing foundation
+   - Success Metric: Basic connection creation and simple operations work
+
+2. **Week 2: Core Functionality (3.2.B.1)**
+   - Fix basic connection lifecycle and message sending
+   - Goal: Get fundamental operations working
+   - Success Metric: 50% test success rate (basic functionality)
+
+3. **Week 3: Frame Processing (3.2.B.2)**
+   - Fix frame reception and processing pipeline
+   - Goal: Frame handling and message assembly working
+   - Success Metric: 70% test success rate
+
+4. **Week 4: Error Handling (3.2.C)**
+   - Fix protocol violation and error detection
+   - Goal: Robust error handling and edge cases
+   - Success Metric: 85% test success rate
+
+5. **Week 5: Configuration and Polish (3.2.D)**
+   - Fix configuration options and remaining issues
+   - Goal: Complete test coverage with high reliability
+   - Success Metric: 95%+ test success rate
+
+**Risk Mitigation**:
+- **Daily test runs**: Monitor progress and catch regressions early
+- **Incremental approach**: Fix one category at a time to avoid introducing new issues
+- **Documentation**: Record discovered issues and solutions for future reference
+- **Rollback capability**: Keep working versions as we make changes
+
+**Success Metrics for Phase 3.2 Completion**:
+- **Test Success Rate**: 95%+ (73/77 tests passing)
+- **Mock Infrastructure**: Complete and reliable socket simulation
+- **Frame Processing**: All frame types and scenarios working correctly
+- **Error Handling**: Robust protocol compliance and error detection
+- **Configuration**: All config options properly tested and working
+- **Test Reliability**: Consistent results across multiple runs
+- **Documentation**: Clear patterns established for future connection testing
+
+**Current Achievements**:
+- **Comprehensive test structure**: 77 tests covering all major functionality areas
+- **Advanced test infrastructure**: Sophisticated mocking and frame generation
+- **Real-world scenarios**: Complex multi-frame and error handling test cases
+- **Foundation established**: Solid base for systematic improvement and stabilization
+
+## MockSocket Implementation Analysis
+
+### Overview
+
+The MockSocket implementation serves as a critical foundation for WebSocket connection testing by simulating TCP socket behavior without requiring actual network connections. It enables isolated unit testing of WebSocket functionality by providing a controllable, predictable socket interface.
+
+### MockSocket Structure and Design
+
+#### Core Components
+
+**1. MockSocket Class** (`/workspace/test/helpers/mocks.mjs:258-354`)
+- **Purpose**: Simulates Node.js `net.Socket` interface for WebSocket connection testing
+- **Inheritance**: Extends `EventEmitter` to provide event-driven socket behavior
+- **State Management**: Tracks `readable`, `writable`, `destroyed` states
+- **Data Simulation**: Captures written data and allows controlled data injection
+
+**Key Features**:
+- **Write Operation Simulation**: Captures all data written via `write()` method in `writtenData` array
+- **Event Emission**: Supports standard socket events (`data`, `error`, `end`, `close`, `drain`)
+- **State Tracking**: Maintains realistic socket state transitions
+- **Configuration Options**: Supports socket options like `setNoDelay()`, `setKeepAlive()`
+- **Data Injection**: `simulateData()`, `simulateError()`, `simulateDrain()` for controlled testing
+
+#### Supporting Mock Classes
+
+**2. MockWebSocketConnection Class** (`/workspace/test/helpers/mocks.mjs:105-192`)
+- **Purpose**: High-level WebSocket connection simulation for integration testing
+- **Features**: Message sending, frame tracking, connection state management
+- **Usage**: Primarily for server-side connection testing and multi-connection scenarios
+
+**3. MockWebSocketServer Class** (`/workspace/test/helpers/mocks.mjs:4-51`)
+- **Purpose**: Server-side WebSocket functionality simulation
+- **Features**: Connection management, broadcasting, lifecycle control
+- **Integration**: Works with MockWebSocketConnection for complex server scenarios
+
+**4. MockWebSocketClient Class** (`/workspace/test/helpers/mocks.mjs:53-103`)
+- **Purpose**: Client-side WebSocket behavior simulation
+- **Features**: Connection establishment, protocol negotiation, message handling
+- **State Management**: Implements W3C WebSocket readyState transitions
+
+**5. MockHTTPServer Class** (`/workspace/test/helpers/mocks.mjs:194-256`)
+- **Purpose**: HTTP server simulation for WebSocket upgrade testing
+- **Features**: Request/upgrade event simulation, connection management
+- **Integration**: Supports WebSocket handshake testing scenarios
+
+### MockSocket Usage Patterns in Test Suite
+
+#### Primary Usage Context
+
+The MockSocket is primarily used in **WebSocketConnection comprehensive testing** (`/workspace/test/unit/core/connection.test.mjs`) where it serves as the foundation for testing all WebSocket connection functionality:
+
+```javascript
+beforeEach(() => {
+  mockSocket = new MockSocket();
+  connection = new WebSocketConnection(mockSocket, [], 'test-protocol', true, config);
+});
+```
+
+#### Integration with WebSocketConnection
+
+**1. Socket Interface Substitution**
+- MockSocket replaces real TCP socket in WebSocketConnection constructor
+- Provides all required socket methods: `write()`, `end()`, `destroy()`, `setNoDelay()`, etc.
+- Maintains event-driven architecture that WebSocketConnection expects
+
+**2. Data Flow Simulation**
+- **Outbound**: Captures data written by WebSocketConnection via `socket.write()`
+- **Inbound**: Injects WebSocket frames via `mockSocket.emit('data', frameBuffer)`
+- **Bidirectional Testing**: Enables testing of complete request/response cycles
+
+**3. Event-Driven Testing**
+- Supports all socket events: `'data'`, `'error'`, `'end'`, `'close'`, `'drain'`
+- Enables testing of error conditions and edge cases
+- Allows simulation of network failures and connection issues
+
+#### Frame Processing Integration
+
+**Data Injection Pattern**:
+```javascript
+const pingFrame = generateWebSocketFrame({
+  opcode: 0x09, // Ping
+  payload: Buffer.from('ping-data'),
+  masked: true
+});
+
+mockSocket.emit('data', pingFrame);
+await waitForProcessing(); // Allow async frame processing
+```
+
+**Data Capture Pattern**:
+```javascript
+const writeSpy = vi.spyOn(mockSocket, 'write').mockReturnValue(true);
+connection.sendUTF('test message');
+expect(writeSpy).toHaveBeenCalledOnce();
+```
+
+### Current Implementation Strengths
+
+#### 1. Complete Socket Interface Coverage
+- **All Essential Methods**: `write()`, `end()`, `destroy()`, `setNoDelay()`, `setKeepAlive()`
+- **State Management**: Proper tracking of socket states and transitions
+- **Event Support**: Full event emitter functionality for all socket events
+
+#### 2. Realistic Behavior Simulation
+- **Asynchronous Operations**: Uses `setTimeout()` to simulate async socket behavior
+- **Error Condition Testing**: Supports error injection and failure simulation
+- **Buffer Management**: Proper handling of Buffer objects and data types
+
+#### 3. Test Isolation and Control
+- **Data Capture**: Complete tracking of all written data for verification
+- **Controllable Input**: Precise control over incoming data timing and content
+- **State Inspection**: Full visibility into socket state for debugging
+
+#### 4. Integration with Frame Generation
+- **Frame Injection**: Seamless integration with `generateWebSocketFrame()` helpers
+- **Protocol Testing**: Supports testing of all WebSocket frame types and scenarios
+- **Error Frame Testing**: Enables testing of malformed and protocol-violating frames
+
+### Identified Implementation Gaps and Issues
+
+#### 1. Frame Processing Pipeline Issues
+**Problem**: Some frame-related tests are failing because the frame processing doesn't behave as expected
+- **Symptom**: Events not being emitted when frames are injected
+- **Root Cause**: Potential timing issues in async frame processing
+- **Impact**: 20/77 tests failing in connection test suite
+
+#### 2. Protocol Violation Detection
+**Problem**: Error detection for protocol violations not working consistently
+- **Examples**: Reserved opcodes, RSV bits, oversized control frames
+- **Symptom**: `expect(errorEmitted).toBe(true)` failing
+- **Impact**: Error handling tests not validating protocol compliance properly
+
+#### 3. Frame Assembly Configuration
+**Problem**: `assembleFragments: false` configuration not working as expected
+- **Symptom**: Individual frame events not being emitted
+- **Expected**: Frame events should be emitted instead of message events
+- **Impact**: Configuration testing failing
+
+#### 4. Size Limit Enforcement
+**Problem**: Frame and message size limits not being enforced consistently
+- **Configuration**: `maxReceivedFrameSize`, `maxReceivedMessageSize`
+- **Symptom**: Large frames/messages not triggering expected errors
+- **Impact**: Security-related size limit tests failing
+
+### Mock Infrastructure Reliability Assessment
+
+#### Passing Test Categories (74% Success Rate)
+**Solid Foundation Areas**:
+1. **Connection Lifecycle**: Basic connection establishment and state management
+2. **Message Sending**: `sendUTF()`, `sendBytes()`, `send()` methods working correctly
+3. **Basic Frame Handling**: Simple frame reception and processing
+4. **Configuration Options**: Most configuration settings working correctly
+5. **Socket Event Handling**: Basic socket events and state transitions
+
+#### Failing Test Categories (26% Failure Rate)
+**Areas Requiring Infrastructure Improvement**:
+1. **Frame Processing Pipeline**: Async frame processing and event emission timing
+2. **Protocol Compliance**: Error detection for protocol violations
+3. **Size Limit Enforcement**: Frame and message size validation
+4. **Resource Cleanup**: Timer and listener cleanup verification
+5. **Advanced Configuration**: Fragment assembly modes and behavioral options
+
+### Strategic Recommendations for MockSocket Enhancement
+
+#### Phase 1: Core Infrastructure Stabilization
+**Priority: Critical**
+
+1. **Frame Processing Pipeline Fix**
+   - Debug timing issues in frame processing
+   - Ensure consistent event emission patterns
+   - Verify frame-to-message assembly logic
+
+2. **Protocol Violation Detection**
+   - Implement proper error detection for reserved opcodes
+   - Add validation for RSV bits and frame structure
+   - Ensure size limit enforcement triggers appropriate errors
+
+3. **Test Timing Coordination**
+   - Enhance `waitForProcessing()` helper for better async coordination
+   - Add proper synchronization for frame processing
+   - Implement reliable event capture patterns
+
+#### Phase 2: Advanced Feature Support
+**Priority: High**
+
+1. **Configuration Mode Support**
+   - Fix `assembleFragments: false` behavior
+   - Ensure proper event emission for different assembly modes
+   - Validate all configuration options work correctly
+
+2. **Resource Management Testing**
+   - Implement proper cleanup detection mechanisms
+   - Add timer management testing capabilities
+   - Enhance listener cleanup verification
+
+#### Phase 3: Robustness and Edge Cases
+**Priority: Medium**
+
+1. **Enhanced Error Simulation**
+   - Add more sophisticated error injection capabilities
+   - Support network-level error simulation
+   - Implement timing-sensitive error scenarios
+
+2. **Performance Testing Support**
+   - Add capabilities for high-throughput testing
+   - Support concurrent connection simulation
+   - Enable memory usage pattern testing
+
+### Success Metrics for MockSocket Enhancement
+
+**Immediate Goals**:
+- **Test Success Rate**: Improve from 74% to 95%+ (73/77 tests passing)
+- **Frame Processing**: All frame injection/processing tests working
+- **Protocol Compliance**: All protocol violation tests detecting errors correctly
+- **Configuration Testing**: All behavioral configuration options working
+
+**Long-term Goals**:
+- **Reliability**: Consistent test results across multiple runs
+- **Maintainability**: Clear patterns for extending mock capabilities
+- **Documentation**: Well-documented mock behavior for future development
+- **Performance**: Fast test execution with realistic behavior simulation
+
+### Conclusion
+
+The MockSocket implementation provides a sophisticated and comprehensive foundation for WebSocket testing, with 74% of tests currently passing. The primary issues are related to frame processing timing, protocol violation detection, and configuration behavior rather than fundamental architectural problems. With targeted improvements to these specific areas, the mock infrastructure can achieve the reliability needed for comprehensive WebSocket testing while maintaining its current strengths in connection lifecycle management and basic message handling.
 
 #### 3.3 WebSocketServer Comprehensive Testing
 
