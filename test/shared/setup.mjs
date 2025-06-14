@@ -1,14 +1,22 @@
-// Global test setup for WebSocket-Node test suite
-// This file runs before all tests
+import { beforeEach, afterEach, vi } from 'vitest';
+import { stopAllServers } from '../helpers/test-server.mjs';
+
+// Global test setup for each test file
+beforeEach(() => {
+  // Clear all mocks and timers
+  vi.clearAllTimers();
+  vi.clearAllMocks();
+});
+
+afterEach(async () => {
+  // Restore all mocks
+  vi.restoreAllMocks();
+  
+  // Clean up any test servers
+  await stopAllServers();
+});
 
 // Set up global test configuration
 process.env.NODE_ENV = 'test';
-
-// Increase timeout for WebSocket operations
-process.env.WEBSOCKET_TIMEOUT = '10000';
-
-// Global setup function
-export function setup() {
-  // Global test setup logic can be added here
-  console.log('Setting up WebSocket-Node test environment...');
-}
+process.env.WEBSOCKET_TIMEOUT = '15000';
+process.env.WEBSOCKET_TEST_MODE = 'true';

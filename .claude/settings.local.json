@@ -17,7 +17,9 @@
       "Bash(npm install)",
       "Bash(git pull:*)",
       "Bash(npm run test:autobahn:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(pnpm test:vitest:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

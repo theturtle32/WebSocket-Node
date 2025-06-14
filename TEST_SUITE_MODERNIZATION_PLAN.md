@@ -639,37 +639,46 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 - [x] **2.1.5** Migrate `dropBeforeAccept.js` tests
 - [x] **2.1.6** Validate all migrated tests pass consistently
 
-#### 2.2 Test Helper Infrastructure
+#### 2.2 Test Helper Infrastructure ✅ **COMPLETED**
 
 **Dependencies**: 2.1.1-2.1.5 (Need examples of test patterns before building helpers)
 **Tasks**:
 
-- [ ] **2.2.1** Create enhanced test server helpers
-  - [ ] Refactor `test/shared/test-server.js` for Vitest
-  - [ ] Add server lifecycle management utilities
-  - [ ] Create configurable test server options
-- [ ] **2.2.2** Build mock infrastructure
-  - [ ] Create `MockWebSocketServer` class
-  - [ ] Create `MockWebSocketClient` class  
-  - [ ] Create `MockHTTPServer` class
-- [ ] **2.2.3** Develop test data generators
-  - [ ] Frame generation utilities
-  - [ ] Payload generation utilities
-  - [ ] Malformed data generators for edge case testing
-- [ ] **2.2.4** Create custom assertion library
-  - [ ] WebSocket frame validation assertions
-  - [ ] Connection state validation assertions
-  - [ ] Protocol compliance assertions
+- [x] **2.2.1** Create enhanced test server helpers
+  - [x] Enhanced `test/helpers/test-server.mjs` with `TestServerManager` class
+  - [x] Server lifecycle management utilities
+  - [x] Configurable test server options (echo, broadcast, protocol testing)
+  - [x] Legacy API compatibility maintained
+- [x] **2.2.2** Build mock infrastructure
+  - [x] `MockWebSocketServer` class in `test/helpers/mocks.mjs`
+  - [x] `MockWebSocketClient` class with connection simulation
+  - [x] `MockWebSocketConnection` class for connection testing
+  - [x] `MockHTTPServer` and `MockSocket` classes for low-level testing
+- [x] **2.2.3** Develop test data generators
+  - [x] `generateWebSocketFrame()` for various frame types in `test/helpers/generators.mjs`
+  - [x] `generateRandomPayload()` with text, binary, JSON support
+  - [x] `generateMalformedFrame()` for edge case testing
+  - [x] `generateProtocolViolation()` for protocol compliance testing
+  - [x] Performance test payload generators
+- [x] **2.2.4** Create custom assertion library
+  - [x] `expectValidWebSocketFrame()` frame validation in `test/helpers/assertions.mjs`
+  - [x] `expectConnectionState()` connection state validation
+  - [x] `expectProtocolCompliance()` RFC 6455 compliance checking
+  - [x] `expectHandshakeHeaders()` header validation
+  - [x] Performance and memory leak assertions
 
-#### 2.3 Parallel Test Execution Setup
+#### 2.3 Parallel Test Execution Setup ⚠️ **DEFERRED**
 
-**Dependencies**: 2.1 (Migrated tests must be stable), 2.2 (Helpers needed for stability)
-**Tasks**:
+**Status**: Deferred to future phases for simplicity and stability
 
-- [ ] **2.3.1** Configure Vitest for parallel execution
-- [ ] **2.3.2** Identify and resolve test isolation issues
-- [ ] **2.3.3** Optimize test server management for parallel execution
-- [ ] **2.3.4** Validate test reliability with parallel execution
+**Decision**: Parallel test execution adds complexity with WebSocket server port management and test isolation. For the current modernization phase, single-threaded test execution provides sufficient performance while ensuring test reliability and easier debugging.
+
+**Future Considerations**:
+
+- Port allocation management
+- Test isolation improvements  
+- Network resource conflict resolution
+- Performance optimization needs assessment
 
 ### Phase 3: Core Component Test Expansion
 
