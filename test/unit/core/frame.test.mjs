@@ -228,15 +228,18 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
   });
 
   describe('Frame Serialization - Control Frame Validation', () => {
-    it('should enforce maximum payload size for control frames', () => {
+    it('should serialize valid control frame at maximum size', () => {
       const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
       frame.fin = true;
       frame.mask = false;
       frame.opcode = 0x08; // Close frame
       frame.closeStatus = 1000;
-      frame.binaryPayload = Buffer.alloc(124, 0x41); // Max allowed is 125 total (2 for status + 123)
+      frame.binaryPayload = Buffer.alloc(123, 0x41); // Max allowed is 125 total (2 for status + 123)
 
       expect(() => frame.toBuffer()).not.toThrow();
+      
+      const serialized = frame.toBuffer();
+      expect(serialized[1]).toBe(125); // Total payload length should be exactly 125
     });
 
     it('should handle close frame with only status code', () => {
@@ -415,6 +418,40 @@ describe('WebSocketFrame - Comprehensive Testing', () => {
       expect(complete).toBe(true);
       expect(frame.protocolError).toBe(true);
       expect(frame.dropReason).toContain('control frame longer than 125 bytes');
+    });
+
+    it('should enforce maximum payload size for control frames during parsing', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Create a ping frame with exactly 126 bytes payload (too large)
+      const malformedFrame = Buffer.alloc(128); // 2 header + 126 payload
+      malformedFrame[0] = 0x89; // FIN + ping opcode  
+      malformedFrame[1] = 126; // Length 126 (invalid for control frames)
+      
+      const bufferList = new MockBufferList(malformedFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.protocolError).toBe(true);
+      expect(frame.dropReason).toContain('Illegal control frame longer than 125 bytes');
+    });
+
+    it('should allow control frames with exactly 125 bytes payload', () => {
+      const frame = new WebSocketFrame(maskBytesBuffer, frameHeaderBuffer, config);
+      
+      // Create a ping frame with exactly 125 bytes payload (maximum allowed)
+      const validFrame = Buffer.alloc(127); // 2 header + 125 payload
+      validFrame[0] = 0x89; // FIN + ping opcode
+      validFrame[1] = 125; // Length 125 (maximum allowed for control frames)
+      validFrame.fill(0x42, 2); // Fill payload with test data
+      
+      const bufferList = new MockBufferList(validFrame);
+      const complete = frame.addData(bufferList);
+      
+      expect(complete).toBe(true);
+      expect(frame.protocolError).toBe(false);
+      expect(frame.opcode).toBe(0x09);
+      expect(frame.binaryPayload.length).toBe(125);
     });
 
     it('should detect fragmented control frame', () => {
