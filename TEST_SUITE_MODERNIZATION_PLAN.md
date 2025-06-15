@@ -806,15 +806,131 @@ This section outlines the discrete phases, tasks, and subtasks for implementing 
 
 **Ready for Phase 3.2.B**: Enhanced frame generation and processing foundation provides reliable infrastructure for systematic test improvement and achieving 95%+ test success rate.
 
-- [ ] **3.2.A.3** Event System Testing Architecture
-  - [ ] **Task**: Create robust event testing patterns
-    - [ ] Implement reliable event capture and verification systems
-    - [ ] Add timeout and async coordination for event-based tests
-    - [ ] Create patterns for testing event emission in error scenarios
-  - [ ] **Task**: Establish connection lifecycle testing standards
-    - [ ] Define clear patterns for connection state transitions
-    - [ ] Create reliable methods for triggering and verifying state changes
-    - [ ] Implement consistent cleanup and teardown patterns
+- [x] **3.2.A.3** Event System Testing Architecture ✅ **PHASE 3.2.A.3.1 COMPLETED**
+  - [x] **3.2.A.3.1** Enhanced Event Capture and Verification Systems ✅ **COMPLETED**
+    - [x] **Subtask**: Expand existing `captureEvents()` utility in `test-utils.mjs`
+      - [x] Add event filtering and pattern matching
+      - [x] Implement event sequence validation (e.g., connection lifecycle events must occur in order)
+      - [x] Add event payload deep comparison utilities
+      - [x] Create event timing verification (ensure events occur within expected timeframes)
+    - [x] **Subtask**: Create specialized event assertion functions in `assertions.mjs`
+      - [x] `expectEventSequenceAsync(emitter, expectedSequence, timeout)` - validate event order
+      - [x] `expectEventWithPayload(emitter, eventName, expectedPayload, timeout)` - deep payload validation
+      - [x] `expectEventTiming(emitter, eventName, minTime, maxTime)` - timing constraints
+      - [x] `expectNoEvent(emitter, eventName, timeout)` - verify certain events don't occur
+      - [x] `expectWebSocketConnectionStateTransition()` - WebSocket-specific state transition validation
+      - [x] `expectWebSocketMessageEvent()` - Message event validation
+      - [x] `expectWebSocketFrameEvent()` - Frame event validation  
+      - [x] `expectWebSocketProtocolError()` - Protocol error validation
+    - [x] **Subtask**: Enhance `waitForEvent()` utility with advanced patterns
+      - [x] Add conditional event waiting (wait for event with specific payload conditions)
+      - [x] Implement multi-event coordination (wait for multiple events in any order)
+      - [x] Add event history tracking for debugging failed tests
+      - [x] Create event race condition detection utilities
+      - [x] `waitForEventWithPayload()` - Payload-specific event waiting
+      - [x] `waitForEventCondition()` - Conditional event waiting
+      - [x] `waitForMultipleEvents()` - Multi-event coordination
+      - [x] `waitForEventSequence()` - Event sequence validation
+
+**Phase 3.2.A.3.1 Achievements**:
+- **Enhanced Event Infrastructure**: Comprehensive event testing capabilities for WebSocket scenarios
+- **Advanced Event Capture**: `captureEvents()` with filtering, sequence validation, and high-resolution timing
+- **Specialized Assertions**: 8 new WebSocket-specific event assertion functions
+- **Advanced Event Coordination**: Multi-event patterns, conditional waiting, and sequence validation
+- **Comprehensive Testing**: 12-test validation suite demonstrating all new functionality
+- **Backward Compatibility**: All existing tests (161 tests) continue to pass
+- **Infrastructure Files**:
+  - Enhanced `test/helpers/test-utils.mjs` (+200 lines): Advanced event capture and waiting utilities
+  - Enhanced `test/helpers/assertions.mjs` (+400 lines): WebSocket-specific event assertions
+  - New `test/unit/helpers/event-infrastructure.test.mjs` (12 comprehensive tests): Validation of event infrastructure
+
+**Ready for Phase 3.2.A.3.2**: Event testing infrastructure provides robust foundation for WebSocket-specific event patterns and connection test stabilization.
+
+  - [ ] **3.2.A.3.2** WebSocket-Specific Event Testing Patterns
+    - [ ] **Subtask**: Create connection event testing patterns for `connection.test.mjs`
+      - [ ] **Connection State Events**: `open`, `close`, `error` event patterns
+        - [ ] Standardized setup for testing state transition events
+        - [ ] Validation patterns for event payload correctness
+        - [ ] Error event categorization and validation patterns
+      - [ ] **Message Events**: `message`, `frame` event patterns  
+        - [ ] Message event validation for different payload types (text, binary, JSON)
+        - [ ] Frame event validation when `assembleFragments: false`
+        - [ ] Fragmented message assembly event sequence testing
+      - [ ] **Control Frame Events**: `ping`, `pong`, close frame event patterns
+        - [ ] Ping-pong event coordination testing
+        - [ ] Close handshake event sequence validation
+        - [ ] Control frame payload validation patterns
+    - [ ] **Subtask**: Protocol compliance event testing patterns
+      - [ ] **Error Event Testing**: Protocol violation error event patterns
+        - [ ] Reserved opcode violation event testing
+        - [ ] RSV bit violation event testing  
+        - [ ] Control frame size violation event testing
+        - [ ] Invalid UTF-8 error event testing
+      - [ ] **Size Limit Events**: Frame and message size limit enforcement events
+        - [ ] `maxReceivedFrameSize` violation event testing
+        - [ ] `maxReceivedMessageSize` violation event testing
+        - [ ] Size limit error payload validation
+  - [ ] **3.2.A.3.3** Connection Lifecycle Testing Standards
+    - [ ] **Subtask**: Define connection state transition event patterns
+      - [ ] **State Transition Map**: Document all valid state transitions and their events
+        - [ ] `connecting` → `open` → `closing` → `closed` lifecycle
+        - [ ] Error state transitions from any state to `closed`
+        - [ ] Event emission requirements for each transition
+      - [ ] **State Validation Utilities**: Create helpers for connection state testing
+        - [ ] `expectConnectionState(connection, expectedState, timeout)` enhancement
+        - [ ] `waitForStateTransition(connection, fromState, toState, timeout)` utility
+        - [ ] `validateStateTransitionEvents(connection, expectedTransitions)` comprehensive validator
+    - [ ] **Subtask**: Create reliable state change triggering methods
+      - [ ] **Connection Establishment Triggers**: Standardized connection setup patterns
+        - [ ] Mock socket connection simulation patterns
+        - [ ] Handshake completion simulation
+        - [ ] Connection ready state triggers
+      - [ ] **Connection Termination Triggers**: Standardized connection teardown patterns
+        - [ ] Graceful close initiation patterns (`close()`, `drop()`)
+        - [ ] Error-triggered close patterns (protocol violations, network errors)
+        - [ ] Timeout-based close patterns (keepalive failures, response timeouts)
+      - [ ] **Error Condition Triggers**: Standardized error injection patterns
+        - [ ] Network error simulation (socket errors, disconnection)
+        - [ ] Protocol error injection (malformed frames, invalid opcodes)
+        - [ ] Resource exhaustion simulation (memory limits, connection limits)
+  - [ ] **3.2.A.3.4** Advanced Event Coordination and Synchronization
+    - [ ] **Subtask**: Enhance async event coordination in connection tests
+      - [ ] **Multi-Event Orchestration**: Coordinate complex event sequences
+        - [ ] Frame injection → processing → event emission coordination
+        - [ ] Message sending → socket write → acknowledgment coordination  
+        - [ ] Error triggering → error handling → cleanup coordination
+      - [ ] **Timing-Sensitive Event Testing**: Handle WebSocket async processing timing
+        - [ ] Enhance existing `waitForProcessing()` with event-specific timing
+        - [ ] Add `waitForEventProcessing(connection, eventType, timeout)` utility
+        - [ ] Create `synchronizeFrameProcessing(connection, frames)` for multi-frame scenarios
+    - [ ] **Subtask**: Create event-based test debugging and diagnostics
+      - [ ] **Event History Tracking**: Comprehensive event logging for test debugging
+        - [ ] Add event history capture to all connection tests
+        - [ ] Create event timeline visualization for debugging failed tests
+        - [ ] Implement event diff comparison for expected vs actual sequences
+      - [ ] **Test Isolation and Cleanup**: Ensure proper event listener cleanup
+        - [ ] Enhance `afterEach()` cleanup with comprehensive event listener removal
+        - [ ] Add event listener leak detection for connection tests
+        - [ ] Create event state reset utilities for test isolation
+  - [ ] **3.2.A.3.5** Integration with Existing Test Infrastructure
+    - [ ] **Subtask**: Integrate event testing patterns with existing helpers
+      - [ ] **MockSocket Integration**: Enhance MockSocket with event-aware capabilities
+        - [ ] Add event emission tracking to MockSocket
+        - [ ] Create MockSocket event injection patterns
+        - [ ] Enhance MockSocket state simulation with proper event sequences
+      - [ ] **Frame Processing Integration**: Integrate with `frame-processing-utils.mjs`
+        - [ ] Add event coordination to `FrameProcessor` class
+        - [ ] Enhance `injectFrameIntoConnection()` with event validation
+        - [ ] Create event-aware frame sequence testing patterns
+    - [ ] **Subtask**: Update connection test suite with new event patterns
+      - [ ] **Phase 1**: Apply event testing patterns to passing tests (58/77)
+        - [ ] Enhance message sending/receiving tests with proper event validation
+        - [ ] Add event assertions to connection lifecycle tests
+        - [ ] Improve frame processing tests with event coordination
+      - [ ] **Phase 2**: Fix skipped tests (19/77) using new event infrastructure
+        - [ ] Apply robust event patterns to currently skipped protocol violation tests
+        - [ ] Use event coordination to fix fragmented message assembly tests
+        - [ ] Implement event-based error detection for size limit tests
 
 ##### **3.2.B Fundamental Functionality Validation (PRIORITY: HIGH)**
 
