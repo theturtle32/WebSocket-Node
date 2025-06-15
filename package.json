@@ -46,7 +46,8 @@
     "verbose": false
   },
   "scripts": {
-    "test": "tape test/unit/*.js",
+    "test": "pnpm run test:tape && pnpm run test:vitest",
+    "test:tape": "tape test/unit/*.js",
     "test:vitest": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",

@@ -9,7 +9,9 @@ export function generateWebSocketFrame(options = {}) {
     rsv3 = false,
     masked = false,
     payload = 'Hello World',
-    maskingKey = null
+    maskingKey = null,
+    // New option for frame validation
+    validate = true
   } = options;
 
   let payloadBuffer;
@@ -88,6 +90,11 @@ export function generateWebSocketFrame(options = {}) {
     }
   } else {
     payloadBuffer.copy(frame, offset);
+  }
+
+  // Validate frame if requested
+  if (validate) {
+    validateGeneratedFrame(frame, options);
   }
 
   return frame;
@@ -302,4 +309,185 @@ export function generateConnectionParams() {
       'Sec-WebSocket-Version': '12' // Should be '13'
     }
   };
+}
+
+// Frame validation function to ensure generated frames are WebSocket-compliant
+function validateGeneratedFrame(frame, options) {
+  const { 
+    opcode = 0x1, 
+    fin = true, 
+    rsv1 = false, 
+    rsv2 = false, 
+    rsv3 = false, 
+    masked = false 
+  } = options;
+  
+  if (frame.length < 2) {
+    throw new Error('Generated frame too short - minimum 2 bytes required');
+  }
+  
+  // Validate first byte (FIN + RSV + Opcode)
+  const firstByte = frame[0];
+  const actualFin = !!(firstByte & 0x80);
+  const actualRsv1 = !!(firstByte & 0x40);
+  const actualRsv2 = !!(firstByte & 0x20);
+  const actualRsv3 = !!(firstByte & 0x10);
+  const actualOpcode = firstByte & 0x0F;
+  
+  if (actualFin !== fin) {
+    throw new Error(`FIN bit mismatch: expected ${fin}, got ${actualFin}`);
+  }
+  if (actualRsv1 !== rsv1) {
+    throw new Error(`RSV1 bit mismatch: expected ${rsv1}, got ${actualRsv1}`);
+  }
+  if (actualRsv2 !== rsv2) {
+    throw new Error(`RSV2 bit mismatch: expected ${rsv2}, got ${actualRsv2}`);
+  }
+  if (actualRsv3 !== rsv3) {
+    throw new Error(`RSV3 bit mismatch: expected ${rsv3}, got ${actualRsv3}`);
+  }
+  if (actualOpcode !== opcode) {
+    throw new Error(`Opcode mismatch: expected ${opcode}, got ${actualOpcode}`);
+  }
+  
+  // Validate second byte (MASK + payload length indicator)  
+  const secondByte = frame[1];
+  const actualMasked = !!(secondByte & 0x80);
+  
+  if (actualMasked !== masked) {
+    throw new Error(`MASK bit mismatch: expected ${masked}, got ${actualMasked}`);
+  }
+  
+  // Validate control frame constraints
+  if (opcode >= 0x8) { // Control frames
+    if (!fin) {
+      throw new Error('Control frames must have FIN=1');
+    }
+    
+    // Calculate payload length to check control frame size limit
+    const lengthIndicator = secondByte & 0x7F;
+    if (lengthIndicator >= 126) {
+      throw new Error('Control frames cannot use extended length encoding');
+    }
+    if (lengthIndicator > 125) {
+      throw new Error('Control frame payload cannot exceed 125 bytes');
+    }
+  }
+  
+  // Validate opcode ranges
+  if (opcode > 0xF) {
+    throw new Error(`Invalid opcode: ${opcode} - must be 0-15`);
+  }
+  
+  // Check for reserved opcodes (0x3-0x7, 0xB-0xF)
+  if ((opcode >= 0x3 && opcode <= 0x7) || (opcode >= 0xB && opcode <= 0xF)) {
+    // Only throw if validation is explicitly enabled and we're not testing reserved opcodes
+    if (options.validate !== false) {
+      throw new Error(`Reserved opcode: ${opcode}`);
+    }
+  }
+}
+
+// Enhanced frame processing utilities for tests
+export function injectFrameIntoConnection(connection, frame, options = {}) {
+  const { 
+    delay = 0,
+    chunkSize = null, // If specified, send frame in chunks to test partial processing
+    validate = true
+  } = options;
+  
+  if (validate && !Buffer.isBuffer(frame)) {
+    throw new Error('Frame must be a Buffer');
+  }
+  
+  return new Promise((resolve, reject) => {
+    const sendFrame = () => {
+      try {
+        if (chunkSize && frame.length > chunkSize) {
+          // Send frame in chunks to simulate partial TCP receive
+          let offset = 0;
+          const sendChunk = () => {
+            if (offset >= frame.length) {
+              resolve();
+              return;
+            }
+            
+            const chunk = frame.subarray(offset, Math.min(offset + chunkSize, frame.length));
+            connection.socket.emit('data', chunk);
+            offset += chunk.length;
+            
+            // Small delay between chunks to simulate network timing
+            setTimeout(sendChunk, 1);
+          };
+          sendChunk();
+        } else {
+          // Send entire frame at once
+          connection.socket.emit('data', frame);
+          resolve();
+        }
+      } catch (error) {
+        reject(error);
+      }
+    };
+    
+    if (delay > 0) {
+      setTimeout(sendFrame, delay);
+    } else {
+      sendFrame();
+    }
+  });
+}
+
+// Wait for WebSocket processing with enhanced reliability
+export async function waitForFrameProcessing(connection, options = {}) {
+  const {
+    timeout = 100,
+    maxIterations = 10,
+    checkConnection = true
+  } = options;
+  
+  // Allow multiple event loop cycles for async processing
+  await new Promise(resolve => process.nextTick(resolve));
+  await new Promise(resolve => setImmediate(resolve));
+  await new Promise(resolve => setImmediate(resolve));
+  
+  // Additional timing for frame parsing if specified
+  if (timeout > 0) {
+    await new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  
+  // Check connection state if requested
+  if (checkConnection && connection) {
+    let iterations = 0;
+    while (connection.bufferList && connection.bufferList.length > 0 && iterations < maxIterations) {
+      await new Promise(resolve => setTimeout(resolve, 10));
+      iterations++;
+    }
+  }
+}
+
+// Generate frames with proper client/server masking conventions
+export function generateClientFrame(options = {}) {
+  return generateWebSocketFrame({
+    ...options,
+    masked: true // Client frames must be masked
+  });
+}
+
+export function generateServerFrame(options = {}) {
+  return generateWebSocketFrame({
+    ...options,
+    masked: false // Server frames must not be masked
+  });
+}
+
+// Generate sequence of frames for complex scenarios
+export function generateFrameSequence(frames) {
+  const sequence = [];
+  
+  for (const frameOptions of frames) {
+    sequence.push(generateWebSocketFrame(frameOptions));
+  }
+  
+  return sequence;
 }

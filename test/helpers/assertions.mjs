@@ -91,6 +91,13 @@ export function expectConnectionState(connection, expectedState) {
     case 'closed':
       expect(connection.connected).toBe(false);
       break;
+    case 'ending':
+      expect(connection.connected).toBe(false); // Actually set to false in close()
+      expect(connection.waitingForCloseResponse).toBe(true);
+      break;
+    case 'peer_requested_close':
+      expect(connection.connected).toBe(false); // Actually set to false when processing close frame
+      break;
     case 'connecting':
       // May or may not be connected yet
       break;
@@ -320,4 +327,387 @@ export function expectWebSocketURL(url, options = {}) {
   if (options.path !== undefined) {
     expect(parsed.pathname).toBe(options.path);
   }
+}
+
+// ============================================================================
+// Enhanced Event System Assertions for Phase 3.2.A.3
+// ============================================================================
+
+export function expectEventSequenceAsync(emitter, expectedSequence, options = {}) {
+  const { timeout = 5000, strict = true } = options;
+  
+  return new Promise((resolve, reject) => {
+    const capturedEvents = [];
+    const listeners = new Map();
+    let currentIndex = 0;
+    
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Event sequence timeout after ${timeout}ms. Expected: ${expectedSequence.map(e => e.eventName).join(' → ')}, Got: ${capturedEvents.map(e => e.eventName).join(' → ')}`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      listeners.forEach((listener, eventName) => {
+        emitter.removeListener(eventName, listener);
+      });
+      listeners.clear();
+    };
+    
+    const processEvent = (eventName, ...args) => {
+      const eventData = { eventName, args: [...args], timestamp: Date.now() };
+      capturedEvents.push(eventData);
+      
+      if (currentIndex >= expectedSequence.length) {
+        if (strict) {
+          cleanup();
+          reject(new Error(`Unexpected event '${eventName}' after sequence completion`));
+          return;
+        }
+        return; // Ignore extra events in non-strict mode
+      }
+      
+      const expected = expectedSequence[currentIndex];
+      
+      // Validate event name
+      if (expected.eventName && expected.eventName !== eventName) {
+        cleanup();
+        reject(new Error(`Event sequence mismatch at index ${currentIndex}: expected '${expected.eventName}', got '${eventName}'`));
+        return;
+      }
+      
+      // Validate payload if validator provided
+      if (expected.validator && !expected.validator(...args)) {
+        cleanup();
+        reject(new Error(`Event sequence validation failed at index ${currentIndex} for event '${eventName}'`));
+        return;
+      }
+      
+      currentIndex++;
+      
+      // Check if sequence is complete
+      if (currentIndex >= expectedSequence.length) {
+        cleanup();
+        resolve(capturedEvents);
+      }
+    };
+    
+    // Set up listeners for all unique event names in sequence
+    const uniqueEvents = [...new Set(expectedSequence.map(e => e.eventName))];
+    uniqueEvents.forEach(eventName => {
+      const listener = (...args) => processEvent(eventName, ...args);
+      listeners.set(eventName, listener);
+      emitter.on(eventName, listener);
+    });
+  });
+}
+
+export function expectEventWithPayload(emitter, eventName, expectedPayload, options = {}) {
+  const { timeout = 5000, deepEqual = true, partial = false } = options;
+  
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Timeout waiting for event '${eventName}' with expected payload after ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      emitter.removeListener(eventName, listener);
+    };
+    
+    const listener = (...args) => {
+      try {
+        if (partial) {
+          // Partial payload matching
+          const actualPayload = args[0];
+          if (typeof expectedPayload === 'object' && expectedPayload !== null) {
+            for (const key in expectedPayload) {
+              expect(actualPayload).toHaveProperty(key, expectedPayload[key]);
+            }
+          } else {
+            expect(actualPayload).toBe(expectedPayload);
+          }
+        } else if (deepEqual) {
+          expect(args).toEqual(expectedPayload);
+        } else {
+          expect(args).toStrictEqual(expectedPayload);
+        }
+        
+        cleanup();
+        resolve(args);
+      } catch (error) {
+        cleanup();
+        reject(new Error(`Event '${eventName}' payload validation failed: ${error.message}`));
+      }
+    };
+    
+    emitter.once(eventName, listener);
+  });
+}
+
+export function expectEventTiming(emitter, eventName, minTime, maxTime, options = {}) {
+  const { timeout = Math.max(maxTime + 1000, 5000) } = options;
+  const startTime = process.hrtime.bigint();
+  
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Timeout waiting for event '${eventName}' within timing constraints after ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      emitter.removeListener(eventName, listener);
+    };
+    
+    const listener = (...args) => {
+      const eventTime = Number(process.hrtime.bigint() - startTime) / 1e6; // Convert to milliseconds
+      
+      try {
+        expect(eventTime).toBeGreaterThanOrEqual(minTime);
+        expect(eventTime).toBeLessThanOrEqual(maxTime);
+        
+        cleanup();
+        resolve({ eventTime, args });
+      } catch (error) {
+        cleanup();
+        reject(new Error(`Event '${eventName}' timing constraint failed: ${error.message} (actual: ${eventTime}ms)`));
+      }
+    };
+    
+    emitter.once(eventName, listener);
+  });
+}
+
+export function expectNoEvent(emitter, eventName, timeout = 1000) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve(); // Success - no event was emitted
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      emitter.removeListener(eventName, listener);
+    };
+    
+    const listener = (...args) => {
+      cleanup();
+      reject(new Error(`Unexpected event '${eventName}' was emitted with args: ${JSON.stringify(args)}`));
+    };
+    
+    emitter.once(eventName, listener);
+  });
+}
+
+export function expectWebSocketConnectionStateTransition(connection, fromState, toState, options = {}) {
+  const { timeout = 5000, validateEvents = true } = options;
+  
+  return new Promise((resolve, reject) => {
+    // Verify initial state
+    try {
+      expectConnectionState(connection, fromState);
+    } catch (error) {
+      reject(new Error(`Initial state validation failed: ${error.message}`));
+      return;
+    }
+    
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`State transition timeout: ${fromState} → ${toState} not completed within ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      if (validateEvents) {
+        connection.removeListener('close', closeListener);
+        connection.removeListener('error', errorListener);
+      }
+    };
+    
+    // Set up event listeners for validation
+    let closeListener, errorListener;
+    if (validateEvents) {
+      closeListener = () => {
+        if (toState === 'closed') {
+          try {
+            expectConnectionState(connection, toState);
+            cleanup();
+            resolve();
+          } catch (error) {
+            cleanup();
+            reject(new Error(`State transition validation failed: ${error.message}`));
+          }
+        }
+      };
+      
+      errorListener = (error) => {
+        if (toState === 'closed') {
+          try {
+            expectConnectionState(connection, toState);
+            cleanup();
+            resolve();
+          } catch (validationError) {
+            cleanup();
+            reject(new Error(`State transition validation failed after error: ${validationError.message}`));
+          }
+        }
+      };
+      
+      connection.once('close', closeListener);
+      connection.once('error', errorListener);
+    }
+    
+    // Poll for state change (fallback for non-event-driven transitions)
+    const pollInterval = setInterval(() => {
+      try {
+        expectConnectionState(connection, toState);
+        clearInterval(pollInterval);
+        cleanup();
+        resolve();
+      } catch (error) {
+        // Continue polling
+      }
+    }, 100);
+    
+    // Clean up poll interval on timeout
+    const originalCleanup = cleanup;
+    cleanup = () => {
+      clearInterval(pollInterval);
+      originalCleanup();
+    };
+  });
+}
+
+export function expectWebSocketMessageEvent(connection, expectedMessage, options = {}) {
+  const { timeout = 5000, messageType = 'utf8', validatePayload = true } = options;
+  
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Timeout waiting for message event after ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      connection.removeListener('message', messageListener);
+    };
+    
+    const messageListener = (message) => {
+      try {
+        expect(message).toBeDefined();
+        expect(message.type).toBe(messageType);
+        
+        if (validatePayload) {
+          if (messageType === 'utf8') {
+            expect(message.utf8Data).toBe(expectedMessage);
+          } else if (messageType === 'binary') {
+            expect(Buffer.isBuffer(message.binaryData)).toBe(true);
+            if (Buffer.isBuffer(expectedMessage)) {
+              expect(message.binaryData.equals(expectedMessage)).toBe(true);
+            } else {
+              expect(message.binaryData).toEqual(expectedMessage);
+            }
+          }
+        }
+        
+        cleanup();
+        resolve(message);
+      } catch (error) {
+        cleanup();
+        reject(new Error(`Message event validation failed: ${error.message}`));
+      }
+    };
+    
+    connection.once('message', messageListener);
+  });
+}
+
+export function expectWebSocketFrameEvent(connection, expectedFrameType, options = {}) {
+  const { timeout = 5000, validatePayload = false, expectedPayload = null } = options;
+  
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Timeout waiting for frame event after ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      connection.removeListener('frame', frameListener);
+    };
+    
+    const frameListener = (frame) => {
+      try {
+        expect(frame).toBeDefined();
+        expect(frame.opcode).toBe(expectedFrameType);
+        
+        if (validatePayload && expectedPayload !== null) {
+          if (Buffer.isBuffer(expectedPayload)) {
+            expect(frame.binaryPayload.equals(expectedPayload)).toBe(true);
+          } else if (typeof expectedPayload === 'string') {
+            expect(frame.utf8Data).toBe(expectedPayload);
+          } else {
+            expect(frame.binaryPayload).toEqual(expectedPayload);
+          }
+        }
+        
+        cleanup();
+        resolve(frame);
+      } catch (error) {
+        cleanup();
+        reject(new Error(`Frame event validation failed: ${error.message}`));
+      }
+    };
+    
+    connection.once('frame', frameListener);
+  });
+}
+
+export function expectWebSocketProtocolError(connection, expectedErrorType, options = {}) {
+  const { timeout = 5000, validateCloseCode = true } = options;
+  
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error(`Timeout waiting for protocol error after ${timeout}ms`));
+    }, timeout);
+    
+    const cleanup = () => {
+      clearTimeout(timer);
+      connection.removeListener('error', errorListener);
+      connection.removeListener('close', closeListener);
+    };
+    
+    const errorListener = (error) => {
+      // Check if this is the expected error type
+      if (error.message && error.message.includes(expectedErrorType)) {
+        cleanup();
+        resolve(error);
+      }
+    };
+    
+    const closeListener = (reasonCode, description) => {
+      if (validateCloseCode) {
+        try {
+          // Protocol errors typically result in specific close codes
+          const protocolErrorCodes = [1002, 1007, 1008, 1009, 1010, 1011];
+          expect(protocolErrorCodes).toContain(reasonCode);
+          
+          cleanup();
+          resolve({ reasonCode, description });
+        } catch (error) {
+          cleanup();
+          reject(new Error(`Protocol error close code validation failed: ${error.message}`));
+        }
+      } else {
+        cleanup();
+        resolve({ reasonCode, description });
+      }
+    };
+    
+    connection.once('error', errorListener);
+    connection.once('close', closeListener);
+  });
 }
