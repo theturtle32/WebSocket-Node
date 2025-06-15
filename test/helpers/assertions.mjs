@@ -518,7 +518,7 @@ export function expectWebSocketConnectionStateTransition(connection, fromState, 
       reject(new Error(`State transition timeout: ${fromState} → ${toState} not completed within ${timeout}ms`));
     }, timeout);
     
-    const cleanup = () => {
+    let cleanup = () => {
       clearTimeout(timer);
       if (validateEvents) {
         connection.removeListener('close', closeListener);
