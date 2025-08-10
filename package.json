@@ -29,7 +29,6 @@
   "dependencies": {
     "bufferutil": "^4.0.1",
     "debug": "^2.2.0",
-    "es5-ext": "^0.10.63",
     "typedarray-to-buffer": "^3.1.5",
     "utf-8-validate": "^5.0.2",
     "yaeti": "^0.0.6"
@@ -38,8 +37,8 @@
     "buffer-equal": "^1.0.0",
     "gulp": "^4.0.2",
     "gulp-jshint": "^2.0.4",
-    "jshint-stylish": "^2.2.1",
     "jshint": "^2.0.0",
+    "jshint-stylish": "^2.2.1",
     "tape": "^4.9.1"
   },
   "config": {
