@@ -9,3 +9,4 @@ test/autobahn/reports*/*
 test/scripts/heapdump/*
 test-results.json
 /coverage
+.claude/
