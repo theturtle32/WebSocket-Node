@@ -59,27 +59,51 @@ const wsServer = new WebSocketServer({
 
 wsServer.on('connect', (connection) => {
   if (debug) { console.log(`${new Date()} Connection accepted - Protocol Version ${connection.webSocketVersion}`); }
-  function sendCallback(err) {
-    if (err) {
+
+  // Using new v2.0 Promise-based API for message handling
+  connection.on('message', async (message) => {
+    try {
+      if (message.type === 'utf8') {
+        if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
+        await connection.sendUTF(message.utf8Data);
+      }
+      else if (message.type === 'binary') {
+        if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
+        await connection.sendBytes(message.binaryData);
+      }
+    } catch (err) {
       console.error(`send() error: ${err}`);
       connection.drop();
       setTimeout(() => {
         process.exit(100);
       }, 100);
     }
-  }
-  connection.on('message', (message) => {
-    if (message.type === 'utf8') {
-      if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
-      connection.sendUTF(message.utf8Data, sendCallback);
-    }
-    else if (message.type === 'binary') {
-      if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
-      connection.sendBytes(message.binaryData, sendCallback);
-    }
   });
+
   connection.on('close', (reasonCode, description) => {
     if (debug) { console.log(`${new Date()} Peer ${connection.remoteAddress} disconnected.`); }
     connection._debug.printOutput();
   });
+
+  // Alternative: Using async iterator pattern (v2.0 feature)
+  // Uncomment to use async iteration instead of event handlers:
+  /*
+  (async () => {
+    try {
+      for await (const message of connection.messages()) {
+        if (message.type === 'utf8') {
+          if (debug) { console.log(`Received utf-8 message of ${message.utf8Data.length} characters.`); }
+          await connection.sendUTF(message.utf8Data);
+        }
+        else if (message.type === 'binary') {
+          if (debug) { console.log(`Received Binary Message of ${message.binaryData.length} bytes`); }
+          await connection.sendBytes(message.binaryData);
+        }
+      }
+    } catch (err) {
+      console.error(`send() error: ${err}`);
+      connection.drop();
+    }
+  })();
+  */
 });

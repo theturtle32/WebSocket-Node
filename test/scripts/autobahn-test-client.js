@@ -43,29 +43,26 @@ console.log('');
 
 console.log('Starting test run.');
 
-getCaseCount((caseCount) => {
-  let currentCase = 1;
-  runNextTestCase();
-    
-  function runNextTestCase() {
-    runTestCase(currentCase++, caseCount, () => {
-      if (currentCase <= caseCount) {
-        process.nextTick(runNextTestCase);
-      }
-      else {
-        process.nextTick(() => {
-          console.log('Test suite complete, generating report.');
-          updateReport(() => {
-            console.log('Report generated.');
-          });
-        });
-      }
-    });
+// Using v2.0 Promise-based API for cleaner async flow
+(async () => {
+  try {
+    const caseCount = await getCaseCount();
+
+    for (let currentCase = 1; currentCase <= caseCount; currentCase++) {
+      await runTestCase(currentCase, caseCount);
+    }
+
+    console.log('Test suite complete, generating report.');
+    await updateReport();
+    console.log('Report generated.');
+  } catch (error) {
+    console.error('Test suite error:', error);
+    process.exit(1);
   }
-});
+})();
 
 
-function runTestCase(caseIndex, caseCount, callback) {
+async function runTestCase(caseIndex, caseCount) {
   console.log(`Running test ${caseIndex} of ${caseCount}`);
   const echoClient = new WebSocketClient({
     maxReceivedFrameSize: 64*1024*1024,   // 64MiB
@@ -75,61 +72,75 @@ function runTestCase(caseIndex, caseCount, callback) {
     disableNagleAlgorithm: false
   });
 
-  echoClient.on('connectFailed', (error) => {
-    console.log(`Connect Error: ${error.toString()}`);
-  });
-
-  echoClient.on('connect', (connection) => {
-    connection.on('error', (error) => {
-      console.log(`Connection Error: ${error.toString()}`);
-    });
-    connection.on('close', () => {
-      callback();
-    });
-    connection.on('message', (message) => {
-      if (message.type === 'utf8') {
-        connection.sendUTF(message.utf8Data);
-      }
-      else if (message.type === 'binary') {
-        connection.sendBytes(message.binaryData);
-      }
-    });
-  });
-    
   const qs = querystring.stringify({
     case: caseIndex,
     agent: `WebSocket-Node Client v${wsVersion}`
   });
-  echoClient.connect(`ws://${args.host}:${args.port}/runCase?${qs}`, []);
+
+  try {
+    const connection = await echoClient.connect(`ws://${args.host}:${args.port}/runCase?${qs}`, []);
+
+    // Wait for connection to close
+    await new Promise((resolve, reject) => {
+      connection.on('error', (error) => {
+        console.log(`Connection Error: ${error.toString()}`);
+      });
+
+      connection.on('close', () => {
+        resolve();
+      });
+
+      connection.on('message', async (message) => {
+        try {
+          if (message.type === 'utf8') {
+            await connection.sendUTF(message.utf8Data);
+          }
+          else if (message.type === 'binary') {
+            await connection.sendBytes(message.binaryData);
+          }
+        } catch (err) {
+          console.error(`Send error: ${err}`);
+        }
+      });
+    });
+  } catch (error) {
+    console.log(`Connect Error: ${error.toString()}`);
+  }
 }
 
-function getCaseCount(callback) {
+async function getCaseCount() {
   const client = new WebSocketClient();
-  let caseCount = NaN;
-  client.on('connect', (connection) => {
+
+  const connection = await client.connect(`ws://${args.host}:${args.port}/getCaseCount`, []);
+
+  return new Promise((resolve, reject) => {
+    let caseCount = NaN;
+
     connection.on('close', () => {
-      callback(caseCount);
+      resolve(caseCount);
     });
+
     connection.on('message', (message) => {
       if (message.type === 'utf8') {
         console.log(`Got case count: ${message.utf8Data}`);
         caseCount = parseInt(message.utf8Data, 10);
       }
       else if (message.type === 'binary') {
-        throw new Error('Unexpected binary message when retrieving case count');
+        reject(new Error('Unexpected binary message when retrieving case count'));
       }
     });
   });
-  client.connect(`ws://${args.host}:${args.port}/getCaseCount`, []);
 }
 
-function updateReport(callback) {
+async function updateReport() {
   const client = new WebSocketClient();
   const qs = querystring.stringify({
     agent: `WebSocket-Node Client v${wsVersion}`
   });
-  client.on('connect', (connection) => {
-    connection.on('close', callback);
+
+  const connection = await client.connect(`ws://localhost:9000/updateReports?${qs}`);
+
+  return new Promise((resolve) => {
+    connection.on('close', resolve);
   });
-  client.connect(`ws://localhost:9000/updateReports?${qs}`);
 }
