@@ -1,13 +1,12 @@
 /**
  * Legacy Compatibility Tests for WebSocketFrame
- * 
+ *
  * These tests maintain backward compatibility by preserving the exact test cases
  * from the original tape-based test suite. For comprehensive frame testing,
  * see frame.test.mjs which provides extensive coverage of frame serialization,
  * parsing, error handling, and edge cases.
  */
 import { describe, it, expect } from 'vitest';
-import bufferEqual from 'buffer-equal';
 import WebSocketFrame from '../../../lib/WebSocketFrame.js';
 
 describe('WebSocketFrame - Legacy Compatibility', () => {
@@ -28,7 +27,7 @@ describe('WebSocketFrame - Legacy Compatibility', () => {
         frameBytes = frame.toBuffer(true);
       }).not.toThrow();
       
-      expect(bufferEqual(frameBytes, Buffer.from('898000000000', 'hex'))).toBe(true);
+      expect(frameBytes.equals(Buffer.from('898000000000', 'hex'))).toBe(true);
     });
 
     it('should serialize a WebSocket Frame with 16-bit length payload', () => {
@@ -58,7 +57,7 @@ describe('WebSocketFrame - Legacy Compatibility', () => {
       expected.writeUInt32BE(0, 4);
       payload.copy(expected, 8);
 
-      expect(bufferEqual(frameBytes, expected)).toBe(true);
+      expect(frameBytes.equals(expected)).toBe(true);
     });
 
     it('should serialize a WebSocket Frame with 64-bit length payload', () => {
@@ -89,7 +88,7 @@ describe('WebSocketFrame - Legacy Compatibility', () => {
       expected.writeUInt32BE(0, 10);
       payload.copy(expected, 14);
 
-      expect(bufferEqual(frameBytes, expected)).toBe(true);
+      expect(frameBytes.equals(expected)).toBe(true);
     });
   });
 });

@@ -2,8 +2,13 @@
 
 ## Build/Test Commands
 
-- Run all tests: `pnpm test`
-- Run single test: `pnpx tape test/unit/[filename].js`
+- Run all tests (tape + vitest): `pnpm test`
+- Run legacy tape tests only: `pnpm run test:tape`
+- Run modern vitest tests only: `pnpm run test:vitest`
+- Run single tape test: `pnpx tape test/unit/[filename].js`
+- Run single vitest test: `pnpx vitest run test/unit/[filename].test.mjs`
+- Watch vitest tests: `pnpm run test:watch`
+- Run tests with coverage: `pnpm run test:coverage`
 - Lint codebase: `pnpm lint`
 - Fix lint issues: `pnpm lint:fix`
 - Run autobahn tests (full integration test suite): `pnpm test:autobahn`

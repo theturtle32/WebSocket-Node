@@ -294,11 +294,11 @@ export class MockSocket extends EventEmitter {
   }
 
   pause() {
-    // Mock implementation
+    this.emit('pause');
   }
 
   resume() {
-    // Mock implementation
+    this.emit('resume');
   }
 
   setTimeout(timeout, callback) {
@@ -307,14 +307,41 @@ export class MockSocket extends EventEmitter {
     }
   }
 
+  setNoDelay(noDelay) {
+    // Mock implementation for TCP_NODELAY
+    this.noDelay = noDelay;
+  }
+
+  setKeepAlive(enable, initialDelay) {
+    // Mock implementation for keepalive
+    this.keepAlive = enable;
+    this.keepAliveInitialDelay = initialDelay;
+  }
+
+  removeAllListeners(event) {
+    if (event) {
+      super.removeAllListeners(event);
+    } else {
+      super.removeAllListeners();
+    }
+  }
+
+  on(event, listener) {
+    return super.on(event, listener);
+  }
+
   simulateData(data) {
     if (!this.destroyed && this.readable) {
-      this.emit('data', Buffer.from(data));
+      this.emit('data', Buffer.isBuffer(data) ? data : Buffer.from(data));
     }
   }
 
   simulateError(error) {
     this.emit('error', error);
+  }
+
+  simulateDrain() {
+    this.emit('drain');
   }
 
   getWrittenData() {
