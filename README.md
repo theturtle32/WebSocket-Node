@@ -311,24 +311,24 @@ async function run() {
             console.log("Connection Error: " + error.toString());
         });
 
-        connection.on('close', function() {
-            console.log('echo-protocol Connection Closed');
-        });
-
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
                 console.log("Received: '" + message.utf8Data + "'");
             }
         });
 
-        async function sendNumber() {
+        // Send a random number every second
+        const interval = setInterval(async function() {
             if (connection.connected) {
                 const number = Math.round(Math.random() * 0xFFFFFF);
                 await connection.sendUTF(number.toString());
-                setTimeout(sendNumber, 1000);
             }
-        }
-        sendNumber();
+        }, 1000);
+
+        connection.on('close', function() {
+            clearInterval(interval);
+            console.log('echo-protocol Connection Closed');
+        });
 
     } catch (error) {
         console.log('Connect Error: ' + error.toString());
@@ -356,23 +356,24 @@ client.on('connect', function(connection) {
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
     });
-    connection.on('close', function() {
-        console.log('echo-protocol Connection Closed');
-    });
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log("Received: '" + message.utf8Data + "'");
         }
     });
 
-    function sendNumber() {
+    // Send a random number every second
+    var interval = setInterval(function() {
         if (connection.connected) {
             var number = Math.round(Math.random() * 0xFFFFFF);
             connection.sendUTF(number.toString());
-            setTimeout(sendNumber, 1000);
         }
-    }
-    sendNumber();
+    }, 1000);
+
+    connection.on('close', function() {
+        clearInterval(interval);
+        console.log('echo-protocol Connection Closed');
+    });
 });
 
 client.connect('ws://localhost:8080/', 'echo-protocol');
@@ -396,18 +397,19 @@ client.onerror = function() {
 client.onopen = function() {
     console.log('WebSocket Client Connected');
 
-    function sendNumber() {
+    // Send a random number every second
+    var interval = setInterval(function() {
         if (client.readyState === client.OPEN) {
             var number = Math.round(Math.random() * 0xFFFFFF);
             client.send(number.toString());
-            setTimeout(sendNumber, 1000);
         }
-    }
-    sendNumber();
-};
+    }, 1000);
 
-client.onclose = function() {
-    console.log('echo-protocol Client Closed');
+    // Clear interval when connection closes
+    client.onclose = function() {
+        clearInterval(interval);
+        console.log('echo-protocol Client Closed');
+    };
 };
 
 client.onmessage = function(e) {
@@ -422,6 +424,74 @@ Request Router Example
 
 For an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.
 
+
+Development & Contributing
+---------------------------
+
+### v2.0 Modernization Project
+
+WebSocket-Node is currently undergoing a comprehensive modernization for v2.0, which includes:
+
+- ✅ **ES6 Classes** - All components converted to ES6 class syntax
+- ✅ **Modern JavaScript** - Template literals, arrow functions, destructuring, etc.
+- ✅ **Promise-based APIs** - All async operations support Promises (fully backward compatible)
+- 🔄 **Comprehensive Test Suite** - Migrating to Vitest with extensive coverage (in progress)
+
+**Current Status:** 65% Complete
+
+For detailed information:
+- **[V2_MODERNIZATION_STATUS.md](V2_MODERNIZATION_STATUS.md)** - Current status and detailed progress
+- **[ROADMAP.md](ROADMAP.md)** - 8-week release timeline and milestones
+- **[TEST_SUITE_MODERNIZATION_PLAN.md](TEST_SUITE_MODERNIZATION_PLAN.md)** - Comprehensive test strategy
+
+### Running Tests
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run protocol compliance tests
+pnpm test:autobahn
+
+# Run linter
+pnpm lint
+
+# Fix lint issues
+pnpm lint:fix
+```
+
+### Test Coverage
+
+Current coverage: 68% overall (target: 85%+)
+
+| Component | Coverage | Status |
+|-----------|----------|--------|
+| WebSocketRouter | 98.71% | ✅ Complete |
+| WebSocketServer | 92.36% | ✅ Complete |
+| WebSocketFrame | 92.47% | ✅ Complete |
+| WebSocketClient | 88.31% | ✅ Complete |
+| WebSocketConnection | 71.48% | 🔄 In Progress |
+| WebSocketRequest | 29.63% | ⚠️ Needs Work |
+
+### Contributing
+
+Contributions are welcome! For the v2.0 modernization:
+
+1. Check current work in [ROADMAP.md](ROADMAP.md)
+2. Review [V2_MODERNIZATION_STATUS.md](V2_MODERNIZATION_STATUS.md) for status
+3. Work from the `v2` branch
+4. Create feature branches for your work
+5. Run `pnpm test && pnpm lint` before submitting PRs
+6. Maintain backward compatibility for all public APIs
 
 Resources
 ---------
