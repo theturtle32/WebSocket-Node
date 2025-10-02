@@ -16,6 +16,10 @@ import https from 'https';
 import { EventEmitter } from 'events';
 import WebSocketClient from '../../../lib/WebSocketClient.js';
 
+// Increase max listeners to avoid warnings during protocol validation tests
+// These tests iterate through many invalid characters and each creates listeners
+EventEmitter.defaultMaxListeners = 20;
+
 describe('WebSocketClient', () => {
   describe('Constructor and Configuration', () => {
     it('should create client with default configuration', () => {
