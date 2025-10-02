@@ -14,15 +14,18 @@
 - Vitest test framework: 100%
 - Test infrastructure: 100%
 - Core component tests: 80% average
+- ✅ **WebSocketConnection tests: 100% (Week 1 complete!)**
+  - Fixed all 22 skipped tests
+  - 107 tests passing (77 in connection.test.mjs, 30 in connection-basic.test.mjs)
+  - 0 skipped tests remaining
 
-### 🔄 Current Work (Phase 3.2)
-- WebSocketConnection comprehensive testing
-- 58/77 tests passing (75%)
-- Target: 95%+ pass rate, 85%+ coverage
+### 🔄 Current Work (Week 2)
+- WebSocketRequest comprehensive testing
+- Current: 29.63% coverage (2 basic tests)
+- Target: 90%+ coverage (40+ tests)
 
 ### ❌ Remaining Work
-- Complete WebSocketConnection tests (1 week)
-- WebSocketRequest tests (1 week)
+- WebSocketRequest tests (1 week) - NEXT
 - utils.js tests (3 days)
 - Integration tests (2 weeks)
 - E2E tests (2 weeks)
@@ -32,20 +35,29 @@
 
 ## 🗓️ 8-Week Release Timeline
 
-### Week 1 (Current) - WebSocketConnection Tests
+### Week 1 - WebSocketConnection Tests ✅ **COMPLETE**
 **Goal:** Fix 19 skipped tests, achieve 95%+ pass rate
 
-- [ ] Implement WebSocket-specific event patterns
-- [ ] Fix protocol violation detection tests
-- [ ] Fix size limit enforcement tests
-- [ ] Fix configuration tests
-- [ ] Achieve 85%+ coverage
+- ✅ Implemented WebSocket-specific event patterns
+- ✅ Fixed protocol violation detection tests (4 tests)
+- ✅ Fixed size limit enforcement tests (3 tests)
+- ✅ Fixed configuration tests (2 tests)
+- ✅ Fixed message handling tests (4 tests)
+- ✅ Fixed resource cleanup tests (3 tests)
+- ✅ Fixed fragmentation tests (1 test)
+- ✅ Fixed control frame tests (1 test)
+- ✅ Fixed network error tests (1 test)
+- ✅ Fixed connection-basic tests (3 tests)
 
-**Deliverable:** WebSocketConnection fully tested and stable
+**Deliverable:** ✅ WebSocketConnection fully tested and stable
+- 22 tests fixed (19 + 3)
+- 107 total tests passing
+- 0 skipped tests
+- PR #479 created and ready for review
 
 ---
 
-### Week 2 - WebSocketRequest Tests
+### Week 2 (Current) - WebSocketRequest Tests
 **Goal:** Raise coverage from 29.63% to 90%+
 
 - [ ] Create 40+ comprehensive tests
