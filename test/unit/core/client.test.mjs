@@ -16,10 +16,6 @@ import https from 'https';
 import { EventEmitter } from 'events';
 import WebSocketClient from '../../../lib/WebSocketClient.js';
 
-// Increase max listeners to avoid warnings during protocol validation tests
-// These tests iterate through many invalid characters and each creates listeners
-EventEmitter.defaultMaxListeners = 20;
-
 describe('WebSocketClient', () => {
   describe('Constructor and Configuration', () => {
     it('should create client with default configuration', () => {
@@ -187,8 +183,10 @@ describe('WebSocketClient', () => {
       const invalidChars = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}', ' ', '\t'];
 
       for (const char of invalidChars) {
+        // Create fresh client for each iteration to avoid listener accumulation
+        const freshClient = new WebSocketClient();
         const invalidProtocol = `test${char}protocol`;
-        const promise = client.connect('ws://localhost/', invalidProtocol);
+        const promise = freshClient.connect('ws://localhost/', invalidProtocol);
         await expect(promise).rejects.toThrow(`Protocol list contains invalid character "${char}"`);
       }
     });
