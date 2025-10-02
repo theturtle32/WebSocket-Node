@@ -19,12 +19,6 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
     await new Promise(resolve => setImmediate(resolve));
   };
 
-  const waitForCallback = async (timeoutMs = 100) => {
-    // For callback-based operations that may take a moment
-    await new Promise(resolve => setTimeout(resolve, timeoutMs));
-    await waitForProcessing();
-  };
-
   const waitForEvent = async (emitter, eventName, timeoutMs = 1000) => {
     // Wait for specific event with timeout
     return new Promise((resolve, reject) => {
