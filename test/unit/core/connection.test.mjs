@@ -10,7 +10,10 @@ describe('WebSocketConnection - Comprehensive Testing', () => {
   
   // Enhanced async utilities for WebSocket processing
   const waitForProcessing = async () => {
-    // WebSocket uses process.nextTick and setImmediate for async processing
+    // WebSocketConnection uses multiple event loop phases for frame processing:
+    // 1. process.nextTick - processFrame() is called
+    // 2. setImmediate (1st) - buffer continuation and frame chaining
+    // 3. setImmediate (2nd) - cascading effects (error/close events, state changes)
     await new Promise(resolve => process.nextTick(resolve));
     await new Promise(resolve => setImmediate(resolve));
     await new Promise(resolve => setImmediate(resolve));
