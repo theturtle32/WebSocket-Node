@@ -10,9 +10,7 @@ function startEchoServer(outputStream, callback) {
   }
   
   const path = require('path').join(__dirname + '/../scripts/echo-server.js');
-  
-  console.log(path);
-    
+
   let echoServer = require('child_process').spawn('node', [ path ]);
   
   let state = 'starting';
