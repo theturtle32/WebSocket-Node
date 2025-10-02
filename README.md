@@ -80,6 +80,12 @@ Current Features:
 - TLS supported for outbound connections via WebSocketClient
 - TLS supported for server connections (use https.createServer instead of http.createServer)
   - Thanks to [pors](https://github.com/pors) for confirming this!
+- **Promise-based API (v2.0+)** - All async operations support both callbacks and Promises
+  - `client.connect()` returns a Promise
+  - `connection.send()`, `sendUTF()`, `sendBytes()` return Promises when no callback provided
+  - `connection.close()` returns a Promise
+  - `connection.messages()` async iterator for consuming messages
+  - Fully backward compatible - existing callback-based code works unchanged
 - Cookie setting and parsing
 - Tunable settings
   - Max Receivable Frame Size
@@ -106,12 +112,14 @@ Server Example
 
 Here's a short example showing a server that echos back anything sent to it, whether utf-8 or binary.
 
+### Using Async/Await with Event Handlers (v2.0+)
+
 ```javascript
 #!/usr/bin/env node
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+const WebSocketServer = require('websocket').server;
+const http = require('http');
 
-var server = http.createServer(function(request, response) {
+const server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
     response.end();
@@ -120,7 +128,7 @@ server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
-wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
     // You should not use autoAcceptConnections for production
     // applications, as it defeats all standard cross-origin protection
@@ -142,17 +150,134 @@ wsServer.on('request', function(request) {
       console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
       return;
     }
-    
+
+    const connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+
+    connection.on('message', async function(message) {
+        try {
+            if (message.type === 'utf8') {
+                console.log('Received Message: ' + message.utf8Data);
+                await connection.sendUTF(message.utf8Data);
+            }
+            else if (message.type === 'binary') {
+                console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+                await connection.sendBytes(message.binaryData);
+            }
+        } catch (err) {
+            console.error('Send failed:', err);
+        }
+    });
+
+    connection.on('close', function(reasonCode, description) {
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+});
+```
+
+### Using Async Iterator (v2.0+)
+
+```javascript
+#!/usr/bin/env node
+const WebSocketServer = require('websocket').server;
+const http = require('http');
+
+const server = http.createServer(function(request, response) {
+    console.log((new Date()) + ' Received request for ' + request.url);
+    response.writeHead(404);
+    response.end();
+});
+server.listen(8080, function() {
+    console.log((new Date()) + ' Server is listening on port 8080');
+});
+
+const wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+});
+
+function originIsAllowed(origin) {
+  return true;
+}
+
+wsServer.on('request', function(request) {
+    if (!originIsAllowed(request.origin)) {
+      request.reject();
+      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      return;
+    }
+
+    const connection = request.accept('echo-protocol', request.origin);
+    console.log((new Date()) + ' Connection accepted.');
+
+    // Process messages using async iteration
+    (async () => {
+        try {
+            for await (const message of connection.messages()) {
+                if (message.type === 'utf8') {
+                    console.log('Received Message: ' + message.utf8Data);
+                    await connection.sendUTF(message.utf8Data);
+                }
+                else if (message.type === 'binary') {
+                    console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+                    await connection.sendBytes(message.binaryData);
+                }
+            }
+        } catch (err) {
+            console.error('Connection error:', err);
+        }
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    })();
+});
+```
+
+<details>
+<summary>Using Callbacks (Traditional)</summary>
+
+```javascript
+#!/usr/bin/env node
+var WebSocketServer = require('websocket').server;
+var http = require('http');
+
+var server = http.createServer(function(request, response) {
+    console.log((new Date()) + ' Received request for ' + request.url);
+    response.writeHead(404);
+    response.end();
+});
+server.listen(8080, function() {
+    console.log((new Date()) + ' Server is listening on port 8080');
+});
+
+wsServer = new WebSocketServer({
+    httpServer: server,
+    autoAcceptConnections: false
+});
+
+function originIsAllowed(origin) {
+  return true;
+}
+
+wsServer.on('request', function(request) {
+    if (!originIsAllowed(request.origin)) {
+      request.reject();
+      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
+      return;
+    }
+
     var connection = request.accept('echo-protocol', request.origin);
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
-            connection.sendUTF(message.utf8Data);
+            connection.sendUTF(message.utf8Data, function(err) {
+                if (err) console.error('Send failed:', err);
+            });
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            connection.sendBytes(message.binaryData);
+            connection.sendBytes(message.binaryData, function(err) {
+                if (err) console.error('Send failed:', err);
+            });
         }
     });
     connection.on('close', function(reasonCode, description) {
@@ -160,6 +285,7 @@ wsServer.on('request', function(request) {
     });
 });
 ```
+</details>
 
 Client Example
 --------------
@@ -167,6 +293,53 @@ Client Example
 This is a simple example client that will print out any utf-8 messages it receives on the console, and periodically sends a random number.
 
 *This code demonstrates a client in Node.js, not in the browser*
+
+### Using Async/Await (v2.0+)
+
+```javascript
+#!/usr/bin/env node
+const WebSocketClient = require('websocket').client;
+
+const client = new WebSocketClient();
+
+async function run() {
+    try {
+        const connection = await client.connect('ws://localhost:8080/', 'echo-protocol');
+        console.log('WebSocket Client Connected');
+
+        connection.on('error', function(error) {
+            console.log("Connection Error: " + error.toString());
+        });
+
+        connection.on('close', function() {
+            console.log('echo-protocol Connection Closed');
+        });
+
+        connection.on('message', function(message) {
+            if (message.type === 'utf8') {
+                console.log("Received: '" + message.utf8Data + "'");
+            }
+        });
+
+        async function sendNumber() {
+            if (connection.connected) {
+                const number = Math.round(Math.random() * 0xFFFFFF);
+                await connection.sendUTF(number.toString());
+                setTimeout(sendNumber, 1000);
+            }
+        }
+        sendNumber();
+
+    } catch (error) {
+        console.log('Connect Error: ' + error.toString());
+    }
+}
+
+run();
+```
+
+<details>
+<summary>Using Callbacks (Traditional)</summary>
 
 ```javascript
 #!/usr/bin/env node
@@ -191,7 +364,7 @@ client.on('connect', function(connection) {
             console.log("Received: '" + message.utf8Data + "'");
         }
     });
-    
+
     function sendNumber() {
         if (connection.connected) {
             var number = Math.round(Math.random() * 0xFFFFFF);
@@ -204,6 +377,7 @@ client.on('connect', function(connection) {
 
 client.connect('ws://localhost:8080/', 'echo-protocol');
 ```
+</details>
 
 Client Example using the *W3C WebSocket API*
 --------------------------------------------

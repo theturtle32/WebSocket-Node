@@ -35,9 +35,7 @@
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
-    "buffer-equal": "^1.0.0",
     "eslint": "^8.0.0",
-    "tape": "^4.9.1",
     "vitest": "^1.0.0",
     "@vitest/coverage-v8": "^1.0.0",
     "@vitest/ui": "^1.0.0"
@@ -46,9 +44,7 @@
     "verbose": false
   },
   "scripts": {
-    "test": "pnpm run test:tape && pnpm run test:vitest",
-    "test:tape": "tape test/unit/*.js",
-    "test:vitest": "vitest run",
+    "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
