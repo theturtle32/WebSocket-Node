@@ -20,8 +20,7 @@ extract_durations() {
     echo "📊 Extracting duration statistics from test reports..."
 
     # Extract all durations and use sort for median calculation
-    find test/autobahn/reports/servers -name "*.json" -exec grep -h '"duration":' {} \; | \
-        sed 's/.*"duration": \([0-9]*\).*/\1/' | \
+    find test/autobahn/reports/servers -name "*.json" -exec jq '.. | .duration? | select(. != null)' {} + | \
         sort -n > /tmp/durations_sorted.txt
 
     # Calculate statistics using simple awk
