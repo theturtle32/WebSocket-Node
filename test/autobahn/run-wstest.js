@@ -163,26 +163,36 @@ class AutobahnTestRunner {
 
   parseAndDisplayResults() {
     console.log('📊 Parsing test results...\n');
-    
+
     const resultsPath = path.join(__dirname, 'reports', 'servers', 'index.json');
-    
+
     if (!fs.existsSync(resultsPath)) {
       console.error('❌ Results file not found. Tests may not have completed properly.');
-      return;
+      process.exit(1);
     }
 
     try {
       const originalProcessExit = process.exit;
-      // Prevent parseResults from exiting the process
-      process.exit = () => {};
-      
-      parseResults();
-      
+      let exitCode = 0;
+
+      // Intercept process.exit to capture the exit code
+      process.exit = (code) => {
+        exitCode = code || 0;
+      };
+
+      const summary = parseResults();
+
       // Restore original function
       process.exit = originalProcessExit;
-      
+
+      // Exit with appropriate code if there were failures
+      if (exitCode !== 0 || (summary && summary.failed > 0)) {
+        process.exit(1);
+      }
+
     } catch (error) {
       console.error('❌ Failed to parse results:', error.message);
+      process.exit(1);
     }
   }
 

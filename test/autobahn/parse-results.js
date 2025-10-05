@@ -140,7 +140,7 @@ function parseResults() {
   }
   
   console.log('\n');
-  
+
   // Exit with error code if there are actual failures
   if (summary.failed > 0) {
     console.error(`❌ ${summary.failed} test(s) failed!`);
@@ -148,6 +148,8 @@ function parseResults() {
   } else {
     console.log(`✅ All tests passed! (${summary.ok} OK, ${summary.nonStrict} non-strict, ${summary.informational} informational, ${summary.unimplemented} unimplemented)`);
   }
+
+  return summary;
 }
 
 if (require.main === module) {
