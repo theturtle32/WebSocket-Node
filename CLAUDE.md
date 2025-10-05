@@ -45,3 +45,6 @@
 - Ensure that you have created an appropriately named branch for the work in progress.
 - Make sure `pnpm lint:fix` is run and not showing any errors.
 - When starting work on a new task, create a branch to track that work.
+- When completing a task and creating the PR, poll for Gemini's code review. Then address any medium or high priority comments. Then merge the PR, switch locally back to `v2`
+ and pull from remote. Then pick up the next task, create a branch, do the work, commit, push, pr, gemini code review, merge, next task, in a loop until all projects are
+completed.
