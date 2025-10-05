@@ -1,1513 +1,896 @@
 # WebSocket-Node Test Suite Modernization Plan
 
+**Status:** 40% Complete
+**Last Updated:** October 2, 2025
+**Current Phase:** Phase 3.2 - WebSocketConnection Comprehensive Testing
+
+---
+
+## 📋 Table of Contents
+
+1. [Overview](#overview)
+2. [Current Status](#current-status)
+3. [Test Infrastructure](#test-infrastructure)
+4. [Component Testing Status](#component-testing-status)
+5. [Execution Plan](#execution-plan)
+6. [Success Metrics](#success-metrics)
+
+---
+
 ## Overview
 
-This document outlines the comprehensive modernization of the WebSocket-Node test suite, migrating from `tape` to `Vitest` and implementing extensive test coverage across all components. The goal is to create a robust, maintainable, and comprehensive testing infrastructure.
+This document tracks the comprehensive modernization of the WebSocket-Node test suite, migrating from `tape` to `Vitest` and implementing extensive test coverage across all components.
 
-## ⚠️ Critical Principle: Implementation is Correct - Test Around It
+### Critical Principle: Test Around Existing Implementation
 
-**IMPORTANT**: This modernization project operates under the fundamental assumption that **the existing WebSocket-Node implementation is correct and should not be modified**. Our job is to build comprehensive, robust tests around the existing codebase.
+**The existing WebSocket-Node implementation is correct and battle-tested.** Our job is to build comprehensive, robust tests around the existing codebase, not to modify implementation code.
 
-### Key Guidelines:
+**If potential bugs are discovered during testing:**
+1. **STOP** - Do not fix implementation
+2. **DOCUMENT** - Record findings with detailed analysis
+3. **CONSULT** - Discuss with project lead before any changes
+4. **TEST AROUND** - Design tests that work with current implementation
 
-- **NO IMPLEMENTATION CHANGES**: Do not modify any files in `lib/` or core implementation files
-- **TEST-ONLY MODIFICATIONS**: All changes should be limited to `test/` directory and test infrastructure
-- **BUG DISCOVERY PROTOCOL**: If potential bugs are discovered in the implementation during testing:
-  1. **STOP** - Do not fix the implementation directly
-  2. **DOCUMENT** - Record the potential issue with detailed analysis
-  3. **CONSULT** - Bring findings to project lead for discussion before any changes
-  4. **TEST AROUND** - Design tests that work with the current implementation behavior
+---
 
-### Implementation Assumptions:
+## Current Status
 
-- **WebSocketConnection**: All methods work correctly, including frame processing, event emission, and lifecycle management
-- **WebSocketServer**: Server functionality is correct and reliable
-- **WebSocketClient**: Client functionality operates as designed
-- **WebSocketFrame**: Frame parsing and serialization work correctly
-- **Event System**: All event emission patterns are correct as implemented
+### Overall Progress: 40% Complete
 
-### Our Testing Responsibility:
+```
+Phase 1: Foundation Setup             ✅ 100% Complete
+Phase 2: Test Migration & Helpers     ✅ 100% Complete
+Phase 3: Component Testing            🔄  40% Complete
+Phase 4: Integration Testing          ❌   0% Complete
+Phase 5: E2E Testing                  ❌   0% Complete
+Phase 6: CI/CD Optimization           ❌   0% Complete
+```
 
-- **Comprehensive Coverage**: Test all code paths, edge cases, and scenarios
-- **Robust Mocking**: Build sophisticated mock infrastructure that works with existing implementation
-- **Realistic Simulation**: Create test scenarios that mirror real-world usage
-- **Edge Case Validation**: Test boundary conditions and error scenarios
-- **Performance Verification**: Validate performance characteristics without changing implementation
+### Test Execution Status
 
-## ⚠️ Important: ES Module File Extensions
+```bash
+Test Files:  21 passed (21)
+Tests:       364 passed | 35 skipped (399)
+Duration:    ~4 seconds
+Coverage:    68% overall
+Lint:        ✅ Zero errors
+```
 
-**All new test files created as part of the Vitest modernization MUST use the `.mjs` extension to ensure proper ES module handling.**
+### Coverage by Component
 
-This is required because:
-- The core WebSocket library maintains CommonJS compatibility for ecosystem users
-- Test files use ES module syntax (`import`/`export`)
-- Without `"type": "module"` in package.json, `.js` files are treated as CommonJS
-- Using `.mjs` extension explicitly marks files as ES modules
+| Component | Tests | Passing | Coverage | Status |
+|-----------|-------|---------|----------|--------|
+| WebSocketRouter | 46 | 46 | 98.71% | ✅ Complete |
+| WebSocketServer | 35 | 34 | 92.36% | ✅ Complete |
+| WebSocketFrame | 51 | 51 | 92.47% | ✅ Complete |
+| WebSocketClient | 47 | 45 | 88.31% | ✅ Complete |
+| WebSocketConnection | 77 | 58 | 71.48% | 🔄 In Progress |
+| WebSocketRequest | 2 | 2 | 29.63% | ❌ Needs Work |
+| utils.js | 38 | 38 | 33.84% | ❌ Needs Work |
+| WebSocketRouterRequest | 0 | 0 | 41.26% | ❌ Not Started |
+| W3CWebSocket | 2 | 2 | 75.39% | ⚠️ Basic Only |
 
-**File Extension Guidelines:**
-- ✅ New Vitest test files: `*.test.mjs` or `*.spec.mjs`
-- ✅ Test helper modules: `*.mjs` (e.g., `config.mjs`, `setup.mjs`)
-- ✅ Vitest configuration: `vitest.config.mjs`
-- ❌ Do NOT use `.js` extension for files with ES module syntax
+---
 
-## Current State Analysis
+## Test Infrastructure
 
-### Existing Test Infrastructure
+### ✅ Phase 1: Foundation Setup - COMPLETE
 
-- **Framework**: `tape` (legacy, minimal features)
-- **Coverage**: 5 unit test files with ~400 lines of tests
-- **Organization**: Flat structure in `test/unit/`
-- **Code Coverage**: None
-- **CI Integration**: Basic with Node.js 18.x
+#### 1.1 Vitest Configuration ✅
+- ✅ Vitest, @vitest/coverage-v8, @vitest/ui installed
+- ✅ vitest.config.mjs configured with Node.js environment
+- ✅ Coverage thresholds and reporting configured
+- ✅ Test file patterns defined
 
-### Current Test Files
+#### 1.2 Directory Structure ✅
+```
+test/
+├── unit/
+│   ├── core/          ✅ 10 test files
+│   ├── legacy/        ✅ 5 migrated tests
+│   ├── browser/       ✅ 1 test file
+│   ├── helpers/       ✅ 3 infrastructure tests
+│   ├── regressions/   ✅ 1 test file
+│   ├── routing/       📁 Empty directory
+│   └── utils/         📁 Empty directory
+├── integration/       📁 Empty directories
+│   ├── client-server/
+│   ├── error-handling/
+│   ├── performance/
+│   └── routing/
+├── e2e/              📁 Empty directories
+│   ├── browser/
+│   ├── protocol/
+│   └── real-world/
+├── fixtures/         📁 Directory exists
+├── helpers/          ✅ Complete helper infrastructure
+└── shared/           ✅ Test servers and utilities
+```
 
-- `test/unit/websocketFrame.js` - Frame serialization (3 tests)
-- `test/unit/request.js` - Request handling (2 tests)
-- `test/unit/w3cwebsocket.js` - W3C WebSocket API (2 tests)
-- `test/unit/regressions.js` - Bug regression tests (1 test)
-- `test/unit/dropBeforeAccept.js` - Connection lifecycle (1 test)
-
-### Coverage Gaps
-
-**Critical components with minimal/no test coverage:**
-
-- `WebSocketConnection.js` (878 lines) - Core connection logic
-- `WebSocketServer.js` (257 lines) - Server functionality
-- `WebSocketClient.js` (361 lines) - Client functionality
-- `WebSocketRouter.js` (157 lines) - URL routing
-- Error handling and edge cases
-- Protocol compliance edge cases
-- Performance and memory management
-- Browser compatibility layer
-
-## Phase 1: Vitest Migration Strategy
-
-### 1.1 Framework Migration Benefits
-
-**Vitest Advantages over Tape:**
-
-- **Modern Features**: Built-in TypeScript support, ES modules, async/await
-- **Code Coverage**: Built-in c8/Istanbul coverage with zero config
-- **Watch Mode**: Intelligent test re-running
-- **Parallel Execution**: Faster test runs
-- **Better Assertions**: More expressive assertion library
-- **Mocking**: Built-in mocking capabilities
-- **Snapshot Testing**: Built-in snapshot testing
-- **IDE Integration**: Better debugging and IDE support
-
-### 1.2 Migration Steps
-
-#### Step 1: Install Vitest Dependencies
-
+#### 1.3 NPM Scripts ✅
 ```json
 {
-  "devDependencies": {
-    "vitest": "^1.0.0",
-    "@vitest/coverage-v8": "^1.0.0",
-    "@vitest/ui": "^1.0.0"
-  }
+  "test": "vitest run",
+  "test:watch": "vitest",
+  "test:ui": "vitest --ui",
+  "test:coverage": "vitest run --coverage",
+  "test:autobahn": "cd test/autobahn && ./run-wstest.js"
 }
 ```
 
-#### Step 2: Create Vitest Configuration
+---
+
+### ✅ Phase 2: Test Migration & Helper Infrastructure - COMPLETE
+
+#### 2.1 Legacy Test Migration ✅
+All 5 original tape tests migrated to Vitest:
+
+- ✅ `websocketFrame.test.mjs` - Frame serialization (3 tests)
+- ✅ `request.test.mjs` - Request handling (2 tests)
+- ✅ `w3cwebsocket.test.mjs` - W3C WebSocket API (2 tests)
+- ✅ `regressions.test.mjs` - Bug regression (1 test)
+- ✅ `dropBeforeAccept.test.mjs` - Connection lifecycle (1 test)
+
+**Result:** All legacy tests passing, maintained backward compatibility
+
+#### 2.2 Test Helper Infrastructure ✅
+
+##### Mocking Infrastructure (`test/helpers/mocks.mjs`)
+- ✅ **MockSocket** - Full TCP socket simulation with event handling
+- ✅ **MockWebSocketServer** - Server functionality simulation
+- ✅ **MockWebSocketClient** - Client behavior simulation
+- ✅ **MockWebSocketConnection** - High-level connection simulation
+- ✅ **MockHTTPServer** - HTTP server for upgrade testing
+
+##### Test Data Generators (`test/helpers/generators.mjs`)
+- ✅ **generateWebSocketFrame()** - RFC 6455 compliant frame generation
+- ✅ **generateClientFrame()** - Masked frames for client scenarios
+- ✅ **generateServerFrame()** - Unmasked frames for server scenarios
+- ✅ **generateRandomPayload()** - Text, binary, JSON payloads
+- ✅ **generateMalformedFrame()** - Invalid frames for error testing
+- ✅ **generateProtocolViolation()** - Protocol compliance testing
+- ✅ **validateGeneratedFrame()** - Frame validation before injection
+
+##### Custom Assertions (`test/helpers/assertions.mjs`)
+- ✅ **expectValidWebSocketFrame()** - Frame structure validation
+- ✅ **expectConnectionState()** - Connection state validation
+- ✅ **expectProtocolCompliance()** - RFC 6455 compliance checking
+- ✅ **expectHandshakeHeaders()** - HTTP header validation
+- ✅ **expectEventSequenceAsync()** - Event order validation
+- ✅ **expectEventWithPayload()** - Event payload deep comparison
+- ✅ **expectWebSocketConnectionStateTransition()** - State transition validation
+- ✅ **expectWebSocketMessageEvent()** - Message event validation
+
+##### Test Utilities (`test/helpers/test-utils.mjs`)
+- ✅ **waitForProcessing()** - Async operation coordination
+- ✅ **waitForCallback()** - Callback completion waiting
+- ✅ **waitForEvent()** - Event emission waiting
+- ✅ **waitForCondition()** - Conditional state waiting
+- ✅ **captureEvents()** - Event capture with filtering and timing
+- ✅ **waitForEventWithPayload()** - Payload-specific event waiting
+- ✅ **waitForMultipleEvents()** - Multi-event coordination
+- ✅ **waitForEventSequence()** - Event sequence validation
+
+##### Frame Processing Utilities (`test/helpers/frame-processing-utils.mjs`)
+- ✅ **FrameProcessor** - Advanced frame processing coordination
+- ✅ **WebSocketTestPatterns** - Reusable test patterns
+- ✅ **AdvancedFrameProcessing** - Complex multi-frame scenarios
+- ✅ **injectFrameIntoConnection()** - Reliable frame injection
+
+##### Test Server Management (`test/helpers/test-server.mjs`)
+- ✅ **TestServerManager** - Lifecycle management
+- ✅ **Echo server mode** - Message echo for testing
+- ✅ **Broadcast server mode** - Multi-client testing
+- ✅ **Protocol testing mode** - Custom protocol handlers
+- ✅ Legacy API compatibility maintained
+
+---
+
+## Component Testing Status
+
+### ✅ Phase 3.1: WebSocketFrame - COMPLETE
+
+**Status:** 100% Complete
+**Tests:** 51 total (51 passing)
+**Coverage:** 92.47% statements, 85.84% branches
+
+**Test Coverage:**
+- ✅ Frame serialization (all payload sizes: 0, small, 16-bit, 64-bit)
+- ✅ All frame types (text, binary, close, ping, pong)
+- ✅ Masking and unmasking scenarios
+- ✅ Control frame validation
+- ✅ Valid frame parsing across all types
+- ✅ Malformed frame detection
+- ✅ Incomplete frame data handling
+- ✅ Reserved bit and opcode handling
+- ✅ Maximum frame sizes
+- ✅ Zero-length payloads
+- ✅ Buffer boundary conditions
+
+**Files:**
+- `test/unit/core/frame.test.mjs` - 43 comprehensive tests
+- `test/unit/core/frame-legacy-compat.test.mjs` - 3 original tests
+- `test/unit/legacy/websocketFrame.test.mjs` - 5 legacy tests
+
+---
+
+### 🔄 Phase 3.2: WebSocketConnection - IN PROGRESS
+
+**Status:** 75% Complete (58/77 tests passing, 19 skipped)
+**Coverage:** 71.48% statements, 69.69% branches
+**Target:** 95%+ pass rate, 85%+ coverage
+
+#### Current Progress
+
+**✅ Completed Subtasks:**
+
+##### 3.2.A.1: Mock Infrastructure Stabilization ✅
+- ✅ MockSocket implementation audit and enhancement
+- ✅ Documented WebSocketConnection usage pattern (`_addSocketEventListeners()` requirement)
+- ✅ Created standardized async waiting utilities
+- ✅ Improved test isolation and cleanup patterns
+- ✅ Enhanced event-based testing reliability
+
+**Key Discovery:** WebSocketConnection requires external caller to invoke `_addSocketEventListeners()` after construction. This is by design, not a bug.
+
+##### 3.2.A.2: Frame Generation and Processing Foundation ✅
+- ✅ Enhanced frame generation with RFC 6455 validation
+- ✅ Implemented masked/unmasked frame helpers (`generateClientFrame`, `generateServerFrame`)
+- ✅ Created comprehensive frame validation pipeline
+- ✅ Built reliable frame injection system (`injectFrameIntoConnection`)
+- ✅ Established frame processing timing coordination
+- ✅ Created advanced test pattern library
+
+##### 3.2.A.3.1: Enhanced Event Capture and Verification ✅
+- ✅ Expanded `captureEvents()` with filtering and pattern matching
+- ✅ Implemented event sequence validation utilities
+- ✅ Created specialized event assertion functions (8 total)
+- ✅ Built advanced event coordination patterns
+- ✅ Added event timing verification capabilities
+- ✅ Created 12-test validation suite for event infrastructure
+
+##### 3.2.A.3.3: Connection Lifecycle Testing Standards ✅
+- ✅ Mapped connection state machine and valid transitions
+- ✅ Created connection state management utilities
+- ✅ Implemented state transition validation patterns
+- ✅ Built reliable state change triggering methods
+- ✅ Created resource cleanup validation patterns
+- ✅ Developed concurrent connection handling patterns
+- ✅ Created 19 comprehensive lifecycle tests
+
+**Files Created:**
+- `test/unit/core/connection.test.mjs` - 77 comprehensive tests
+- `test/unit/core/connection-basic.test.mjs` - 30 basic operation tests
+- `test/unit/core/connection-lifecycle.test.mjs` - 1 integration test
+- `test/unit/helpers/connection-lifecycle-patterns.test.mjs` - 19 lifecycle tests
+- `test/unit/helpers/event-infrastructure.test.mjs` - 12 event system tests
+- `test/unit/helpers/websocket-event-patterns.test.mjs` - 22 event pattern tests
+
+#### 🔄 Active Work
+
+##### 3.2.A.3.2: WebSocket-Specific Event Testing Patterns (IN PROGRESS)
+**Goal:** Create robust event testing patterns for connection tests
+
+- [ ] Connection state event patterns (open, close, error)
+- [ ] Message event patterns (message, frame for different payload types)
+- [ ] Control frame event patterns (ping, pong, close)
+- [ ] Protocol compliance error event patterns
+- [ ] Size limit violation event patterns
+
+#### ⏳ Remaining Work
+
+##### 3.2.B: Fundamental Functionality Validation
+**Goal:** Fix core functionality tests for 85%+ pass rate
+
+- [ ] **3.2.B.1:** Connection establishment and basic operations
+  - Fix basic connection lifecycle tests
+  - Stabilize message sending functionality (send, sendUTF, sendBytes)
+
+- [ ] **3.2.B.2:** Frame processing pipeline
+  - Fix frame reception and processing
+  - Stabilize fragmented message handling
+
+##### 3.2.C: Error Handling and Edge Cases
+**Goal:** Robust error handling and protocol compliance
+
+- [ ] **3.2.C.1:** Protocol violation detection
+  - Fix reserved opcode detection tests
+  - Fix RSV bit violation tests
+  - Fix unexpected continuation frame tests
+  - Stabilize control frame size validation
+
+- [ ] **3.2.C.2:** Size limit enforcement
+  - Fix maxReceivedFrameSize enforcement tests
+  - Fix maxReceivedMessageSize enforcement tests
+
+- [ ] **3.2.C.3:** Resource management and cleanup
+  - Fix timer cleanup verification
+  - Fix frame queue management tests
+  - Validate proper resource cleanup
+
+##### 3.2.D: Configuration and Behavioral Options
+**Goal:** Ensure all configuration options work correctly
+
+- [ ] **3.2.D.1:** Assembly and fragmentation configuration
+  - Fix assembleFragments: false tests
+  - Validate frame event emission vs message event emission
+
+- [ ] **3.2.D.2:** Keepalive and network configuration
+  - Fix native keepalive configuration tests
+  - Validate configuration error messages
+
+#### Test Categories
+
+**Passing (58 tests):**
+- ✅ Connection lifecycle (establishment, termination, state transitions)
+- ✅ Message sending (text, binary, UTF-8 validation)
+- ✅ Basic frame reception
+- ✅ Configuration options (most)
+- ✅ Socket event handling
+
+**Skipped (19 tests):**
+- ⏳ Protocol violation detection (reserved opcodes, RSV bits)
+- ⏳ Size limit enforcement (frame and message size limits)
+- ⏳ Fragmented message assembly edge cases
+- ⏳ Control frame size validation
+- ⏳ Frame assembly configuration modes
+
+**Success Criteria:**
+- 95%+ test success rate (73/77 tests passing)
+- 85%+ code coverage
+- All skipped tests either passing or documented as intentional
+- Consistent test results across multiple runs
+
+---
+
+### ❌ Phase 3.3: WebSocketServer - COMPLETE (But Needs Enhancement)
+
+**Status:** Basic testing complete, comprehensive testing needed
+**Tests:** 35 total (34 passing, 1 skipped)
+**Coverage:** 92.36% statements, 90.74% branches
+
+**Current Coverage:**
+- ✅ Basic server lifecycle
+- ✅ Request handling
+- ✅ Connection management
+- ✅ Protocol negotiation
+- ⚠️ Limited security testing
+- ⚠️ Limited error scenario coverage
+
+**Enhancement Needed:**
+- More comprehensive security tests (origin validation, malicious requests)
+- More error handling scenarios
+- Connection limit enforcement tests
+- Concurrent connection stress tests
+
+---
+
+### ❌ Phase 3.4: WebSocketClient - COMPLETE (But Needs Enhancement)
+
+**Status:** Basic testing complete, comprehensive testing needed
+**Tests:** 47 total (45 passing, 2 skipped)
+**Coverage:** 88.31% statements, 72.80% branches
+
+**Current Coverage:**
+- ✅ Connection establishment
+- ✅ Protocol negotiation
+- ✅ Message sending
+- ✅ Error handling
+- ⚠️ Limited reconnection testing
+- ⚠️ Limited timeout scenario coverage
+
+**Enhancement Needed:**
+- More reconnection and retry logic tests
+- More timeout and failure scenario tests
+- Authentication workflow tests
+- TLS/SSL connection tests
+
+---
+
+### ❌ Phase 3.5: WebSocketRequest - CRITICAL GAP
+
+**Status:** 10% Complete
+**Tests:** 2 basic tests only
+**Coverage:** 29.63% statements, 73.33% branches
+**Priority:** HIGH
+**Estimated Effort:** 1 week
+
+**Major Gaps:**
+- ❌ Request parsing and validation
+- ❌ Protocol negotiation logic
+- ❌ Origin validation
+- ❌ Cookie handling
+- ❌ Extension parsing
+- ❌ Accept/reject workflow testing
+- ❌ Error scenarios
+
+**Required Tests (~40 tests needed):**
 
 ```javascript
-// vitest.config.js
-import { defineConfig } from 'vitest/config';
+describe('WebSocketRequest', () => {
+  describe('Request Parsing', () => {
+    // Test HTTP header parsing
+    // Test WebSocket key validation
+    // Test protocol header parsing
+    // Test extension header parsing
+  });
 
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'test/',
-        'example/',
-        'docs/',
-        'lib/version.js'
-      ],
-      thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80
-        }
-      }
-    }
-  }
-});
-```
+  describe('Protocol Negotiation', () => {
+    // Test protocol selection
+    // Test protocol mismatch handling
+    // Test case-sensitive protocol matching
+  });
 
-#### Step 3: Update Package.json Scripts
+  describe('Origin Validation', () => {
+    // Test origin checking
+    // Test origin rejection
+    // Test allowedOrigins configuration
+  });
 
-```json
-{
-  "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:coverage:watch": "vitest --coverage",
-    "test:autobahn": "cd test/autobahn && ./run-wstest.js"
-  }
-}
-```
+  describe('Cookie Handling', () => {
+    // Test cookie parsing
+    // Test cookie validation
+    // Test setCookie functionality
+  });
 
-#### Step 4: Migrate Test Syntax
+  describe('Accept/Reject', () => {
+    // Test successful accept
+    // Test reject with various status codes
+    // Test multiple accept/reject prevention
+  });
 
-**Tape → Vitest Migration Patterns:**
-
-```javascript
-// BEFORE (tape)
-const test = require('tape');
-test('should do something', function(t) {
-  t.plan(2);
-  t.equal(actual, expected, 'should be equal');
-  t.ok(condition, 'should be truthy');
-  t.end();
-});
-
-// AFTER (vitest)
-import { describe, it, expect } from 'vitest';
-describe('Component Name', () => {
-  it('should do something', () => {
-    expect(actual).toBe(expected);
-    expect(condition).toBeTruthy();
+  describe('Error Scenarios', () => {
+    // Test invalid requests
+    // Test malformed headers
+    // Test protocol violations
   });
 });
 ```
 
-## Phase 2: Test Suite Reorganization
+---
 
-### 2.1 New Directory Structure
+### ❌ Phase 3.6: utils.js - CRITICAL GAP
 
-```
-test/
-├── unit/                           # Unit tests (isolated components)
-│   ├── core/                      # Core WebSocket functionality
-│   │   ├── connection.test.js     # WebSocketConnection tests
-│   │   ├── server.test.js         # WebSocketServer tests
-│   │   ├── client.test.js         # WebSocketClient tests
-│   │   ├── request.test.js        # WebSocketRequest tests
-│   │   └── frame.test.js          # WebSocketFrame tests
-│   ├── routing/                   # Router and URL handling
-│   │   ├── router.test.js         # WebSocketRouter tests
-│   │   └── router-request.test.js # WebSocketRouterRequest tests
-│   ├── browser/                   # Browser compatibility
-│   │   ├── w3c-websocket.test.js  # W3CWebSocket tests
-│   │   └── browser-shim.test.js   # browser.js tests
-│   ├── utils/                     # Utility functions
-│   │   ├── utils.test.js          # utils.js tests
-│   │   └── deprecation.test.js    # Deprecation.js tests
-│   └── regressions/               # Bug regression tests
-│       └── historical.test.js     # Known bug regression tests
-├── integration/                   # Integration tests
-│   ├── client-server/             # Client-server integration
-│   │   ├── basic-connection.test.js
-│   │   ├── protocol-negotiation.test.js
-│   │   ├── message-exchange.test.js
-│   │   └── connection-lifecycle.test.js
-│   ├── routing/                   # Router integration tests
-│   │   ├── url-routing.test.js
-│   │   └── multi-protocol.test.js
-│   ├── error-handling/            # Error scenarios
-│   │   ├── malformed-frames.test.js
-│   │   ├── connection-errors.test.js
-│   │   └── protocol-violations.test.js
-│   └── performance/               # Performance tests
-│       ├── high-throughput.test.js
-│       ├── memory-usage.test.js
-│       └── concurrent-connections.test.js
-├── e2e/                          # End-to-end tests
-│   ├── browser/                  # Browser testing
-│   │   ├── w3c-compliance.test.js
-│   │   └── cross-browser.test.js
-│   ├── protocol/                 # Protocol compliance
-│   │   ├── rfc6455-compliance.test.js
-│   │   └── extension-support.test.js
-│   └── real-world/               # Real-world scenarios
-│       ├── chat-application.test.js
-│       └── streaming-data.test.js
-├── fixtures/                     # Test data and fixtures
-│   ├── messages/                 # Sample WebSocket messages
-│   ├── certificates/             # SSL/TLS certificates for testing
-│   └── payloads/                 # Various payload types
-├── helpers/                      # Test utilities
-│   ├── test-server.js           # Enhanced test server
-│   ├── mock-client.js           # Mock client for testing
-│   ├── message-generators.js    # Generate test messages
-│   └── assertions.js            # Custom assertions
-└── shared/                      # Shared test infrastructure
-    ├── setup.js                 # Global test setup
-    ├── teardown.js              # Global test teardown
-    └── config.js                # Test configuration
-```
+**Status:** 20% Complete
+**Tests:** 38 basic tests
+**Coverage:** 33.84% statements, 46.66% branches
+**Priority:** HIGH
+**Estimated Effort:** 3 days
 
-### 2.2 Test Categories and Organization
+**Major Gaps:**
+- ⚠️ BufferingLogger has basic tests only
+- ❌ Buffer utility functions need more coverage
+- ❌ Validation functions need edge case testing
+- ❌ Error scenarios not fully tested
 
-#### Unit Tests (Isolated Component Testing)
-
-**Core Components:**
-
-- WebSocketConnection (extensive testing needed)
-- WebSocketServer (server lifecycle, configuration)
-- WebSocketClient (client lifecycle, reconnection)
-- WebSocketRequest (request parsing, validation)
-- WebSocketFrame (frame parsing, serialization)
-
-**Supporting Components:**
-
-- WebSocketRouter (URL matching, protocol selection)
-- W3CWebSocket (browser API compatibility)
-- Utils (helper functions, buffer management)
-
-#### Integration Tests (Component Interaction)
-
-**Client-Server Communication:**
-
-- Connection establishment
-- Message exchange patterns
-- Protocol negotiation
-- Connection termination
-
-**Error Handling:**
-
-- Malformed frame handling
-- Protocol violations
-- Network failures
-- Resource exhaustion
-
-#### End-to-End Tests (Full System Testing)
-
-**Protocol Compliance:**
-
-- RFC 6455 compliance
-- Extension support
-- Subprotocol negotiation
-
-**Real-World Scenarios:**
-
-- High-throughput messaging
-- Long-lived connections
-- Concurrent client handling
-
-## Phase 3: Comprehensive Test Coverage Plan
-
-### 3.1 WebSocketConnection Tests (Priority: Critical)
-
-**Current Coverage: ~5% | Target Coverage: 90%+**
-
-#### Core Functionality Tests
+**Required Tests (~30 more tests needed):**
 
 ```javascript
-describe('WebSocketConnection', () => {
-  describe('Connection Lifecycle', () => {
-    it('should establish connection with valid handshake')
-    it('should reject invalid handshake')
-    it('should handle connection close gracefully')
-    it('should emit proper events during lifecycle')
-  })
+describe('utils', () => {
+  describe('BufferingLogger', () => {
+    // More comprehensive buffer management tests
+    // Overflow scenarios
+    // Dump functionality edge cases
+  });
 
-  describe('Message Handling', () => {
-    it('should send text messages correctly')
-    it('should send binary messages correctly')
-    it('should handle fragmented messages')
-    it('should respect message size limits')
-    it('should handle control frames (ping/pong/close)')
-  })
+  describe('Buffer Utilities', () => {
+    // bufferAllocUnsafe edge cases
+    // bufferFromString with various encodings
+    // Buffer comparison utilities
+  });
 
-  describe('Frame Processing', () => {
-    it('should parse valid frames correctly')
-    it('should reject malformed frames')
-    it('should handle frame masking/unmasking')
-    it('should process continuation frames')
-    it('should handle frame size edge cases')
-  })
-
-  describe('Error Handling', () => {
-    it('should handle protocol violations')
-    it('should handle buffer overflow scenarios')
-    it('should handle network errors gracefully')
-    it('should clean up resources on error')
-  })
-
-  describe('Configuration', () => {
-    it('should respect maxReceivedFrameSize')
-    it('should respect maxReceivedMessageSize')
-    it('should handle different assembleFragments settings')
-    it('should validate configuration parameters')
-  })
-})
+  describe('Validation Functions', () => {
+    // Input validation edge cases
+    // Error message validation
+    // Boundary condition testing
+  });
+});
 ```
 
-### 3.2 WebSocketServer Tests (Priority: Critical)
+---
 
-**Current Coverage: ~10% | Target Coverage: 90%+**
+### ❌ Phase 3.7: WebSocketRouterRequest - NOT STARTED
 
-#### Server Lifecycle Tests
+**Status:** 0% Complete
+**Tests:** 0 tests
+**Coverage:** 41.26% statements (inherited from router usage)
+**Priority:** MEDIUM
+**Estimated Effort:** 2 days
+
+**Required Tests (~20 tests needed):**
+- Router request initialization
+- Protocol matching logic
+- Request routing
+- Error handling
+
+---
+
+### ❌ Phase 3.8: W3CWebSocket - BASIC ONLY
+
+**Status:** Basic tests only
+**Tests:** 2 tests
+**Coverage:** 75.39% statements, 60.86% branches
+**Priority:** MEDIUM
+**Estimated Effort:** 3 days
+
+**Enhancement Needed:**
+- More comprehensive W3C API compliance tests
+- ReadyState transition testing
+- Browser compatibility scenarios
+- Event listener functionality
+
+---
+
+## ❌ Phase 4: Integration Testing - NOT STARTED
+
+**Status:** 0% Complete
+**Priority:** MEDIUM
+**Estimated Effort:** 2 weeks
+
+### 4.1 Client-Server Integration (Week 1)
+
+**Needed Tests (~30 tests):**
 
 ```javascript
-describe('WebSocketServer', () => {
-  describe('Server Lifecycle', () => {
-    it('should start server on specified port')
-    it('should stop server gracefully')
-    it('should handle server restart scenarios')
-    it('should manage active connections on shutdown')
-  })
-
-  describe('Request Handling', () => {
-    it('should handle valid WebSocket upgrade requests')
-    it('should reject invalid upgrade requests')
-    it('should support multiple protocols')
-    it('should handle origin validation')
-    it('should process custom headers')
-  })
-
-  describe('Connection Management', () => {
-    it('should track active connections')
-    it('should enforce connection limits')
-    it('should handle concurrent connections')
-    it('should clean up closed connections')
-  })
-
-  describe('Security', () => {
-    it('should validate origin headers')
-    it('should handle malicious requests')
-    it('should enforce rate limiting (if configured)')
-    it('should handle SSL/TLS connections')
-  })
-})
-```
-
-### 3.3 WebSocketClient Tests (Priority: High)
-
-**Current Coverage: ~15% | Target Coverage: 85%+**
-
-#### Client Connection Tests
-
-```javascript
-describe('WebSocketClient', () => {
+describe('Client-Server Integration', () => {
   describe('Connection Establishment', () => {
-    it('should connect to valid WebSocket server')
-    it('should handle connection failures')
-    it('should support connection timeouts')
-    it('should retry connections with backoff')
-  })
+    it('should establish end-to-end connection');
+    it('should negotiate protocols correctly');
+    it('should handle connection failures');
+  });
 
-  describe('Protocol Negotiation', () => {
-    it('should negotiate subprotocols correctly')
-    it('should handle protocol mismatch')
-    it('should send proper upgrade headers')
-    it('should validate server response')
-  })
+  describe('Message Exchange', () => {
+    it('should exchange text messages bidirectionally');
+    it('should exchange binary messages bidirectionally');
+    it('should handle large messages');
+    it('should handle rapid message sequences');
+  });
 
-  describe('Authentication', () => {
-    it('should support HTTP basic authentication')
-    it('should handle custom authentication headers')
-    it('should manage authentication failures')
-  })
-})
+  describe('Connection Lifecycle', () => {
+    it('should handle graceful close from client');
+    it('should handle graceful close from server');
+    it('should clean up resources properly');
+  });
+});
 ```
 
-### 3.4 WebSocketFrame Tests (Priority: High)
+### 4.2 Error Handling Integration (Week 2)
 
-**Current Coverage: ~30% | Target Coverage: 95%+**
-
-#### Frame Serialization/Parsing Tests
+**Needed Tests (~20 tests):**
 
 ```javascript
-describe('WebSocketFrame', () => {
-  describe('Frame Serialization', () => {
-    it('should serialize frames with various payload sizes')
-    it('should handle masking correctly')
-    it('should support all frame types (text, binary, control)')
-    it('should handle empty payloads')
-    it('should enforce frame size limits')
-  })
+describe('Error Handling Integration', () => {
+  describe('Network Errors', () => {
+    it('should handle connection interruption');
+    it('should handle partial frame transmission');
+    it('should handle timeout scenarios');
+  });
 
-  describe('Frame Parsing', () => {
-    it('should parse valid frames correctly')
-    it('should detect malformed frames')
-    it('should handle incomplete frame data')
-    it('should validate control frame constraints')
-  })
-
-  describe('Edge Cases', () => {
-    it('should handle maximum frame size (2^63)')
-    it('should handle zero-length payloads')
-    it('should handle reserved bits')
-    it('should handle reserved opcodes')
-  })
-})
+  describe('Protocol Violations', () => {
+    it('should reject malformed frames');
+    it('should handle invalid message sequences');
+    it('should enforce control frame constraints');
+  });
+});
 ```
 
-### 3.5 Browser Compatibility Tests (Priority: Medium)
+### 4.3 Performance Testing
 
-**Current Coverage: ~20% | Target Coverage: 80%+**
-
-#### W3C WebSocket API Tests
+**Needed Tests (~15 tests):**
 
 ```javascript
-describe('W3CWebSocket', () => {
-  describe('API Compliance', () => {
-    it('should implement W3C WebSocket API')
-    it('should handle readyState transitions')
-    it('should support event listeners')
-    it('should handle close codes correctly')
-  })
-
-  describe('Browser Compatibility', () => {
-    it('should work with different browser environments')
-    it('should handle browser-specific quirks')
-    it('should support both event handlers and addEventListener')
-  })
-})
-```
-
-### 3.6 Performance and Stress Tests (Priority: Medium)
-
-**Current Coverage: 0% | Target Coverage: 70%+**
-
-#### Performance Test Categories
-
-```javascript
-describe('Performance Tests', () => {
+describe('Performance Integration', () => {
   describe('Throughput', () => {
-    it('should handle high message throughput')
-    it('should maintain performance with large messages')
-    it('should efficiently process concurrent connections')
-  })
+    it('should handle high message rate');
+    it('should handle large messages efficiently');
+    it('should manage memory under load');
+  });
 
-  describe('Memory Management', () => {
-    it('should not leak memory during long operations')
-    it('should efficiently manage frame buffers')
-    it('should clean up resources properly')
-  })
-
-  describe('Resource Limits', () => {
-    it('should handle maximum connection limits')
-    it('should enforce message size limits')
-    it('should handle resource exhaustion gracefully')
-  })
-})
+  describe('Concurrent Connections', () => {
+    it('should handle multiple simultaneous connections');
+    it('should not leak memory with many connections');
+  });
+});
 ```
 
-## Phase 4: Advanced Testing Features
+**Directory Status:**
+```
+test/integration/
+├── client-server/     📁 Empty
+├── error-handling/    📁 Empty
+├── performance/       📁 Empty
+└── routing/          📁 Empty
+```
 
-### 4.1 Mock and Stub Infrastructure
+---
+
+## ❌ Phase 5: End-to-End Testing - NOT STARTED
+
+**Status:** 0% Complete
+**Priority:** MEDIUM
+**Estimated Effort:** 2 weeks
+
+### 5.1 Browser Compatibility (Week 1)
+
+**Needed Tests (~20 tests):**
 
 ```javascript
-// test/helpers/mocks.js
-export class MockWebSocketServer {
-  // Server mock for client testing
-}
+describe('Browser Compatibility', () => {
+  describe('W3C WebSocket API', () => {
+    it('should implement standard WebSocket interface');
+    it('should handle readyState correctly');
+    it('should support addEventListener and on* handlers');
+  });
 
-export class MockWebSocketClient {
-  // Client mock for server testing
-}
-
-export class MockHTTPServer {
-  // HTTP server mock for upgrade testing
-}
+  describe('Cross-Browser Scenarios', () => {
+    it('should work with different event patterns');
+    it('should handle browser-specific quirks');
+  });
+});
 ```
 
-### 4.2 Test Data Generation
+### 5.2 Protocol Compliance (Week 2)
+
+**Needed Tests (~15 tests):**
 
 ```javascript
-// test/helpers/generators.js
-export function generateWebSocketFrame(options) {
-  // Generate various frame types for testing
-}
-
-export function generateRandomPayload(size) {
-  // Generate payloads of various sizes
-}
-
-export function generateMalformedFrame(type) {
-  // Generate specific malformed frames
-}
+describe('Protocol Compliance E2E', () => {
+  describe('RFC 6455 Compliance', () => {
+    it('should pass Autobahn test suite core tests');
+    it('should handle all frame types correctly');
+    it('should enforce protocol rules');
+  });
+});
 ```
 
-### 4.3 Custom Assertions
-
-```javascript
-// test/helpers/assertions.js
-export function expectValidWebSocketFrame(frame) {
-  // Custom frame validation
-}
-
-export function expectConnectionState(connection, state) {
-  // Connection state validation
-}
-
-export function expectProtocolCompliance(interaction) {
-  // Protocol compliance validation
-}
+**Directory Status:**
+```
+test/e2e/
+├── browser/          📁 Empty
+├── protocol/         📁 Empty
+└── real-world/       📁 Empty
 ```
 
-## Phase 5: CI/CD Integration
+---
 
-### 5.1 GitHub Actions Enhancement
+## ❌ Phase 6: CI/CD Optimization - NOT STARTED
 
-```yaml
-# .github/workflows/test-suite.yml
-name: Comprehensive Test Suite
-on: [push, pull_request]
+**Status:** Basic CI only
+**Priority:** LOW
+**Estimated Effort:** 3-4 days
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-    
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      
-      - name: Install dependencies
-        run: pnpm install
-      
-      - name: Run unit tests
-        run: pnpm test:coverage
-      
-      - name: Run integration tests
-        run: pnpm test:integration
-      
-      - name: Run Autobahn tests
-        run: pnpm test:autobahn
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-```
+### 6.1 Coverage Reporting
 
-### 5.2 Coverage Reporting
+**Needed:**
+- [ ] Codecov integration
+- [ ] PR coverage diff comments
+- [ ] Coverage badges in README
+- [ ] Coverage threshold enforcement
 
-- **Codecov Integration**: Automatic coverage reporting
-- **PR Coverage Comments**: Coverage diff on pull requests
-- **Coverage Badges**: Repository coverage status
-- **Coverage Gates**: Prevent coverage regression
+### 6.2 Performance Regression Detection
+
+**Needed:**
+- [ ] Benchmark baseline establishment
+- [ ] Performance test automation
+- [ ] Regression alerts
+- [ ] Historical performance tracking
+
+### 6.3 Multi-Version Testing
+
+**Needed:**
+- [ ] Node.js version matrix (16.x, 18.x, 20.x)
+- [ ] Parallel test execution in CI
+- [ ] Test result aggregation
+
+---
 
 ## Execution Plan
 
-This section outlines the discrete phases, tasks, and subtasks for implementing the test suite modernization, organized by their dependencies.
-
-### Phase 1: Foundation Setup (Prerequisites for all other work)
-
-**Objective**: Establish the modern testing infrastructure before any migration work begins.
-
-#### 1.1 Vitest Installation and Configuration
-
-**Dependencies**: None (starting point)
-**Tasks**:
-
-- [ ] **1.1.1** Update `package.json` with Vitest dependencies
-  - [ ] Install `vitest`, `@vitest/coverage-v8`, `@vitest/ui`
-  - [ ] Remove `tape` dependency (after migration complete)
-- [ ] **1.1.2** Create `vitest.config.js` configuration file
-  - [ ] Set up Node.js environment
-  - [ ] Configure coverage settings and thresholds
-  - [ ] Define test file patterns
-  - [ ] Set up global test configurations
-- [ ] **1.1.3** Update npm scripts in `package.json`
-  - [ ] Add `test:vitest` script (parallel with existing `test`)
-  - [ ] Add `test:watch` script
-  - [ ] Add `test:coverage` script
-  - [ ] Add `test:ui` script
-
-#### 1.2 Test Infrastructure Setup
-
-**Dependencies**: 1.1 (Vitest configuration must exist)
-**Tasks**:
-
-- [ ] **1.2.1** Create new test directory structure
-  - [ ] Create `test/unit/core/`, `test/unit/routing/`, `test/unit/browser/`, `test/unit/utils/` directories
-  - [ ] Create `test/integration/` subdirectories
-  - [ ] Create `test/e2e/` subdirectories
-  - [ ] Create `test/fixtures/`, `test/helpers/`, `test/shared/` directories
-- [ ] **1.2.2** Set up global test configuration
-  - [ ] Create `test/shared/setup.js` for global test setup
-  - [ ] Create `test/shared/teardown.js` for global test cleanup
-  - [ ] Create `test/shared/config.js` for test constants
-
-#### 1.3 Basic Vitest Validation
-
-**Dependencies**: 1.1, 1.2 (Infrastructure must be in place)
-**Tasks**:
-
-- [ ] **1.3.1** Create simple smoke test to validate Vitest setup
-- [ ] **1.3.2** Verify coverage reporting works
-- [ ] **1.3.3** Test CI/CD integration with basic test
-- [ ] **1.3.4** Validate test discovery and execution
-
-### Phase 2: Test Migration and Helper Infrastructure ⚠️ IN PROGRESS
-
-**Objective**: Migrate existing tests and create foundational testing utilities.
-
-#### 2.1 Existing Test Migration
-
-**Dependencies**: Phase 1 complete (Vitest infrastructure operational)
-**Tasks**:
-
-- [x] **2.1.1** Migrate `websocketFrame.js` tests
-  - [x] Convert tape syntax to Vitest syntax
-  - [x] Update imports and assertions
-  - [x] Verify test functionality matches original
-- [x] **2.1.2** Migrate `request.js` tests
-  - [x] Handle server setup/teardown in Vitest context
-  - [x] Convert async test patterns
-- [x] **2.1.3** Migrate `w3cwebsocket.js` tests
-- [x] **2.1.4** Migrate `regressions.js` tests
-- [x] **2.1.5** Migrate `dropBeforeAccept.js` tests
-- [x] **2.1.6** Validate all migrated tests pass consistently
-
-#### 2.2 Test Helper Infrastructure ✅ **COMPLETED**
-
-**Dependencies**: 2.1.1-2.1.5 (Need examples of test patterns before building helpers)
-**Tasks**:
-
-- [x] **2.2.1** Create enhanced test server helpers
-  - [x] Enhanced `test/helpers/test-server.mjs` with `TestServerManager` class
-  - [x] Server lifecycle management utilities
-  - [x] Configurable test server options (echo, broadcast, protocol testing)
-  - [x] Legacy API compatibility maintained
-- [x] **2.2.2** Build mock infrastructure
-  - [x] `MockWebSocketServer` class in `test/helpers/mocks.mjs`
-  - [x] `MockWebSocketClient` class with connection simulation
-  - [x] `MockWebSocketConnection` class for connection testing
-  - [x] `MockHTTPServer` and `MockSocket` classes for low-level testing
-- [x] **2.2.3** Develop test data generators
-  - [x] `generateWebSocketFrame()` for various frame types in `test/helpers/generators.mjs`
-  - [x] `generateRandomPayload()` with text, binary, JSON support
-  - [x] `generateMalformedFrame()` for edge case testing
-  - [x] `generateProtocolViolation()` for protocol compliance testing
-  - [x] Performance test payload generators
-- [x] **2.2.4** Create custom assertion library
-  - [x] `expectValidWebSocketFrame()` frame validation in `test/helpers/assertions.mjs`
-  - [x] `expectConnectionState()` connection state validation
-  - [x] `expectProtocolCompliance()` RFC 6455 compliance checking
-  - [x] `expectHandshakeHeaders()` header validation
-  - [x] Performance and memory leak assertions
-
-#### 2.3 Parallel Test Execution Setup ⚠️ **DEFERRED**
-
-**Status**: Deferred to future phases for simplicity and stability
-
-**Decision**: Parallel test execution adds complexity with WebSocket server port management and test isolation. For the current modernization phase, single-threaded test execution provides sufficient performance while ensuring test reliability and easier debugging.
-
-**Future Considerations**:
-
-- Port allocation management
-- Test isolation improvements  
-- Network resource conflict resolution
-- Performance optimization needs assessment
-
-### Phase 3: Core Component Test Expansion
-
-**Objective**: Dramatically expand test coverage for critical WebSocket components.
-
-#### 3.1 WebSocketFrame Comprehensive Testing ✅ **COMPLETED**
-
-**Dependencies**: Phase 2 complete (Test helpers and infrastructure ready)
-**Tasks**:
-
-- [x] **3.1.1** Frame serialization tests
-  - [x] All payload sizes (0, small, 16-bit, 64-bit)
-  - [x] All frame types (text, binary, close, ping, pong)
-  - [x] Masking/unmasking scenarios
-  - [x] Control frame validation
-- [x] **3.1.2** Frame parsing tests
-  - [x] Valid frame parsing across all types
-  - [x] Malformed frame detection and handling
-  - [x] Incomplete frame data handling
-  - [x] Reserved bit and opcode handling
-- [x] **3.1.3** Edge case testing
-  - [x] Maximum frame sizes
-  - [x] Zero-length payloads
-  - [x] Buffer boundary conditions
-
-**Achievements**:
-- **Created comprehensive test suite**: 43 tests covering all aspects of WebSocketFrame functionality
-- **Achieved 83.87% statement coverage and 96.87% branch coverage** for WebSocketFrame.js (up from ~30%)
-- **Implemented robust frame serialization tests**: All payload sizes, frame types, masking scenarios
-- **Added comprehensive frame parsing tests**: Valid frames, malformed detection, incomplete handling
-- **Extensive edge case coverage**: Reserved bits, opcodes, buffer boundaries, performance tests
-- **Test file created**: `test/unit/core/frame.test.mjs` (43 comprehensive tests)
-- **Legacy compatibility maintained**: `test/unit/core/frame-legacy-compat.test.mjs` (3 original tests)
-
-#### 3.2 WebSocketConnection Comprehensive Testing ⚠️ **IN PROGRESS - SYSTEMATIC STABILIZATION**
-
-**Dependencies**: 3.1 complete (Frame handling must be solid for connection tests)
-
-**Current Status**: 
-- **Initial comprehensive test suite created**: 77 tests covering all major functionality
-- **Current test success rate**: 58/77 passing (75%) - 0 tests failing, 19 tests skipped
-- **Key achievement**: Successfully implemented correct WebSocketConnection usage pattern
-- **Resolved Issue**: WebSocketConnection requires caller to invoke `_addSocketEventListeners()` after construction
-- **Result**: All infrastructure issues resolved, tests now work correctly with existing implementation
-
-**Systematic Approach for Test Stabilization**:
-
-##### **3.2.A Test Infrastructure Foundation (PRIORITY: CRITICAL)**
-
-**Objective**: Establish rock-solid test infrastructure before fixing specific tests
-
-- [x] **3.2.A.1** Mock Infrastructure Stabilization ✅ **COMPLETED**
-  - [x] **Task**: Audit MockSocket implementation completeness
-    - [x] Verified all required WebSocket socket methods are properly mocked
-    - [x] Confirmed `setNoDelay`, `setKeepAlive`, `removeAllListeners` method implementations work
-    - [x] **DISCOVERED**: WebSocketConnection constructor has `_addSocketEventListeners()` method but doesn't call it
-    - [x] **ANALYSIS**: This is by design - external callers must set up socket listeners
-    - [x] **SOLUTION**: Test infrastructure must call `connection._addSocketEventListeners()` after construction
-  - [x] **Task**: Document WebSocketConnection usage pattern
-    - [x] Constructor creates connection object but doesn't start listening
-    - [x] Caller responsible for setting up socket event listeners via `_addSocketEventListeners()`
-    - [x] Tests must follow this pattern: create connection, then call `_addSocketEventListeners()`
-  - [x] **Task**: Create standardized test utilities for connection testing ✅ **COMPLETED**
-    - [x] Enhanced async waiting patterns: `waitForProcessing()`, `waitForCallback()`, `waitForEvent()`, `waitForCondition()`
-    - [x] Fixed fragmented message tests using improved event-based waiting
-    - [x] Implemented proper cleanup patterns for test isolation
-    - [x] **Result**: Fragmented text and binary message tests now pass
-  - [x] **Task**: Improve test infrastructure reliability ✅ **COMPLETED**
-    - [x] Enhanced `afterEach()` cleanup with mock clearing and listener removal
-    - [x] Better spy management and state isolation between tests
-    - [x] **Achievement**: 58/77 tests passing (75%) with 0 failures, 19 skipped
-
-- [x] **3.2.A.2** Frame Generation and Processing Foundation ✅ **COMPLETED**
-  - [x] **Task**: Enhance frame generation for realistic test scenarios
-    - [x] Fix frame generation to produce WebSocket-compliant frames with full RFC 6455 validation
-    - [x] Ensure proper masking/unmasking for client/server scenarios via `generateClientFrame()` and `generateServerFrame()`
-    - [x] Add comprehensive frame validation before injection with `validateGeneratedFrame()`
-  - [x] **Task**: Establish reliable frame processing test patterns
-    - [x] Create consistent patterns for testing frame reception via `injectFrameIntoConnection()`
-    - [x] Implement proper async coordination for multi-frame scenarios with enhanced timing utilities
-    - [x] Add frame processing pipeline timing synchronization with `waitForFrameProcessing()` and `FrameProcessor` class
-
-**Phase 3.2.A.2 Achievements**:
-- **Enhanced Frame Generation**: Created comprehensive WebSocket-compliant frame generation with full RFC 6455 validation system
-- **Frame Validation Pipeline**: Added `validateGeneratedFrame()` function ensuring all frames meet protocol requirements
-- **Client/Server Conventions**: Implemented `generateClientFrame()` (masked) and `generateServerFrame()` (unmasked) helpers
-- **Advanced Processing Utilities**: Created `frame-processing-utils.mjs` with `FrameProcessor`, `WebSocketTestPatterns`, and `AdvancedFrameProcessing` classes
-- **Reliable Frame Injection**: Implemented `injectFrameIntoConnection()` with chunked transmission and timing control
-- **Enhanced Async Coordination**: Improved `waitForFrameProcessing()` with proper WebSocket processing pipeline timing
-- **Test Pattern Library**: Created reusable patterns for text/binary messages, fragmented messages, ping-pong, protocol violations
-- **Infrastructure Files**:
-  - Enhanced `test/helpers/generators.mjs` (+200 lines): Frame validation, injection utilities, client/server helpers
-  - New `test/helpers/frame-processing-utils.mjs` (+500 lines): Advanced test patterns and processing coordination
-  - Documentation: `PHASE_3_2_A_2_COMPLETION_SUMMARY.md` with detailed implementation guide
-
-**Ready for Phase 3.2.B**: Enhanced frame generation and processing foundation provides reliable infrastructure for systematic test improvement and achieving 95%+ test success rate.
-
-- [x] **3.2.A.3** Event System Testing Architecture ✅ **PHASE 3.2.A.3.1 COMPLETED**
-  - [x] **3.2.A.3.1** Enhanced Event Capture and Verification Systems ✅ **COMPLETED**
-    - [x] **Subtask**: Expand existing `captureEvents()` utility in `test-utils.mjs`
-      - [x] Add event filtering and pattern matching
-      - [x] Implement event sequence validation (e.g., connection lifecycle events must occur in order)
-      - [x] Add event payload deep comparison utilities
-      - [x] Create event timing verification (ensure events occur within expected timeframes)
-    - [x] **Subtask**: Create specialized event assertion functions in `assertions.mjs`
-      - [x] `expectEventSequenceAsync(emitter, expectedSequence, timeout)` - validate event order
-      - [x] `expectEventWithPayload(emitter, eventName, expectedPayload, timeout)` - deep payload validation
-      - [x] `expectEventTiming(emitter, eventName, minTime, maxTime)` - timing constraints
-      - [x] `expectNoEvent(emitter, eventName, timeout)` - verify certain events don't occur
-      - [x] `expectWebSocketConnectionStateTransition()` - WebSocket-specific state transition validation
-      - [x] `expectWebSocketMessageEvent()` - Message event validation
-      - [x] `expectWebSocketFrameEvent()` - Frame event validation  
-      - [x] `expectWebSocketProtocolError()` - Protocol error validation
-    - [x] **Subtask**: Enhance `waitForEvent()` utility with advanced patterns
-      - [x] Add conditional event waiting (wait for event with specific payload conditions)
-      - [x] Implement multi-event coordination (wait for multiple events in any order)
-      - [x] Add event history tracking for debugging failed tests
-      - [x] Create event race condition detection utilities
-      - [x] `waitForEventWithPayload()` - Payload-specific event waiting
-      - [x] `waitForEventCondition()` - Conditional event waiting
-      - [x] `waitForMultipleEvents()` - Multi-event coordination
-      - [x] `waitForEventSequence()` - Event sequence validation
-
-**Phase 3.2.A.3.1 Achievements**:
-- **Enhanced Event Infrastructure**: Comprehensive event testing capabilities for WebSocket scenarios
-- **Advanced Event Capture**: `captureEvents()` with filtering, sequence validation, and high-resolution timing
-- **Specialized Assertions**: 8 new WebSocket-specific event assertion functions
-- **Advanced Event Coordination**: Multi-event patterns, conditional waiting, and sequence validation
-- **Comprehensive Testing**: 12-test validation suite demonstrating all new functionality
-- **Backward Compatibility**: All existing tests (161 tests) continue to pass
-- **Infrastructure Files**:
-  - Enhanced `test/helpers/test-utils.mjs` (+200 lines): Advanced event capture and waiting utilities
-  - Enhanced `test/helpers/assertions.mjs` (+400 lines): WebSocket-specific event assertions
-  - New `test/unit/helpers/event-infrastructure.test.mjs` (12 comprehensive tests): Validation of event infrastructure
-
-**Ready for Phase 3.2.A.3.2**: Event testing infrastructure provides robust foundation for WebSocket-specific event patterns and connection test stabilization.
-
-  - [ ] **3.2.A.3.2** WebSocket-Specific Event Testing Patterns
-    - [ ] **Subtask**: Create connection event testing patterns for `connection.test.mjs`
-      - [ ] **Connection State Events**: `open`, `close`, `error` event patterns
-        - [ ] Standardized setup for testing state transition events
-        - [ ] Validation patterns for event payload correctness
-        - [ ] Error event categorization and validation patterns
-      - [ ] **Message Events**: `message`, `frame` event patterns  
-        - [ ] Message event validation for different payload types (text, binary, JSON)
-        - [ ] Frame event validation when `assembleFragments: false`
-        - [ ] Fragmented message assembly event sequence testing
-      - [ ] **Control Frame Events**: `ping`, `pong`, close frame event patterns
-        - [ ] Ping-pong event coordination testing
-        - [ ] Close handshake event sequence validation
-        - [ ] Control frame payload validation patterns
-    - [ ] **Subtask**: Protocol compliance event testing patterns
-      - [ ] **Error Event Testing**: Protocol violation error event patterns
-        - [ ] Reserved opcode violation event testing
-        - [ ] RSV bit violation event testing  
-        - [ ] Control frame size violation event testing
-        - [ ] Invalid UTF-8 error event testing
-      - [ ] **Size Limit Events**: Frame and message size limit enforcement events
-        - [ ] `maxReceivedFrameSize` violation event testing
-        - [ ] `maxReceivedMessageSize` violation event testing
-        - [ ] Size limit error payload validation
-  - [x] **3.2.A.3.3** Connection Lifecycle Testing Standards **✅ COMPLETED**
-    - [x] **Subtask**: Define connection state transition event patterns
-      - [x] **State Transition Map**: Document all valid state transitions and their events
-        - [x] `connecting` → `open` → `ending` → `closed` lifecycle
-        - [x] Direct `open` → `closed` transitions (via `drop()`)
-        - [x] Error state transitions from any state to `closed`
-        - [x] Event emission requirements for each transition
-      - [x] **State Validation Utilities**: Create helpers for connection state testing
-        - [x] `createConnectionStateManager()` with history tracking
-        - [x] `waitForStateTransition(fromState, toState, timeout)` utility
-        - [x] `validateStateTransitionSequence(transitions)` comprehensive validator
-    - [x] **Subtask**: Create reliable state change triggering methods
-      - [x] **Connection Establishment Triggers**: Standardized connection setup patterns
-        - [x] Mock socket connection simulation patterns
-        - [x] Handshake completion simulation
-        - [x] Connection ready state triggers with protocol negotiation
-      - [x] **Connection Termination Triggers**: Standardized connection teardown patterns
-        - [x] Graceful close initiation patterns (`close()` with socket simulation)
-        - [x] Immediate drop patterns (`drop()`)
-        - [x] Error-triggered close patterns (socket errors, network disconnection)
-      - [x] **Error Condition Triggers**: Standardized error injection patterns
-        - [x] Network error simulation via MockSocket
-        - [x] Connection failure simulation
-        - [x] Error-to-close event sequence validation
-    - [x] **Subtask**: Resource cleanup validation patterns
-      - [x] **Complete Cleanup Validation**: Verify state, connections, and event emission
-      - [x] **Event Listener Cleanup**: Test manual listener removal
-      - [x] **Memory Leak Detection**: Multi-cycle connection testing
-    - [x] **Subtask**: Concurrent connection handling patterns
-      - [x] **Multi-Connection Lifecycle Testing**: Concurrent state transitions
-      - [x] **Concurrent Resource Cleanup**: Parallel cleanup validation
-      - [x] **Race Condition Testing**: Random delay concurrent operations
-    
-    **🚀 ACHIEVEMENTS:**
-    - **19 passing tests** with comprehensive lifecycle coverage
-    - **Connection state machine** fully mapped and tested
-    - **Resource cleanup validation** with memory leak detection
-    - **Concurrent connection patterns** for stress testing
-    - **Complete integration** with existing test infrastructure
-  - [ ] **3.2.A.3.4** Advanced Event Coordination and Synchronization
-    - [ ] **Subtask**: Enhance async event coordination in connection tests
-      - [ ] **Multi-Event Orchestration**: Coordinate complex event sequences
-        - [ ] Frame injection → processing → event emission coordination
-        - [ ] Message sending → socket write → acknowledgment coordination  
-        - [ ] Error triggering → error handling → cleanup coordination
-      - [ ] **Timing-Sensitive Event Testing**: Handle WebSocket async processing timing
-        - [ ] Enhance existing `waitForProcessing()` with event-specific timing
-        - [ ] Add `waitForEventProcessing(connection, eventType, timeout)` utility
-        - [ ] Create `synchronizeFrameProcessing(connection, frames)` for multi-frame scenarios
-    - [ ] **Subtask**: Create event-based test debugging and diagnostics
-      - [ ] **Event History Tracking**: Comprehensive event logging for test debugging
-        - [ ] Add event history capture to all connection tests
-        - [ ] Create event timeline visualization for debugging failed tests
-        - [ ] Implement event diff comparison for expected vs actual sequences
-      - [ ] **Test Isolation and Cleanup**: Ensure proper event listener cleanup
-        - [ ] Enhance `afterEach()` cleanup with comprehensive event listener removal
-        - [ ] Add event listener leak detection for connection tests
-        - [ ] Create event state reset utilities for test isolation
-  - [ ] **3.2.A.3.5** Integration with Existing Test Infrastructure
-    - [ ] **Subtask**: Integrate event testing patterns with existing helpers
-      - [ ] **MockSocket Integration**: Enhance MockSocket with event-aware capabilities
-        - [ ] Add event emission tracking to MockSocket
-        - [ ] Create MockSocket event injection patterns
-        - [ ] Enhance MockSocket state simulation with proper event sequences
-      - [ ] **Frame Processing Integration**: Integrate with `frame-processing-utils.mjs`
-        - [ ] Add event coordination to `FrameProcessor` class
-        - [ ] Enhance `injectFrameIntoConnection()` with event validation
-        - [ ] Create event-aware frame sequence testing patterns
-    - [ ] **Subtask**: Update connection test suite with new event patterns
-      - [ ] **Phase 1**: Apply event testing patterns to passing tests (58/77)
-        - [ ] Enhance message sending/receiving tests with proper event validation
-        - [ ] Add event assertions to connection lifecycle tests
-        - [ ] Improve frame processing tests with event coordination
-      - [ ] **Phase 2**: Fix skipped tests (19/77) using new event infrastructure
-        - [ ] Apply robust event patterns to currently skipped protocol violation tests
-        - [ ] Use event coordination to fix fragmented message assembly tests
-        - [ ] Implement event-based error detection for size limit tests
-
-##### **3.2.B Fundamental Functionality Validation (PRIORITY: HIGH)**
-
-**Objective**: Fix core functionality tests to establish reliable baseline
-
-- [ ] **3.2.B.1** Connection Establishment and Basic Operations
-  - [ ] **Task**: Fix basic connection lifecycle tests
-    - **Issues**: Connection initialization, socket listener setup, basic state management
-    - **Approach**: Start with simplest connection tests, verify MockSocket interactions
-    - **Target**: Get basic connection creation and teardown working consistently
-  
-  - [ ] **Task**: Stabilize message sending functionality
-    - **Issues**: `send()`, `sendUTF()`, `sendBytes()` methods not triggering socket.write
-    - **Root Cause Analysis**: Connection may not be in correct state, or socket mocking incomplete
-    - **Approach**: Debug connection state requirements for message sending
-    - **Target**: Basic message send operations should trigger expected socket writes
-
-- [ ] **3.2.B.2** Frame Processing Pipeline
-  - [ ] **Task**: Fix frame reception and processing
-    - **Issues**: Frame events not being emitted, assembleFragments not working correctly
-    - **Approach**: Debug frame processing pipeline step by step
-    - **Key Areas**: Frame parsing, event emission, message assembly
-    - **Target**: Basic frame reception should trigger appropriate events
-
-  - [ ] **Task**: Stabilize fragmented message handling
-    - **Issues**: Message fragmentation and assembly not working as expected
-    - **Approach**: Test individual frame processing before multi-frame scenarios
-    - **Target**: Fragmented messages should assemble correctly
-
-##### **3.2.C Error Handling and Edge Cases (PRIORITY: MEDIUM)**
-
-**Objective**: Ensure robust error handling and protocol compliance
-
-- [ ] **3.2.C.1** Protocol Violation Detection
-  - [ ] **Task**: Fix protocol violation detection tests
-    - **Issues**: Expected errors not being triggered for protocol violations
-    - **Areas**: Reserved opcodes, RSV bits, unexpected continuation frames
-    - **Approach**: Verify frame parsing error detection logic
-    - **Target**: Protocol violations should trigger expected error responses
-
-  - [ ] **Task**: Stabilize control frame validation
-    - **Issues**: Control frame size limits not being enforced
-    - **Approach**: Debug control frame processing and validation
-    - **Target**: Oversized control frames should be rejected
-
-- [ ] **3.2.C.2** Size Limit Enforcement
-  - [ ] **Task**: Fix frame and message size limit enforcement
-    - **Issues**: `maxReceivedFrameSize` and `maxReceivedMessageSize` not being enforced
-    - **Approach**: Debug size checking logic in frame processing
-    - **Target**: Size limits should be properly enforced with appropriate errors
-
-- [ ] **3.2.C.3** Resource Management and Cleanup
-  - [ ] **Task**: Fix resource cleanup and timer management
-    - **Issues**: Timer cleanup not being detected, frame queue not being managed
-    - **Approach**: Debug cleanup logic in connection close scenarios
-    - **Target**: Proper resource cleanup should be verifiable in tests
-
-##### **3.2.D Configuration and Behavioral Options (PRIORITY: LOW)**
-
-**Objective**: Ensure all configuration options work correctly
-
-- [ ] **3.2.D.1** Assembly and Fragmentation Configuration
-  - [ ] **Task**: Fix `assembleFragments` configuration testing
-    - **Issues**: Frame events not being emitted when `assembleFragments: false`
-    - **Approach**: Debug frame processing logic for different assembly modes
-    - **Target**: Configuration should control frame vs message emission
-
-- [ ] **3.2.D.2** Keepalive and Network Configuration
-  - [ ] **Task**: Fix native keepalive configuration validation
-    - **Issues**: Expected error messages not matching actual errors
-    - **Approach**: Debug configuration validation logic
-    - **Target**: Configuration validation should produce expected error messages
-
-##### **3.2.E Systematic Test Execution Strategy**
-
-**Execution Approach**:
-
-1. **Week 1: Infrastructure Foundation (3.2.A)**
-   - Focus exclusively on mock infrastructure and test utilities
-   - Goal: Establish reliable testing foundation
-   - Success Metric: Basic connection creation and simple operations work
-
-2. **Week 2: Core Functionality (3.2.B.1)**
-   - Fix basic connection lifecycle and message sending
-   - Goal: Get fundamental operations working
-   - Success Metric: 50% test success rate (basic functionality)
-
-3. **Week 3: Frame Processing (3.2.B.2)**
-   - Fix frame reception and processing pipeline
-   - Goal: Frame handling and message assembly working
-   - Success Metric: 70% test success rate
-
-4. **Week 4: Error Handling (3.2.C)**
-   - Fix protocol violation and error detection
-   - Goal: Robust error handling and edge cases
-   - Success Metric: 85% test success rate
-
-5. **Week 5: Configuration and Polish (3.2.D)**
-   - Fix configuration options and remaining issues
-   - Goal: Complete test coverage with high reliability
-   - Success Metric: 95%+ test success rate
-
-**Risk Mitigation**:
-- **Daily test runs**: Monitor progress and catch regressions early
-- **Incremental approach**: Fix one category at a time to avoid introducing new issues
-- **Documentation**: Record discovered issues and solutions for future reference
-- **Rollback capability**: Keep working versions as we make changes
-
-**Success Metrics for Phase 3.2 Completion**:
-- **Test Success Rate**: 95%+ (73/77 tests passing)
-- **Mock Infrastructure**: Complete and reliable socket simulation
-- **Frame Processing**: All frame types and scenarios working correctly
-- **Error Handling**: Robust protocol compliance and error detection
-- **Configuration**: All config options properly tested and working
-- **Test Reliability**: Consistent results across multiple runs
-- **Documentation**: Clear patterns established for future connection testing
-
-**Current Achievements**:
-- **Comprehensive test structure**: 77 tests covering all major functionality areas
-- **Advanced test infrastructure**: Sophisticated mocking and frame generation
-- **Real-world scenarios**: Complex multi-frame and error handling test cases
-- **Foundation established**: Solid base for systematic improvement and stabilization
-
-## MockSocket Implementation Analysis
-
-### Overview
-
-The MockSocket implementation serves as a critical foundation for WebSocket connection testing by simulating TCP socket behavior without requiring actual network connections. It enables isolated unit testing of WebSocket functionality by providing a controllable, predictable socket interface.
-
-### MockSocket Structure and Design
-
-#### Core Components
-
-**1. MockSocket Class** (`/workspace/test/helpers/mocks.mjs:258-354`)
-- **Purpose**: Simulates Node.js `net.Socket` interface for WebSocket connection testing
-- **Inheritance**: Extends `EventEmitter` to provide event-driven socket behavior
-- **State Management**: Tracks `readable`, `writable`, `destroyed` states
-- **Data Simulation**: Captures written data and allows controlled data injection
-
-**Key Features**:
-- **Write Operation Simulation**: Captures all data written via `write()` method in `writtenData` array
-- **Event Emission**: Supports standard socket events (`data`, `error`, `end`, `close`, `drain`)
-- **State Tracking**: Maintains realistic socket state transitions
-- **Configuration Options**: Supports socket options like `setNoDelay()`, `setKeepAlive()`
-- **Data Injection**: `simulateData()`, `simulateError()`, `simulateDrain()` for controlled testing
-
-#### Supporting Mock Classes
-
-**2. MockWebSocketConnection Class** (`/workspace/test/helpers/mocks.mjs:105-192`)
-- **Purpose**: High-level WebSocket connection simulation for integration testing
-- **Features**: Message sending, frame tracking, connection state management
-- **Usage**: Primarily for server-side connection testing and multi-connection scenarios
-
-**3. MockWebSocketServer Class** (`/workspace/test/helpers/mocks.mjs:4-51`)
-- **Purpose**: Server-side WebSocket functionality simulation
-- **Features**: Connection management, broadcasting, lifecycle control
-- **Integration**: Works with MockWebSocketConnection for complex server scenarios
-
-**4. MockWebSocketClient Class** (`/workspace/test/helpers/mocks.mjs:53-103`)
-- **Purpose**: Client-side WebSocket behavior simulation
-- **Features**: Connection establishment, protocol negotiation, message handling
-- **State Management**: Implements W3C WebSocket readyState transitions
-
-**5. MockHTTPServer Class** (`/workspace/test/helpers/mocks.mjs:194-256`)
-- **Purpose**: HTTP server simulation for WebSocket upgrade testing
-- **Features**: Request/upgrade event simulation, connection management
-- **Integration**: Supports WebSocket handshake testing scenarios
-
-### MockSocket Usage Patterns in Test Suite
-
-#### Primary Usage Context
-
-The MockSocket is primarily used in **WebSocketConnection comprehensive testing** (`/workspace/test/unit/core/connection.test.mjs`) where it serves as the foundation for testing all WebSocket connection functionality:
-
-```javascript
-beforeEach(() => {
-  mockSocket = new MockSocket();
-  connection = new WebSocketConnection(mockSocket, [], 'test-protocol', true, config);
-});
-```
-
-#### Integration with WebSocketConnection
-
-**1. Socket Interface Substitution**
-- MockSocket replaces real TCP socket in WebSocketConnection constructor
-- Provides all required socket methods: `write()`, `end()`, `destroy()`, `setNoDelay()`, etc.
-- Maintains event-driven architecture that WebSocketConnection expects
-
-**2. Data Flow Simulation**
-- **Outbound**: Captures data written by WebSocketConnection via `socket.write()`
-- **Inbound**: Injects WebSocket frames via `mockSocket.emit('data', frameBuffer)`
-- **Bidirectional Testing**: Enables testing of complete request/response cycles
-
-**3. Event-Driven Testing**
-- Supports all socket events: `'data'`, `'error'`, `'end'`, `'close'`, `'drain'`
-- Enables testing of error conditions and edge cases
-- Allows simulation of network failures and connection issues
-
-#### Frame Processing Integration
-
-**Data Injection Pattern**:
-```javascript
-const pingFrame = generateWebSocketFrame({
-  opcode: 0x09, // Ping
-  payload: Buffer.from('ping-data'),
-  masked: true
-});
-
-mockSocket.emit('data', pingFrame);
-await waitForProcessing(); // Allow async frame processing
-```
-
-**Data Capture Pattern**:
-```javascript
-const writeSpy = vi.spyOn(mockSocket, 'write').mockReturnValue(true);
-connection.sendUTF('test message');
-expect(writeSpy).toHaveBeenCalledOnce();
-```
-
-### Current Implementation Strengths
-
-#### 1. Complete Socket Interface Coverage
-- **All Essential Methods**: `write()`, `end()`, `destroy()`, `setNoDelay()`, `setKeepAlive()`
-- **State Management**: Proper tracking of socket states and transitions
-- **Event Support**: Full event emitter functionality for all socket events
-
-#### 2. Realistic Behavior Simulation
-- **Asynchronous Operations**: Uses `setTimeout()` to simulate async socket behavior
-- **Error Condition Testing**: Supports error injection and failure simulation
-- **Buffer Management**: Proper handling of Buffer objects and data types
-
-#### 3. Test Isolation and Control
-- **Data Capture**: Complete tracking of all written data for verification
-- **Controllable Input**: Precise control over incoming data timing and content
-- **State Inspection**: Full visibility into socket state for debugging
-
-#### 4. Integration with Frame Generation
-- **Frame Injection**: Seamless integration with `generateWebSocketFrame()` helpers
-- **Protocol Testing**: Supports testing of all WebSocket frame types and scenarios
-- **Error Frame Testing**: Enables testing of malformed and protocol-violating frames
-
-### Identified Implementation Gaps and Issues
-
-#### 1. Frame Processing Pipeline Issues
-**Problem**: Some frame-related tests are failing because the frame processing doesn't behave as expected
-- **Symptom**: Events not being emitted when frames are injected
-- **Root Cause**: Potential timing issues in async frame processing
-- **Impact**: 20/77 tests failing in connection test suite
-
-#### 2. Protocol Violation Detection
-**Problem**: Error detection for protocol violations not working consistently
-- **Examples**: Reserved opcodes, RSV bits, oversized control frames
-- **Symptom**: `expect(errorEmitted).toBe(true)` failing
-- **Impact**: Error handling tests not validating protocol compliance properly
-
-#### 3. Frame Assembly Configuration
-**Problem**: `assembleFragments: false` configuration not working as expected
-- **Symptom**: Individual frame events not being emitted
-- **Expected**: Frame events should be emitted instead of message events
-- **Impact**: Configuration testing failing
-
-#### 4. Size Limit Enforcement
-**Problem**: Frame and message size limits not being enforced consistently
-- **Configuration**: `maxReceivedFrameSize`, `maxReceivedMessageSize`
-- **Symptom**: Large frames/messages not triggering expected errors
-- **Impact**: Security-related size limit tests failing
-
-### Mock Infrastructure Reliability Assessment
-
-#### Passing Test Categories (74% Success Rate)
-**Solid Foundation Areas**:
-1. **Connection Lifecycle**: Basic connection establishment and state management
-2. **Message Sending**: `sendUTF()`, `sendBytes()`, `send()` methods working correctly
-3. **Basic Frame Handling**: Simple frame reception and processing
-4. **Configuration Options**: Most configuration settings working correctly
-5. **Socket Event Handling**: Basic socket events and state transitions
-
-#### Failing Test Categories (26% Failure Rate)
-**Areas Requiring Infrastructure Improvement**:
-1. **Frame Processing Pipeline**: Async frame processing and event emission timing
-2. **Protocol Compliance**: Error detection for protocol violations
-3. **Size Limit Enforcement**: Frame and message size validation
-4. **Resource Cleanup**: Timer and listener cleanup verification
-5. **Advanced Configuration**: Fragment assembly modes and behavioral options
-
-### Strategic Recommendations for MockSocket Enhancement
-
-#### Phase 1: Core Infrastructure Stabilization
-**Priority: Critical**
-
-1. **Frame Processing Pipeline Fix**
-   - Debug timing issues in frame processing
-   - Ensure consistent event emission patterns
-   - Verify frame-to-message assembly logic
-
-2. **Protocol Violation Detection**
-   - Implement proper error detection for reserved opcodes
-   - Add validation for RSV bits and frame structure
-   - Ensure size limit enforcement triggers appropriate errors
-
-3. **Test Timing Coordination**
-   - Enhance `waitForProcessing()` helper for better async coordination
-   - Add proper synchronization for frame processing
-   - Implement reliable event capture patterns
-
-#### Phase 2: Advanced Feature Support
-**Priority: High**
-
-1. **Configuration Mode Support**
-   - Fix `assembleFragments: false` behavior
-   - Ensure proper event emission for different assembly modes
-   - Validate all configuration options work correctly
-
-2. **Resource Management Testing**
-   - Implement proper cleanup detection mechanisms
-   - Add timer management testing capabilities
-   - Enhance listener cleanup verification
-
-#### Phase 3: Robustness and Edge Cases
-**Priority: Medium**
-
-1. **Enhanced Error Simulation**
-   - Add more sophisticated error injection capabilities
-   - Support network-level error simulation
-   - Implement timing-sensitive error scenarios
-
-2. **Performance Testing Support**
-   - Add capabilities for high-throughput testing
-   - Support concurrent connection simulation
-   - Enable memory usage pattern testing
-
-### Success Metrics for MockSocket Enhancement
-
-**Immediate Goals**:
-- **Test Success Rate**: Improve from 74% to 95%+ (73/77 tests passing)
-- **Frame Processing**: All frame injection/processing tests working
-- **Protocol Compliance**: All protocol violation tests detecting errors correctly
-- **Configuration Testing**: All behavioral configuration options working
-
-**Long-term Goals**:
-- **Reliability**: Consistent test results across multiple runs
-- **Maintainability**: Clear patterns for extending mock capabilities
-- **Documentation**: Well-documented mock behavior for future development
-- **Performance**: Fast test execution with realistic behavior simulation
-
-### Conclusion
-
-The MockSocket implementation provides a sophisticated and comprehensive foundation for WebSocket testing, with 74% of tests currently passing. The primary issues are related to frame processing timing, protocol violation detection, and configuration behavior rather than fundamental architectural problems. With targeted improvements to these specific areas, the mock infrastructure can achieve the reliability needed for comprehensive WebSocket testing while maintaining its current strengths in connection lifecycle management and basic message handling.
-
-#### 3.3 WebSocketServer Comprehensive Testing
-
-**Dependencies**: 3.2 complete (Server depends on connection handling)
-**Tasks**:
-
-- [ ] **3.3.1** Server lifecycle tests
-  - [ ] Server startup on various ports
-  - [ ] Graceful server shutdown
-  - [ ] Server restart scenarios
-  - [ ] Connection management during shutdown
-- [ ] **3.3.2** Request handling tests
-  - [ ] Valid upgrade request processing
-  - [ ] Invalid upgrade request rejection
-  - [ ] Multi-protocol support
-  - [ ] Origin validation
-  - [ ] Custom header processing
-- [ ] **3.3.3** Connection management tests
-  - [ ] Active connection tracking
-  - [ ] Connection limit enforcement
-  - [ ] Concurrent connection handling
-  - [ ] Connection cleanup on close
-- [ ] **3.3.4** Security testing
-  - [ ] Origin header validation
-  - [ ] Malicious request handling
-  - [ ] Rate limiting (if applicable)
-  - [ ] SSL/TLS connection support
-
-#### 3.4 WebSocketClient Comprehensive Testing
-
-**Dependencies**: 3.3 complete (Client tests need server functionality)
-**Tasks**:
-
-- [ ] **3.4.1** Connection establishment tests
-  - [ ] Successful connection to valid servers
-  - [ ] Connection failure handling
-  - [ ] Connection timeout behavior
-  - [ ] Reconnection logic with backoff
-- [ ] **3.4.2** Protocol negotiation tests
-  - [ ] Subprotocol negotiation success
-  - [ ] Protocol mismatch handling
-  - [ ] Upgrade header validation
-  - [ ] Server response validation
-- [ ] **3.4.3** Authentication tests
-  - [ ] HTTP basic authentication
-  - [ ] Custom authentication headers
-  - [ ] Authentication failure handling
-
-### Phase 4: Integration and Advanced Testing
-
-**Objective**: Test component interactions and advanced scenarios.
-
-#### 4.1 Client-Server Integration Testing
-
-**Dependencies**: Phase 3 complete (All core components individually tested)
-**Tasks**:
-
-- [ ] **4.1.1** Basic connection integration
-  - [ ] End-to-end connection establishment
-  - [ ] Bidirectional message exchange
-  - [ ] Connection lifecycle coordination
-- [ ] **4.1.2** Protocol negotiation integration
-  - [ ] Multi-protocol client-server negotiation
-  - [ ] Subprotocol selection workflows
-  - [ ] Protocol upgrade sequences
-- [ ] **4.1.3** Message exchange patterns
-  - [ ] Request-response patterns
-  - [ ] Streaming message patterns
-  - [ ] Broadcast message patterns
-
-#### 4.2 Error Handling Integration
-
-**Dependencies**: 4.1 complete (Need stable integration baseline)
-**Tasks**:
-
-- [ ] **4.2.1** Network error scenarios
-  - [ ] Connection interruption handling
-  - [ ] Partial frame transmission
-  - [ ] Network timeout scenarios
-- [ ] **4.2.2** Protocol violation handling
-  - [ ] Malformed frame integration testing
-  - [ ] Invalid message sequence handling
-  - [ ] Control frame violation responses
-- [ ] **4.2.3** Resource exhaustion scenarios
-  - [ ] Memory limit testing
-  - [ ] Connection limit testing
-  - [ ] Buffer overflow integration
-
-#### 4.3 Performance and Load Testing
-
-**Dependencies**: 4.2 complete (Error handling must be solid for load testing)
-**Tasks**:
-
-- [ ] **4.3.1** Throughput testing
-  - [ ] High message rate testing
-  - [ ] Large message handling
-  - [ ] Concurrent connection throughput
-- [ ] **4.3.2** Memory management testing
-  - [ ] Memory leak detection during sustained operation
-  - [ ] Buffer management efficiency
-  - [ ] Resource cleanup validation
-- [ ] **4.3.3** Stress testing
-  - [ ] Maximum connection testing
-  - [ ] Resource limit boundary testing
-  - [ ] Graceful degradation under load
-
-### Phase 5: Browser Compatibility and End-to-End Testing
-
-**Objective**: Ensure browser compatibility and real-world scenario validation.
-
-#### 5.1 Browser Compatibility Testing
-
-**Dependencies**: Phase 4 complete (Core functionality must be solid)
-**Tasks**:
-
-- [ ] **5.1.1** W3C WebSocket API compliance
-  - [ ] API interface compliance testing
-  - [ ] ReadyState transition testing
-  - [ ] Event listener functionality
-  - [ ] Close code handling
-- [ ] **5.1.2** Cross-browser compatibility
-  - [ ] Browser-specific behavior testing
-  - [ ] Event handler vs addEventListener compatibility
-  - [ ] Browser quirk accommodation
-
-#### 5.2 End-to-End Scenario Testing
-
-**Dependencies**: 5.1 complete (Browser compatibility established)
-**Tasks**:
-
-- [ ] **5.2.1** Real-world application scenarios
-  - [ ] Chat application simulation
-  - [ ] Streaming data scenarios
-  - [ ] File transfer scenarios
-- [ ] **5.2.2** Protocol compliance validation
-  - [ ] RFC 6455 compliance testing
-  - [ ] Extension support testing
-  - [ ] Subprotocol implementation testing
-
-### Phase 6: CI/CD Integration and Optimization
-
-**Objective**: Integrate comprehensive testing into development workflow.
-
-#### 6.1 CI/CD Pipeline Enhancement
-
-**Dependencies**: Phase 5 complete (All tests must be stable and reliable)
-**Tasks**:
-
-- [ ] **6.1.1** GitHub Actions workflow update
-  - [ ] Multi-Node.js version testing matrix
-  - [ ] Parallel test execution in CI
-  - [ ] Coverage reporting integration
-- [ ] **6.1.2** Coverage reporting setup
-  - [ ] Codecov integration
-  - [ ] PR coverage diff reporting
-  - [ ] Coverage threshold enforcement
-- [ ] **6.1.3** Performance regression detection
-  - [ ] Benchmark baseline establishment
-  - [ ] Performance regression alerts
-  - [ ] Historical performance tracking
-
-#### 6.2 Test Suite Optimization
-
-**Dependencies**: 6.1 complete (CI integration must be working)
-**Tasks**:
-
-- [ ] **6.2.1** Test execution optimization
-  - [ ] Test parallelization tuning
-  - [ ] Test dependency optimization
-  - [ ] Resource sharing optimization
-- [ ] **6.2.2** Maintenance procedures
-  - [ ] Test update procedures
-  - [ ] Coverage maintenance guidelines
-  - [ ] Performance baseline update procedures
+### Current Sprint: WebSocketConnection Testing (Week 1)
+**Goal:** Complete Phase 3.2, achieve 95%+ pass rate
+
+**Tasks:**
+1. Implement WebSocket-specific event testing patterns (3.2.A.3.2)
+2. Fix fundamental functionality tests (3.2.B)
+3. Fix protocol violation detection tests (3.2.C.1)
+4. Fix size limit enforcement tests (3.2.C.2)
+5. Fix configuration tests (3.2.D)
+6. Achieve 85%+ code coverage
+
+**Success Criteria:**
+- 73/77 tests passing (95%+)
+- 85%+ statement coverage
+- 90%+ branch coverage
+- Zero skipped tests (all passing or removed)
+
+---
+
+### Next Sprint: WebSocketRequest Testing (Week 2)
+**Goal:** Raise coverage from 29.63% to 90%+
+
+**Tasks:**
+1. Create comprehensive request parsing tests
+2. Implement protocol negotiation tests
+3. Add origin validation tests
+4. Create cookie handling tests
+5. Build accept/reject workflow tests
+6. Add error scenario coverage
+
+**Success Criteria:**
+- 40+ tests for WebSocketRequest
+- 90%+ statement coverage
+- 85%+ branch coverage
+- All critical paths tested
+
+---
+
+### Sprint 3: utils.js Testing (Week 3)
+**Goal:** Raise coverage from 33.84% to 80%+
+
+**Tasks:**
+1. Enhance BufferingLogger tests
+2. Add buffer utility edge case tests
+3. Create validation function tests
+4. Add error scenario coverage
+
+**Success Criteria:**
+- 60+ total tests for utils.js
+- 80%+ statement coverage
+- 75%+ branch coverage
+
+---
+
+### Sprint 4-5: Integration Testing (Weeks 4-5)
+**Goal:** Create comprehensive integration test suite
+
+**Week 4:**
+- Client-server communication tests (30 tests)
+- Protocol negotiation integration (10 tests)
+- Message exchange patterns (15 tests)
+
+**Week 5:**
+- Error handling integration (20 tests)
+- Performance tests (15 tests)
+- Multi-connection scenarios (10 tests)
+
+**Success Criteria:**
+- 100+ integration tests
+- All major integration scenarios covered
+- No integration test failures
+
+---
+
+### Sprint 6-7: E2E Testing (Weeks 6-7)
+**Goal:** Create end-to-end validation suite
+
+**Week 6:**
+- Browser compatibility tests (20 tests)
+- W3C API compliance tests (10 tests)
+- Real-world scenario tests (15 tests)
+
+**Week 7:**
+- Protocol compliance validation (15 tests)
+- Cross-browser testing (10 tests)
+- Performance validation (10 tests)
+
+**Success Criteria:**
+- 80+ E2E tests
+- Full protocol compliance validated
+- Browser compatibility confirmed
+
+---
+
+### Sprint 8: CI/CD and Polish (Week 8)
+**Goal:** Production-ready test infrastructure
+
+**Tasks:**
+1. Codecov integration
+2. Performance regression detection
+3. Multi-Node.js version testing
+4. Documentation updates
+5. Final validation
+
+**Success Criteria:**
+- Coverage reporting operational
+- Performance benchmarks established
+- All documentation updated
+- Ready for v2.0 release
+
+---
 
 ## Success Metrics
 
 ### Coverage Targets
 
-- **Overall Code Coverage**: 85%+
-- **Core Components**: 90%+ (Connection, Server, Client)
-- **Supporting Components**: 80%+ (Frame, Router, Utils)
-- **Integration Scenarios**: 75%+
+**Current Status:**
+```
+Overall:         68.00% ⚠️ (Target: 85%+)
+Branch:          75.54% ⚠️ (Target: 80%+)
+Functions:       63.36% ⚠️ (Target: 80%+)
+```
 
-### Quality Metrics
+**Target by Component:**
+- Core Components (Client, Server, Connection, Frame): 90%+
+- Supporting Components (Request, Router, Utils): 85%+
+- Browser Compatibility (W3CWebSocket): 80%+
+- Overall: 85%+
 
-- **Test Execution Time**: <30 seconds for full suite
-- **Test Reliability**: 99.9% success rate in CI
-- **Maintenance Overhead**: <10% of development time
+### Test Count Targets
 
-### Feature Metrics
+**Current:** 399 tests (364 passing, 35 skipped)
+**Target:** 600+ tests
 
-- **Total Test Count**: 300+ tests (vs current ~10)
-- **Edge Case Coverage**: 95% of identified edge cases
-- **Protocol Compliance**: 100% RFC 6455 compliance tests
-- **Performance Benchmarks**: Established baselines for all components
+**Breakdown:**
+- Unit tests: 400+ (currently: 364)
+- Integration tests: 100+ (currently: 0)
+- E2E tests: 80+ (currently: 0)
+- Helper validation: 20+ (currently: 12)
 
-## Risk Mitigation
+### Quality Targets
 
-### Migration Risks
+- **Test Reliability:** 99%+ (currently ~91%)
+- **Test Execution Time:** <30 seconds full suite (currently ~4 seconds)
+- **CI Success Rate:** 99%+
+- **Zero lint errors:** ✅ Achieved
 
-- **API Changes**: Gradual migration with parallel test runs
-- **Test Reliability**: Extensive validation of migrated tests
-- **CI/CD Disruption**: Staged rollout with fallback options
+---
 
-### Coverage Risks
+## Risk Assessment
 
-- **Over-Testing**: Focus on high-value, maintainable tests
-- **Performance Impact**: Optimize test execution and parallelization
-- **Maintenance Burden**: Establish clear ownership and update procedures
+### Current Risks
 
-## Conclusion
+1. **WebSocketConnection Test Stabilization** (HIGH)
+   - 19 skipped tests need resolution
+   - May require mock infrastructure enhancements
+   - **Mitigation:** Systematic approach via Phase 3.2.B-D
 
-This comprehensive modernization will transform the WebSocket-Node test suite from a basic regression-prevention tool into a robust, comprehensive validation system that ensures code quality, protocol compliance, and performance standards. The migration to Vitest provides modern tooling, while the expanded test coverage ensures reliability across all use cases and edge conditions.
+2. **Integration Test Complexity** (MEDIUM)
+   - No existing integration tests to reference
+   - May encounter timing and coordination challenges
+   - **Mitigation:** Leverage existing test helpers, start simple
 
-The structured approach and phased implementation minimize risk while maximizing the benefits of modern testing practices. Upon completion, the project will have industry-standard test coverage and tooling that supports confident development and maintenance.
+3. **Coverage Target Achievement** (MEDIUM)
+   - Current 68% to target 85% requires significant work
+   - Some components (WebSocketRequest, utils) far below target
+   - **Mitigation:** Focused sprints on low-coverage components
+
+### Mitigation Strategies
+
+1. **Incremental Progress:** Complete one component fully before moving to next
+2. **Regular Validation:** Run full test suite daily, catch regressions early
+3. **Documentation:** Record patterns and solutions for future reference
+4. **Consultation:** Discuss blockers and implementation questions with team
+
+---
+
+## Appendix: Test File Naming Convention
+
+**Unit Tests:**
+- `test/unit/core/{component}.test.mjs` - Main component tests
+- `test/unit/legacy/{component}.test.mjs` - Migrated legacy tests
+- `test/unit/helpers/{helper}.test.mjs` - Infrastructure validation tests
+
+**Integration Tests:**
+- `test/integration/{category}/{scenario}.test.mjs`
+
+**E2E Tests:**
+- `test/e2e/{category}/{scenario}.test.mjs`
+
+**Important:** All new test files MUST use `.mjs` extension for ES module support.
+
+---
+
+## Quick Reference
+
+**Current Phase:** 3.2 - WebSocketConnection Testing
+**Current Sprint:** Fix skipped tests, achieve 95%+ pass rate
+**Tests Passing:** 364/399 (91%)
+**Coverage:** 68% overall
+**Next Milestone:** Complete WebSocketConnection, start WebSocketRequest
+**Estimated Completion:** 8 weeks
+
+---
+
+**Document Status:** Up to date as of October 2, 2025
+**Maintained By:** Development team
+**Review Frequency:** Updated after each sprint/phase completion

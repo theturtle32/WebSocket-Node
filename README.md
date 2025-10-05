@@ -63,11 +63,11 @@ In your project root:
 Then in your code:
 
 ```javascript
-var WebSocketServer = require('websocket').server;
-var WebSocketClient = require('websocket').client;
-var WebSocketFrame  = require('websocket').frame;
-var WebSocketRouter = require('websocket').router;
-var W3CWebSocket = require('websocket').w3cwebsocket;
+const WebSocketServer = require('websocket').server;
+const WebSocketClient = require('websocket').client;
+const WebSocketFrame  = require('websocket').frame;
+const WebSocketRouter = require('websocket').router;
+const W3CWebSocket = require('websocket').w3cwebsocket;
 ```
 
 Current Features:
@@ -236,10 +236,10 @@ wsServer.on('request', function(request) {
 
 ```javascript
 #!/usr/bin/env node
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+const WebSocketServer = require('websocket').server;
+const http = require('http');
 
-var server = http.createServer(function(request, response) {
+const server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
     response.end();
@@ -248,7 +248,7 @@ server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
-wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: false
 });
@@ -264,7 +264,7 @@ wsServer.on('request', function(request) {
       return;
     }
 
-    var connection = request.accept('echo-protocol', request.origin);
+    const connection = request.accept('echo-protocol', request.origin);
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -311,24 +311,26 @@ async function run() {
             console.log("Connection Error: " + error.toString());
         });
 
-        connection.on('close', function() {
-            console.log('echo-protocol Connection Closed');
-        });
-
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
                 console.log("Received: '" + message.utf8Data + "'");
             }
         });
 
-        async function sendNumber() {
+        // Send a random number every second
+        let timeoutId;
+        (async function sendNumber() {
             if (connection.connected) {
                 const number = Math.round(Math.random() * 0xFFFFFF);
                 await connection.sendUTF(number.toString());
-                setTimeout(sendNumber, 1000);
+                timeoutId = setTimeout(sendNumber, 1000);
             }
-        }
-        sendNumber();
+        })();
+
+        connection.on('close', function() {
+            clearTimeout(timeoutId);
+            console.log('echo-protocol Connection Closed');
+        });
 
     } catch (error) {
         console.log('Connect Error: ' + error.toString());
@@ -343,9 +345,9 @@ run();
 
 ```javascript
 #!/usr/bin/env node
-var WebSocketClient = require('websocket').client;
+const WebSocketClient = require('websocket').client;
 
-var client = new WebSocketClient();
+const client = new WebSocketClient();
 
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -356,23 +358,24 @@ client.on('connect', function(connection) {
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
     });
-    connection.on('close', function() {
-        console.log('echo-protocol Connection Closed');
-    });
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
             console.log("Received: '" + message.utf8Data + "'");
         }
     });
 
-    function sendNumber() {
+    // Send a random number every second
+    const interval = setInterval(function() {
         if (connection.connected) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
+            const number = Math.round(Math.random() * 0xFFFFFF);
             connection.sendUTF(number.toString());
-            setTimeout(sendNumber, 1000);
         }
-    }
-    sendNumber();
+    }, 1000);
+
+    connection.on('close', function() {
+        clearInterval(interval);
+        console.log('echo-protocol Connection Closed');
+    });
 });
 
 client.connect('ws://localhost:8080/', 'echo-protocol');
@@ -385,9 +388,9 @@ Client Example using the *W3C WebSocket API*
 Same example as above but using the [W3C WebSocket API](http://www.w3.org/TR/websockets/).
 
 ```javascript
-var W3CWebSocket = require('websocket').w3cwebsocket;
+const W3CWebSocket = require('websocket').w3cwebsocket;
 
-var client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
+const client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
 
 client.onerror = function() {
     console.log('Connection Error');
@@ -396,18 +399,19 @@ client.onerror = function() {
 client.onopen = function() {
     console.log('WebSocket Client Connected');
 
-    function sendNumber() {
+    // Send a random number every second
+    const interval = setInterval(function() {
         if (client.readyState === client.OPEN) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
+            const number = Math.round(Math.random() * 0xFFFFFF);
             client.send(number.toString());
-            setTimeout(sendNumber, 1000);
         }
-    }
-    sendNumber();
-};
+    }, 1000);
 
-client.onclose = function() {
-    console.log('echo-protocol Client Closed');
+    // Clear interval when connection closes
+    client.onclose = function() {
+        clearInterval(interval);
+        console.log('echo-protocol Client Closed');
+    };
 };
 
 client.onmessage = function(e) {
@@ -422,6 +426,74 @@ Request Router Example
 
 For an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.
 
+
+Development & Contributing
+---------------------------
+
+### v2.0 Modernization Project
+
+WebSocket-Node is currently undergoing a comprehensive modernization for v2.0, which includes:
+
+- ✅ **ES6 Classes** - All components converted to ES6 class syntax
+- ✅ **Modern JavaScript** - Template literals, arrow functions, destructuring, etc.
+- ✅ **Promise-based APIs** - All async operations support Promises (fully backward compatible)
+- 🔄 **Comprehensive Test Suite** - Migrating to Vitest with extensive coverage (in progress)
+
+**Current Status:** 65% Complete
+
+For detailed information:
+- **[V2_MODERNIZATION_STATUS.md](V2_MODERNIZATION_STATUS.md)** - Current status and detailed progress
+- **[ROADMAP.md](ROADMAP.md)** - 8-week release timeline and milestones
+- **[TEST_SUITE_MODERNIZATION_PLAN.md](TEST_SUITE_MODERNIZATION_PLAN.md)** - Comprehensive test strategy
+
+### Running Tests
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run protocol compliance tests
+pnpm test:autobahn
+
+# Run linter
+pnpm lint
+
+# Fix lint issues
+pnpm lint:fix
+```
+
+### Test Coverage
+
+Current coverage: 68% overall (target: 85%+)
+
+| Component | Coverage | Status |
+|-----------|----------|--------|
+| WebSocketRouter | 98.71% | ✅ Complete |
+| WebSocketServer | 92.36% | ✅ Complete |
+| WebSocketFrame | 92.47% | ✅ Complete |
+| WebSocketClient | 88.31% | ✅ Complete |
+| WebSocketConnection | 71.48% | 🔄 In Progress |
+| WebSocketRequest | 29.63% | ⚠️ Needs Work |
+
+### Contributing
+
+Contributions are welcome! For the v2.0 modernization:
+
+1. Check current work in [ROADMAP.md](ROADMAP.md)
+2. Review [V2_MODERNIZATION_STATUS.md](V2_MODERNIZATION_STATUS.md) for status
+3. Work from the `v2` branch
+4. Create feature branches for your work
+5. Run `pnpm test && pnpm lint` before submitting PRs
+6. Maintain backward compatibility for all public APIs
 
 Resources
 ---------
