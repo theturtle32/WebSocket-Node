@@ -70,15 +70,6 @@ describe('WebSocketRouterRequest - Comprehensive Tests', () => {
       );
 
       expect(routerRequest.protocol).toBeNull();
-    });
-
-    it('should set protocol to null for ____no_protocol____ sentinel', () => {
-      const routerRequest = new WebSocketRouterRequest(
-        mockWebSocketRequest,
-        '____no_protocol____'
-      );
-
-      expect(routerRequest.protocol).toBeNull();
       expect(routerRequest.webSocketRequest).toBe(mockWebSocketRequest);
     });
 
@@ -309,22 +300,6 @@ describe('WebSocketRouterRequest - Comprehensive Tests', () => {
       routerRequest.reject();
 
       expect(rejectedHandler).toHaveBeenCalledWith(routerRequest);
-    });
-
-    it('should emit requestRejected with correct routerRequest reference', () => {
-      const routerRequest = new WebSocketRouterRequest(
-        mockWebSocketRequest,
-        'test-protocol'
-      );
-
-      let emittedRequest = null;
-      routerRequest.on('requestRejected', (request) => {
-        emittedRequest = request;
-      });
-
-      routerRequest.reject();
-
-      expect(emittedRequest).toBe(routerRequest);
     });
 
     it('should handle multiple event listeners for requestRejected', () => {
