@@ -287,12 +287,12 @@ export function createFrameEventPattern(connection, mockSocket, options = {}) {
       
       const [receivedFrame] = await framePromise;
       expect(receivedFrame.opcode).toBe(frameType);
-      
-      // Check payload based on frame type
-      if (frameType === 0x01) { // Text frame
-        expect(receivedFrame.utf8Data).toBe(payload);
-      } else if (frameType === 0x02) { // Binary frame
-        expect(Buffer.isBuffer(receivedFrame.binaryPayload)).toBe(true);
+
+      // Check payload - WebSocketFrame stores all data in binaryPayload
+      expect(Buffer.isBuffer(receivedFrame.binaryPayload)).toBe(true);
+      if (frameType === 0x01 && typeof payload === 'string') {
+        // For text frames, convert binaryPayload to string for comparison
+        expect(receivedFrame.binaryPayload.toString('utf8')).toBe(payload);
       }
     },
     
@@ -442,15 +442,16 @@ export function createProtocolErrorPattern(connection, mockSocket, options = {})
         'reserved opcode',
         { timeout, validateCloseCode: true }
       );
-      
+
       const invalidFrame = generateWebSocketFrame({
         opcode: 0x05, // Reserved opcode
         payload: 'invalid',
-        masked: true
+        masked: true,
+        validate: false // Skip validation to allow generating invalid frame
       });
-      
+
       mockSocket.emit('data', invalidFrame);
-      
+
       await errorPromise;
     },
     
@@ -465,15 +466,17 @@ export function createProtocolErrorPattern(connection, mockSocket, options = {})
       );
       
       // Create frame with RSV1 bit set (invalid without extension)
-      const buffer = Buffer.alloc(6);
+      const buffer = Buffer.alloc(7);
       buffer[0] = 0x81 | 0x40; // Text frame with RSV1 set
       buffer[1] = 0x80 | 0x01; // Masked, 1 byte payload
-      // Masking key
+      // Masking key (all zeros for simplicity)
       buffer[2] = 0x00;
       buffer[3] = 0x00;
       buffer[4] = 0x00;
       buffer[5] = 0x00;
-      
+      // Payload (1 byte, 'A' XOR 0x00 = 'A')
+      buffer[6] = 0x41;
+
       mockSocket.emit('data', buffer);
       
       await errorPromise;
@@ -488,17 +491,18 @@ export function createProtocolErrorPattern(connection, mockSocket, options = {})
         'control frame',
         { timeout }
       );
-      
+
       // Create oversized ping frame (>125 bytes)
       const largePayload = Buffer.alloc(126, 0x41); // 126 'A' characters
       const oversizedPing = generateWebSocketFrame({
         opcode: 0x09, // Ping
         payload: largePayload,
-        masked: true
+        masked: true,
+        validate: false // Skip validation to allow generating invalid frame
       });
-      
+
       mockSocket.emit('data', oversizedPing);
-      
+
       await errorPromise;
     },
     
@@ -542,15 +546,16 @@ export function createSizeLimitPattern(connection, mockSocket, options = {}) {
      * Test maxReceivedFrameSize enforcement
      */
     async testFrameSizeLimit(maxFrameSize = 1024) {
-      // Update connection config
-      connection.maxReceivedFrameSize = maxFrameSize;
-      
+      // Update the current frame's max size limit
+      connection.currentFrame.maxReceivedFrameSize = maxFrameSize;
+      connection.config.maxReceivedFrameSize = maxFrameSize;
+
       const errorPromise = expectWebSocketProtocolError(
         connection,
         'frame size',
         { timeout }
       );
-      
+
       // Create frame larger than limit
       const largePayload = Buffer.alloc(maxFrameSize + 1, 0x41);
       const oversizedFrame = generateWebSocketFrame({
@@ -558,9 +563,9 @@ export function createSizeLimitPattern(connection, mockSocket, options = {}) {
         payload: largePayload,
         masked: true
       });
-      
+
       mockSocket.emit('data', oversizedFrame);
-      
+
       await errorPromise;
     },
     

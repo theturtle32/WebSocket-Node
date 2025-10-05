@@ -44,3 +44,4 @@
 - Update any relevant project plan markdown files.
 - Ensure that you have created an appropriately named branch for the work in progress.
 - Make sure `pnpm lint:fix` is run and not showing any errors.
+- When starting work on a new task, create a branch to track that work.

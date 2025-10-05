@@ -96,16 +96,8 @@ describe('WebSocketClient', () => {
       vi.restoreAllMocks();
     });
 
-    // URL validation tests skip due to Promise error handling complexity
-    // The validation itself works correctly, but testing the error propagation
-    // is complicated by the .catch(() => {}) added for backward compatibility
-    it.skip('should throw error for URL without protocol', () => {
-      // Tested indirectly by integration tests
-    });
-
-    it.skip('should throw error for URL without host', () => {
-      // Tested indirectly by integration tests
-    });
+    // Note: URL validation error cases (missing protocol/host) are tested
+    // indirectly by integration tests due to Promise error handling complexity
 
     it('should accept valid ws:// URL', () => {
       expect(() => {
