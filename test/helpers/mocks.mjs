@@ -282,6 +282,11 @@ export class MockSocket extends EventEmitter {
     this.writable = false;
     setTimeout(() => {
       this.emit('end');
+      // After 'end', emit 'close' to match real socket behavior
+      setTimeout(() => {
+        this.readable = false;
+        this.emit('close', false); // false = no error
+      }, 1);
       if (callback) callback();
     }, 1);
   }
