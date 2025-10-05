@@ -86,18 +86,18 @@ function parseResults() {
   // Print summary
   console.log('Test Summary:');
   console.log(`  Total tests: ${summary.total}`);
-  console.log(`  Implemented tests: ${summary.total - summary.unimplemented}`);
+  console.log(`  Required tests: ${summary.total - summary.unimplemented}`);
+  console.log(`  Optional tests: ${summary.unimplemented}`);
   console.log(`  Passed (OK): ${summary.ok}`);
   console.log(`  Failed: ${summary.failed}`);
   console.log(`  Non-Strict: ${summary.nonStrict}`);
   console.log(`  Informational: ${summary.informational}`);
-  console.log(`  Unimplemented: ${summary.unimplemented}`);
 
-  const implementedTests = summary.total - summary.unimplemented;
-  const passRate = implementedTests > 0
-    ? ((summary.ok / implementedTests) * 100).toFixed(1)
+  const requiredTests = summary.total - summary.unimplemented;
+  const passRate = requiredTests > 0
+    ? ((summary.ok / requiredTests) * 100).toFixed(1)
     : '0.0';
-  console.log(`  Pass rate (implemented): ${passRate}%`);
+  console.log(`  Pass rate (required): ${passRate}%`);
   
   // Print failed tests if any
   if (summary.failedTests.length > 0) {
@@ -125,7 +125,7 @@ function parseResults() {
   
   // Print unimplemented tests summary (grouped by major version)
   if (summary.unimplementedTests.length > 0) {
-    console.log('\n=== UNIMPLEMENTED TESTS (Informational) ===');
+    console.log('\n=== OPTIONAL FEATURES NOT IMPLEMENTED (Informational) ===');
     
     // Group by major test category
     const unimplementedByCategory = {};
