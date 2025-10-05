@@ -1,0 +1,17 @@
+
+{
+   "options": {"failByDrop": false},
+   "outdir": "./reports/servers",
+
+   "servers": [
+                  {
+                     "agent": "WebSocket-Node 1.0.27",
+                     "url": "ws://localhost:8080",
+                     "options": {"version": 18}
+                  }
+               ],
+
+   "cases": ["*"],
+   "exclude-cases": [],
+   "exclude-agent-cases": {}
+}
