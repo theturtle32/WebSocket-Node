@@ -63,11 +63,11 @@ In your project root:
 Then in your code:
 
 ```javascript
-var WebSocketServer = require('websocket').server;
-var WebSocketClient = require('websocket').client;
-var WebSocketFrame  = require('websocket').frame;
-var WebSocketRouter = require('websocket').router;
-var W3CWebSocket = require('websocket').w3cwebsocket;
+const WebSocketServer = require('websocket').server;
+const WebSocketClient = require('websocket').client;
+const WebSocketFrame  = require('websocket').frame;
+const WebSocketRouter = require('websocket').router;
+const W3CWebSocket = require('websocket').w3cwebsocket;
 ```
 
 Current Features:
@@ -236,10 +236,10 @@ wsServer.on('request', function(request) {
 
 ```javascript
 #!/usr/bin/env node
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+const WebSocketServer = require('websocket').server;
+const http = require('http');
 
-var server = http.createServer(function(request, response) {
+const server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
     response.end();
@@ -248,7 +248,7 @@ server.listen(8080, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });
 
-wsServer = new WebSocketServer({
+const wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: false
 });
@@ -264,7 +264,7 @@ wsServer.on('request', function(request) {
       return;
     }
 
-    var connection = request.accept('echo-protocol', request.origin);
+    const connection = request.accept('echo-protocol', request.origin);
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -343,9 +343,9 @@ run();
 
 ```javascript
 #!/usr/bin/env node
-var WebSocketClient = require('websocket').client;
+const WebSocketClient = require('websocket').client;
 
-var client = new WebSocketClient();
+const client = new WebSocketClient();
 
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
@@ -363,9 +363,9 @@ client.on('connect', function(connection) {
     });
 
     // Send a random number every second
-    var interval = setInterval(function() {
+    const interval = setInterval(function() {
         if (connection.connected) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
+            const number = Math.round(Math.random() * 0xFFFFFF);
             connection.sendUTF(number.toString());
         }
     }, 1000);
@@ -386,9 +386,9 @@ Client Example using the *W3C WebSocket API*
 Same example as above but using the [W3C WebSocket API](http://www.w3.org/TR/websockets/).
 
 ```javascript
-var W3CWebSocket = require('websocket').w3cwebsocket;
+const W3CWebSocket = require('websocket').w3cwebsocket;
 
-var client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
+const client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
 
 client.onerror = function() {
     console.log('Connection Error');
@@ -398,9 +398,9 @@ client.onopen = function() {
     console.log('WebSocket Client Connected');
 
     // Send a random number every second
-    var interval = setInterval(function() {
+    const interval = setInterval(function() {
         if (client.readyState === client.OPEN) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
+            const number = Math.round(Math.random() * 0xFFFFFF);
             client.send(number.toString());
         }
     }, 1000);
