@@ -11,7 +11,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as utils from '../../../lib/utils.js';
 
 describe('Utils Module - Enhanced Coverage', () => {
-  describe('BufferingLogger.clear()', () => {
+  describe('BufferingLogger.printOutput() behavior', () => {
     let originalDebugEnv;
 
     beforeEach(() => {
@@ -27,7 +27,7 @@ describe('Utils Module - Enhanced Coverage', () => {
       }
     });
 
-    it('should clear buffered messages', () => {
+    it('should not clear the buffer after printing and allow new messages', () => {
       const logger = utils.BufferingLogger('websocket:test', 'test-id');
 
       if (logger.enabled) {
@@ -36,22 +36,19 @@ describe('Utils Module - Enhanced Coverage', () => {
         logger('message 2');
         logger('message 3');
 
-        // Access the underlying BufferingLogger instance via closure
-        // The logger function has access to the BufferingLogger instance
-        // We can test clear indirectly by calling printOutput before and after
         const mockLog = vi.fn();
 
-        // Print output (should have messages)
+        // Print output (should have 3 messages)
         logger.printOutput(mockLog);
-        const callCountBefore = mockLog.mock.calls.length;
-        expect(callCountBefore).toBeGreaterThan(0);
+        expect(mockLog).toHaveBeenCalledTimes(3);
 
-        // Now test that we can log more after printing
+        // Log another message
         logger('message 4');
         mockLog.mockClear();
+
+        // Print again (should have all 4 messages)
         logger.printOutput(mockLog);
-        // Should have all messages including the new one
-        expect(mockLog.mock.calls.length).toBeGreaterThan(callCountBefore);
+        expect(mockLog).toHaveBeenCalledTimes(4);
       }
     });
   });
@@ -138,8 +135,7 @@ describe('Utils Module - Enhanced Coverage', () => {
         const mockLog = vi.fn();
         logger.printOutput(mockLog);
 
-        expect(mockLog).toHaveBeenCalled();
-        expect(mockLog.mock.calls.length).toBeGreaterThanOrEqual(3);
+        expect(mockLog).toHaveBeenCalledTimes(3);
       }
     });
 
@@ -153,7 +149,7 @@ describe('Utils Module - Enhanced Coverage', () => {
         const mockLog = vi.fn();
         logger.printOutput(mockLog);
 
-        expect(mockLog).toHaveBeenCalled();
+        expect(mockLog).toHaveBeenCalledTimes(2);
       }
     });
 
@@ -167,7 +163,7 @@ describe('Utils Module - Enhanced Coverage', () => {
         const mockLog = vi.fn();
         logger.printOutput(mockLog);
 
-        expect(mockLog).toHaveBeenCalled();
+        expect(mockLog).toHaveBeenCalledTimes(2);
       }
     });
   });
@@ -185,7 +181,7 @@ describe('Utils Module - Enhanced Coverage', () => {
       expect(dest[sym]).toBeUndefined(); // Symbols not copied by for...in
     });
 
-    it('should handle getters and setters', () => {
+    it('should copy the value from getters, not the getter itself', () => {
       const dest = {};
       let value = 'initial';
       const source = {
@@ -195,9 +191,17 @@ describe('Utils Module - Enhanced Coverage', () => {
 
       utils.extend(dest, source);
 
-      // For...in will copy the getter/setter or the evaluated value
-      // depending on the property descriptor
-      expect(dest.prop).toBeDefined();
+      // extend() evaluates the getter and copies the value.
+      expect(dest.prop).toBe('initial');
+
+      // Verify that 'prop' on dest is a data property, not an accessor property.
+      const descriptor = Object.getOwnPropertyDescriptor(dest, 'prop');
+      expect(descriptor.get).toBeUndefined();
+      expect(descriptor.set).toBeUndefined();
+
+      // Changing the original source's value should not affect the copied property.
+      value = 'changed';
+      expect(dest.prop).toBe('initial');
     });
 
     it('should handle non-enumerable properties', () => {
@@ -261,8 +265,9 @@ describe('Utils Module - Enhanced Coverage', () => {
   });
 
   describe('eventEmitterListenerCount() additional coverage', () => {
+    const { EventEmitter } = require('events');
+
     it('should handle multiple listeners on same event', () => {
-      const { EventEmitter } = require('events');
       const emitter = new EventEmitter();
 
       const listener1 = () => {};
@@ -278,7 +283,6 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     it('should handle listeners after removal', () => {
-      const { EventEmitter } = require('events');
       const emitter = new EventEmitter();
 
       const listener1 = () => {};
@@ -295,7 +299,6 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     it('should handle removeAllListeners', () => {
-      const { EventEmitter } = require('events');
       const emitter = new EventEmitter();
 
       emitter.on('test', () => {});
