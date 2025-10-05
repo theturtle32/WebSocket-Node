@@ -12,7 +12,7 @@
  * - Connection failure scenarios
  * - Error handling
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import W3CWebSocket from '../../../lib/W3CWebSocket.js';
 import { createEchoServer } from '../../helpers/test-server.mjs';
 
@@ -68,12 +68,13 @@ describe('W3CWebSocket - Enhanced Coverage', () => {
       expect(ws.readyState).toBe(W3CWebSocket.CONNECTING);
     });
 
-    it('should have assembleFragments enabled by default', () => {
+    it('should successfully establish connection', () => {
       return new Promise((resolve, reject) => {
         const ws = new W3CWebSocket(echoServer.getURL());
 
         ws.addEventListener('open', () => {
-          // Connection established, assembleFragments is enabled
+          // Connection established successfully
+          expect(ws.readyState).toBe(W3CWebSocket.OPEN);
           ws.close();
         });
 
