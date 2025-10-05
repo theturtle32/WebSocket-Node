@@ -221,11 +221,8 @@ describe('WebSocketServer', () => {
       await connectPromise;
     });
 
-    // Skip this test - it's testing complex async behavior with WebSocketRequest
-    // which is better covered by integration tests
-    it.skip('should reject with 404 when no request listener and autoAccept is false', () => {
-      // Tested in integration tests
-    });
+    // Note: 404 rejection when no request listener is tested in integration tests
+    // due to complex async behavior with WebSocketRequest
 
     it('should emit upgradeError for invalid handshake', async () => {
       const invalidRequest = {

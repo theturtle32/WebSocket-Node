@@ -50,18 +50,18 @@ describe('WebSocket Event Testing Patterns', () => {
       await pattern.testNoUnexpectedEvents();
     });
     
-    it.skip('should validate connection close pattern', async () => {
+    it('should validate connection close pattern', async () => {
       const pattern = createConnectionClosePattern(connection, mockSocket, {
         expectedCloseCode: 1000,
         expectedDescription: 'Normal closure'
       });
-      
+
       await pattern.testGracefulClose();
     });
     
-    it.skip('should validate close state transition', async () => {
+    it('should validate close state transition', async () => {
       const pattern = createConnectionClosePattern(connection, mockSocket);
-      
+
       await pattern.testCloseStateTransition();
     });
     
@@ -101,9 +101,9 @@ describe('WebSocket Event Testing Patterns', () => {
       connection._addSocketEventListeners();
     });
     
-    it.skip('should validate individual frame event pattern - needs frame structure investigation', async () => {
+    it('should validate individual frame event pattern', async () => {
       const pattern = createFrameEventPattern(connection, mockSocket);
-      
+
       await pattern.testFrameEvent(0x01, 'individual frame');
     });
     
@@ -121,9 +121,9 @@ describe('WebSocket Event Testing Patterns', () => {
       await pattern.testPingPongSequence(Buffer.from('test-ping'));
     });
     
-    it.skip('should validate close frame handling pattern', async () => {
+    it('should validate close frame handling pattern', async () => {
       const pattern = createControlFramePattern(connection, mockSocket);
-      
+
       await pattern.testCloseFrameHandling(1000, 'Test close');
     });
     
@@ -135,41 +135,41 @@ describe('WebSocket Event Testing Patterns', () => {
   });
 
   describe('Protocol Error Event Patterns', () => {
-    it.skip('should validate reserved opcode error pattern', async () => {
+    it('should validate reserved opcode error pattern', async () => {
       const pattern = createProtocolErrorPattern(connection, mockSocket);
-      
+
       await pattern.testReservedOpcodeError();
     });
-    
-    it.skip('should validate RSV bit error pattern', async () => {
+
+    it('should validate RSV bit error pattern', async () => {
       const pattern = createProtocolErrorPattern(connection, mockSocket);
-      
+
       await pattern.testRSVBitError();
-    });
-    
-    it.skip('should validate control frame size error pattern', async () => {
+    }, 10000); // Increase timeout for async processing
+
+    it('should validate control frame size error pattern', async () => {
       const pattern = createProtocolErrorPattern(connection, mockSocket);
-      
+
       await pattern.testControlFrameSizeError();
     });
-    
-    it.skip('should validate invalid UTF-8 error pattern', async () => {
+
+    it('should validate invalid UTF-8 error pattern', async () => {
       const pattern = createProtocolErrorPattern(connection, mockSocket);
-      
+
       await pattern.testInvalidUTF8Error();
     });
   });
 
   describe('Size Limit Event Patterns', () => {
-    it.skip('should validate frame size limit pattern', async () => {
+    it('should validate frame size limit pattern', async () => {
       const pattern = createSizeLimitPattern(connection, mockSocket);
-      
+
       await pattern.testFrameSizeLimit(1024);
     });
-    
-    it.skip('should validate message size limit pattern', async () => {
+
+    it('should validate message size limit pattern', async () => {
       const pattern = createSizeLimitPattern(connection, mockSocket);
-      
+
       await pattern.testMessageSizeLimit(2048);
     });
   });
