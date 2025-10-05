@@ -93,11 +93,12 @@ function parseResults() {
   console.log(`  Non-Strict: ${summary.nonStrict}`);
   console.log(`  Informational: ${summary.informational}`);
 
-  const requiredTests = summary.total - summary.unimplemented;
-  const passRate = requiredTests > 0
-    ? ((summary.ok / requiredTests) * 100).toFixed(1)
+  // Pass rate excludes optional, non-strict, and informational tests
+  const strictRequired = summary.total - summary.unimplemented - summary.nonStrict - summary.informational;
+  const passRate = strictRequired > 0
+    ? ((summary.ok / strictRequired) * 100).toFixed(1)
     : '0.0';
-  console.log(`  Pass rate (required): ${passRate}%`);
+  console.log(`  Pass rate: ${passRate}%`);
   
   // Print failed tests if any
   if (summary.failedTests.length > 0) {
