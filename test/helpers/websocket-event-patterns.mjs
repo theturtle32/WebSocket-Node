@@ -290,9 +290,14 @@ export function createFrameEventPattern(connection, mockSocket, options = {}) {
 
       // Check payload - WebSocketFrame stores all data in binaryPayload
       expect(Buffer.isBuffer(receivedFrame.binaryPayload)).toBe(true);
+
       if (frameType === 0x01 && typeof payload === 'string') {
         // For text frames, convert binaryPayload to string for comparison
         expect(receivedFrame.binaryPayload.toString('utf8')).toBe(payload);
+      } else if (frameType === 0x02 && Buffer.isBuffer(payload)) {
+        // For binary frames, compare buffer contents
+        expect(receivedFrame.binaryPayload.length).toBe(payload.length);
+        expect(receivedFrame.binaryPayload.equals(payload)).toBe(true);
       }
     },
     
