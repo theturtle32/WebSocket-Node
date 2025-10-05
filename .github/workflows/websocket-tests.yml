@@ -20,3 +20,9 @@ jobs:
       - run: pnpm run lint
 
       - run: pnpm run test
+
+      - name: Pull Autobahn Test Suite Docker image
+        run: docker pull crossbario/autobahn-testsuite
+
+      - name: Run Autobahn WebSocket Protocol Tests
+        run: cd test/autobahn && node run-wstest.js
