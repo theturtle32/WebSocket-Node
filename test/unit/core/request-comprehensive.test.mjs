@@ -11,7 +11,6 @@
  * - Error scenarios
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { EventEmitter } from 'events';
 import WebSocketRequest from '../../../lib/WebSocketRequest.js';
 import { MockSocket } from '../../helpers/mocks.mjs';
 
