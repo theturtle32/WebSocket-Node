@@ -1,8 +1,9 @@
 # WebSocket-Node Test Suite Modernization Plan
 
-**Status:** 55% Complete
-**Last Updated:** October 5, 2025
-**Current Phase:** Phase 4 Complete - Integration Testing with Real Sockets
+**Status:** 62% Complete
+**Last Updated:** October 5, 2025 (Evening Update)
+**Current Phase:** Phases 1-4 Complete - All Core Testing & Integration Complete
+**Latest Milestone:** Removed obsolete tape test files (5 files cleaned up)
 
 ---
 
@@ -646,6 +647,18 @@ test/integration/
 ├── performance/       📁 Empty (future enhancement)
 └── routing/          ✅ 7 tests (router-integration.test.mjs)
 ```
+
+### Cleanup Complete (October 5, 2025)
+
+**Obsolete Files Removed:**
+- ❌ `test/unit/request.js` (superseded by test/unit/legacy/request.test.mjs)
+- ❌ `test/unit/regressions.js` (superseded by test/unit/legacy/regressions.test.mjs)
+- ❌ `test/unit/dropBeforeAccept.js` (superseded by test/unit/legacy/dropBeforeAccept.test.mjs)
+- ❌ `test/unit/websocketFrame.js` (superseded by test/unit/legacy/websocketFrame.test.mjs)
+- ❌ `test/unit/w3cwebsocket.js` (superseded by test/unit/legacy/w3cwebsocket.test.mjs)
+
+All 5 legacy tape test files have been migrated to Vitest and the old versions removed.
+All 559 tests continue to pass after cleanup.
 
 ---
 
