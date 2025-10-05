@@ -86,14 +86,18 @@ function parseResults() {
   // Print summary
   console.log('Test Summary:');
   console.log(`  Total tests: ${summary.total}`);
+  console.log(`  Implemented tests: ${summary.total - summary.unimplemented}`);
   console.log(`  Passed (OK): ${summary.ok}`);
   console.log(`  Failed: ${summary.failed}`);
   console.log(`  Non-Strict: ${summary.nonStrict}`);
   console.log(`  Informational: ${summary.informational}`);
   console.log(`  Unimplemented: ${summary.unimplemented}`);
-  
-  const passRate = ((summary.ok / summary.total) * 100).toFixed(1);
-  console.log(`  Pass rate: ${passRate}%`);
+
+  const implementedTests = summary.total - summary.unimplemented;
+  const passRate = implementedTests > 0
+    ? ((summary.ok / implementedTests) * 100).toFixed(1)
+    : '0.0';
+  console.log(`  Pass rate (implemented): ${passRate}%`);
   
   // Print failed tests if any
   if (summary.failedTests.length > 0) {
