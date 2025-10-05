@@ -318,15 +318,17 @@ async function run() {
         });
 
         // Send a random number every second
-        const interval = setInterval(async function() {
+        let timeoutId;
+        (async function sendNumber() {
             if (connection.connected) {
                 const number = Math.round(Math.random() * 0xFFFFFF);
                 await connection.sendUTF(number.toString());
+                timeoutId = setTimeout(sendNumber, 1000);
             }
-        }, 1000);
+        })();
 
         connection.on('close', function() {
-            clearInterval(interval);
+            clearTimeout(timeoutId);
             console.log('echo-protocol Connection Closed');
         });
 
