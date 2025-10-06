@@ -9,6 +9,7 @@
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as utils from '../../../lib/utils.js';
+import debug from 'debug';
 
 describe('Utils Module - Enhanced Coverage', () => {
   describe('BufferingLogger.printOutput() behavior', () => {
@@ -20,7 +21,6 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     afterEach(() => {
-      const debug = require('debug');
       debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;
@@ -67,7 +67,6 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     afterEach(() => {
-      const debug = require('debug');
       debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;

@@ -11,9 +11,6 @@ export default defineConfig({
         singleThread: true
       }
     },
-    // Silence debug output during tests
-    silent: false,
-    reporters: ['default'],
     // Timeouts for WebSocket operations
     testTimeout: 15000,
     hookTimeout: 15000,
