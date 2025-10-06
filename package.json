@@ -55,6 +55,8 @@
     "test:browser:chromium": "playwright test --project=chromium",
     "test:browser:ui": "playwright test --ui",
     "test:autobahn": "cd test/autobahn && ./run-wstest.js",
+    "bench": "vitest bench --run --config vitest.bench.config.mjs",
+    "bench:compare": "vitest bench --run --config vitest.bench.config.mjs --compare",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
   },
