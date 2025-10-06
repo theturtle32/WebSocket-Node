@@ -35,10 +35,12 @@
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "vitest": "^1.0.0",
+    "@playwright/test": "^1.55.1",
     "@vitest/coverage-v8": "^1.0.0",
-    "@vitest/ui": "^1.0.0"
+    "@vitest/ui": "^1.0.0",
+    "eslint": "^8.0.0",
+    "express": "^5.1.0",
+    "vitest": "^1.0.0"
   },
   "config": {
     "verbose": false
@@ -49,6 +51,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:coverage:watch": "vitest --coverage",
+    "test:browser": "playwright test",
+    "test:browser:chromium": "playwright test --project=chromium",
+    "test:browser:ui": "playwright test --ui",
     "test:autobahn": "cd test/autobahn && ./run-wstest.js",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"

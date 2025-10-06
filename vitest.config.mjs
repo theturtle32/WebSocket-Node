@@ -21,11 +21,13 @@ export default defineConfig({
     ],
     exclude: [
       'node_modules/',
-      'test/autobahn/',
-      'test/scripts/',
-      'test/fixtures/',
-      'test/shared/',
-      'test/helpers/'
+      'test/autobahn/**',
+      'test/browser/**',
+      'test/scripts/**',
+      'test/fixtures/**',
+      'test/shared/**',
+      'test/helpers/**',
+      '**/*.browser.test.js'
     ],
     // Setup files for global test configuration
     setupFiles: ['test/shared/setup.mjs'],
