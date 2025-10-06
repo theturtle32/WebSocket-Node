@@ -1,16 +1,47 @@
 name: websocket-tests
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+      fail-fast: false
+    name: Test on Node.js ${{ matrix.node-version }}
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 10.x
-
       - uses: actions/checkout@v2
 
-      - run: npm install
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
-      - run: npm run test
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run lint
+        run: pnpm run lint
+
+      - name: Run unit tests
+        if: matrix.node-version != '22.x'
+        run: pnpm run test
+
+      - name: Run unit tests with coverage
+        if: matrix.node-version == '22.x'
+        run: pnpm run test:coverage
+
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == '22.x'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Pull Autobahn Test Suite Docker image
+        run: docker pull crossbario/autobahn-testsuite
+
+      - name: Run Autobahn WebSocket Protocol Tests
+        run: cd test/autobahn && node run-wstest.js

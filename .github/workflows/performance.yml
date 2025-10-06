@@ -1,0 +1,55 @@
+name: performance
+on:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'test/benchmark/**'
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    name: Performance Benchmarks
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run benchmarks
+        id: bench
+        run: |
+          echo "Running performance benchmarks..."
+          pnpm exec vitest bench --run --config vitest.bench.config.mjs --outputJson bench-results.json 2>&1 | tee bench-output.txt
+
+      - name: Generate benchmark summary
+        if: always()
+        run: |
+          # Parse JSON and create markdown table
+          if [ -f bench-results.json ]; then
+            node scripts/format-benchmarks.mjs bench-results.json >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## 📊 Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ No benchmark results found" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Show terminal output
+          echo "### Terminal Output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          sed 's/\x1b\[[0-9;]*m//g' bench-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Check for regressions (informational)
+        run: pnpm run bench:check || echo "::warning::Performance regressions detected. Review benchmark results."
+        continue-on-error: true

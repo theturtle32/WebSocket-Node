@@ -1,12 +1,12 @@
-var http = require('http');
-var WebSocketServer = require('../../lib/WebSocketServer');
+const http = require('http');
+const WebSocketServer = require('../../lib/WebSocketServer');
 
-var server;
-var wsServer;
+let server;
+let wsServer;
 
 function prepare(callback) {
-  if (typeof(callback) !== 'function') { callback = function(){}; }
-  server = http.createServer(function(request, response) {
+  if (typeof(callback) !== 'function') { callback = () => {}; }
+  server = http.createServer((request, response) => {
     response.writeHead(404);
     response.end();
   });
@@ -21,7 +21,7 @@ function prepare(callback) {
     disableNagleAlgorithm: false
   });
 
-  server.listen(64321, function(err) {
+  server.listen(64321, (err) => {
     if (err) {
       return callback(err);
     }
@@ -40,6 +40,6 @@ function stopServer() {
 }
 
 module.exports = {
-  prepare: prepare,
-  stopServer: stopServer
+  prepare,
+  stopServer
 };

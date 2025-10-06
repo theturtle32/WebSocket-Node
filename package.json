@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/theturtle32/WebSocket-Node",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "bufferutil": "^4.0.1",
@@ -35,19 +35,32 @@
     "yaeti": "^0.0.6"
   },
   "devDependencies": {
-    "buffer-equal": "^1.0.0",
-    "gulp": "^4.0.2",
-    "gulp-jshint": "^2.0.4",
-    "jshint-stylish": "^2.2.1",
-    "jshint": "^2.0.0",
-    "tape": "^4.9.1"
+    "@playwright/test": "^1.55.1",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "eslint": "^8.0.0",
+    "express": "^5.1.0",
+    "vitest": "^1.0.0"
   },
   "config": {
     "verbose": false
   },
   "scripts": {
-    "test": "tape test/unit/*.js",
-    "gulp": "gulp"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:watch": "vitest --coverage",
+    "test:browser": "playwright test",
+    "test:browser:chromium": "playwright test --project=chromium",
+    "test:browser:ui": "playwright test --ui",
+    "test:autobahn": "cd test/autobahn && ./run-wstest.js",
+    "bench": "vitest bench --run --config vitest.bench.config.mjs",
+    "bench:baseline": "pnpm run bench -- --outputJson test/benchmark/baseline.json",
+    "bench:compare": "pnpm run bench -- --compare test/benchmark/baseline.json",
+    "bench:check": "pnpm run bench -- --compare test/benchmark/baseline.json",
+    "lint": "eslint lib/**/*.js test/**/*.js",
+    "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
   },
   "main": "index",
   "directories": {

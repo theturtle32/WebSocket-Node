@@ -15,23 +15,23 @@
  *  limitations under the License.
  ***********************************************************************/
 
-var WebSocketClient = require('../../lib/WebSocketClient');
-var wsVersion = require('../../lib/websocket').version;
-var querystring = require('querystring');
+const WebSocketClient = require('../../lib/WebSocketClient');
+const wsVersion = require('../../lib/websocket').version;
+const querystring = require('querystring');
 
-var args = { /* defaults */
-    secure: false,
-    port: '9000',
-    host: 'localhost'
+const args = { /* defaults */
+  secure: false,
+  port: '9000',
+  host: 'localhost'
 };
 
 /* Parse command line options */
-var pattern = /^--(.*?)(?:=(.*))?$/;
-process.argv.forEach(function(value) {
-    var match = pattern.exec(value);
-    if (match) {
-        args[match[1]] = match[2] ? match[2] : true;
-    }
+const pattern = /^--(.*?)(?:=(.*))?$/;
+process.argv.forEach((value) => {
+  const match = pattern.exec(value);
+  if (match) {
+    args[match[1]] = match[2] ? match[2] : true;
+  }
 });
 
 args.protocol = args.secure ? 'wss:' : 'ws:';
@@ -43,93 +43,104 @@ console.log('');
 
 console.log('Starting test run.');
 
-getCaseCount(function(caseCount) {
-    var currentCase = 1;
-    runNextTestCase();
-    
-    function runNextTestCase() {
-        runTestCase(currentCase++, caseCount, function() {
-            if (currentCase <= caseCount) {
-                process.nextTick(runNextTestCase);
-            }
-            else {
-                process.nextTick(function() {
-                    console.log('Test suite complete, generating report.');
-                    updateReport(function() {
-                        console.log('Report generated.');
-                    });
-                });
-            }
-        });
+// Using v2.0 Promise-based API for cleaner async flow
+(async () => {
+  try {
+    const caseCount = await getCaseCount();
+
+    for (let currentCase = 1; currentCase <= caseCount; currentCase++) {
+      await runTestCase(currentCase, caseCount);
     }
-});
+
+    console.log('Test suite complete, generating report.');
+    await updateReport();
+    console.log('Report generated.');
+  } catch (error) {
+    console.error('Test suite error:', error);
+    process.exit(1);
+  }
+})();
 
 
-function runTestCase(caseIndex, caseCount, callback) {
-    console.log('Running test ' + caseIndex + ' of ' + caseCount);
-    var echoClient = new WebSocketClient({
-        maxReceivedFrameSize: 64*1024*1024,   // 64MiB
-        maxReceivedMessageSize: 64*1024*1024, // 64MiB
-        fragmentOutgoingMessages: false,
-        keepalive: false,
-        disableNagleAlgorithm: false
-    });
+async function runTestCase(caseIndex, caseCount) {
+  console.log(`Running test ${caseIndex} of ${caseCount}`);
+  const echoClient = new WebSocketClient({
+    maxReceivedFrameSize: 64*1024*1024,   // 64MiB
+    maxReceivedMessageSize: 64*1024*1024, // 64MiB
+    fragmentOutgoingMessages: false,
+    keepalive: false,
+    disableNagleAlgorithm: false
+  });
 
-    echoClient.on('connectFailed', function(error) {
-        console.log('Connect Error: ' + error.toString());
-    });
+  const qs = querystring.stringify({
+    case: caseIndex,
+    agent: `WebSocket-Node Client v${wsVersion}`
+  });
 
-    echoClient.on('connect', function(connection) {
-        connection.on('error', function(error) {
-            console.log('Connection Error: ' + error.toString());
-        });
-        connection.on('close', function() {
-            callback();
-        });
-        connection.on('message', function(message) {
-            if (message.type === 'utf8') {
-                connection.sendUTF(message.utf8Data);
-            }
-            else if (message.type === 'binary') {
-                connection.sendBytes(message.binaryData);
-            }
-        });
+  try {
+    const connection = await echoClient.connect(`ws://${args.host}:${args.port}/runCase?${qs}`, []);
+
+    // Wait for connection to close
+    await new Promise((resolve, reject) => {
+      connection.on('error', (error) => {
+        console.log(`Connection Error: ${error.toString()}`);
+      });
+
+      connection.on('close', () => {
+        resolve();
+      });
+
+      connection.on('message', async (message) => {
+        try {
+          if (message.type === 'utf8') {
+            await connection.sendUTF(message.utf8Data);
+          }
+          else if (message.type === 'binary') {
+            await connection.sendBytes(message.binaryData);
+          }
+        } catch (err) {
+          console.error(`Send error: ${err}`);
+        }
+      });
     });
-    
-    var qs = querystring.stringify({
-        case: caseIndex,
-        agent: 'WebSocket-Node Client v' + wsVersion
-    });
-    echoClient.connect('ws://' + args.host + ':' + args.port + '/runCase?' + qs, []);
+  } catch (error) {
+    console.log(`Connect Error: ${error.toString()}`);
+  }
 }
 
-function getCaseCount(callback) {
-    var client = new WebSocketClient();
-    var caseCount = NaN;
-    client.on('connect', function(connection) {
-        connection.on('close', function() {
-            callback(caseCount);
-        });
-        connection.on('message', function(message) {
-            if (message.type === 'utf8') {
-                console.log('Got case count: ' + message.utf8Data);
-                caseCount = parseInt(message.utf8Data, 10);
-            }
-            else if (message.type === 'binary') {
-                throw new Error('Unexpected binary message when retrieving case count');
-            }
-        });
+async function getCaseCount() {
+  const client = new WebSocketClient();
+
+  const connection = await client.connect(`ws://${args.host}:${args.port}/getCaseCount`, []);
+
+  return new Promise((resolve, reject) => {
+    let caseCount = NaN;
+
+    connection.on('close', () => {
+      resolve(caseCount);
     });
-    client.connect('ws://' + args.host + ':' + args.port + '/getCaseCount', []);
+
+    connection.on('message', (message) => {
+      if (message.type === 'utf8') {
+        console.log(`Got case count: ${message.utf8Data}`);
+        caseCount = parseInt(message.utf8Data, 10);
+      }
+      else if (message.type === 'binary') {
+        reject(new Error('Unexpected binary message when retrieving case count'));
+      }
+    });
+  });
 }
 
-function updateReport(callback) {
-    var client = new WebSocketClient();
-    var qs = querystring.stringify({
-        agent: 'WebSocket-Node Client v' + wsVersion
-    });
-    client.on('connect', function(connection) {
-        connection.on('close', callback);
-    });
-    client.connect('ws://localhost:9000/updateReports?' + qs);
+async function updateReport() {
+  const client = new WebSocketClient();
+  const qs = querystring.stringify({
+    agent: `WebSocket-Node Client v${wsVersion}`
+  });
+
+  const connection = await client.connect(`ws://localhost:9000/updateReports?${qs}`);
+
+  return new Promise((resolve) => {
+    connection.on('close', resolve);
+  });
 }

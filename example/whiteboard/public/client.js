@@ -114,7 +114,7 @@ Whiteboard.prototype.clear = function() {
 
 Whiteboard.prototype.handleMouseDown = function(event) {
     this.mouseDown = true;
-	this.lastPoint = this.resolveMousePosition(event);
+  this.lastPoint = this.resolveMousePosition(event);
 };
 
 Whiteboard.prototype.handleMouseUp = function(event) {
@@ -178,12 +178,12 @@ Whiteboard.prototype.addCanvasEventListeners = function() {
 
 Whiteboard.prototype.resolveMousePosition = function(event) {
     var x, y;
-	if (event.offsetX) {
-		x = event.offsetX;
-		y = event.offsetY;
-	} else {
-		x = event.layerX - this.offsetX;
-		y = event.layerY - this.offsetY;
-	}
-	return { x: x, y: y };
+  if (event.offsetX) {
+    x = event.offsetX;
+    y = event.offsetY;
+  } else {
+    x = event.layerX - this.offsetX;
+    y = event.layerY - this.offsetY;
+  }
+  return { x: x, y: y };
 };
