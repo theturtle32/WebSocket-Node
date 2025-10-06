@@ -35,13 +35,17 @@ function parseBenchmarkOutput(output) {
     // Detect suite name
     if (line.includes('> WebSocket')) {
       currentSuite = line.match(/> (.*)/)[1].trim();
-      results[currentSuite] = {};
+      // Don't initialize suite here - wait until first benchmark is found
     }
 
     // Parse benchmark results
     const benchMatch = line.match(/^\s*[·•]\s+(.+?)\s+(\d+(?:,\d+)*(?:\.\d+)?)\s/);
     if (benchMatch && currentSuite) {
       const [, name, hz] = benchMatch;
+      // Lazily initialize suite only when first benchmark is found
+      if (!results[currentSuite]) {
+        results[currentSuite] = {};
+      }
       results[currentSuite][name.trim()] = parseFloat(hz.replace(/,/g, ''));
     }
   }
