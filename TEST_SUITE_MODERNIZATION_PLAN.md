@@ -780,13 +780,51 @@ test/
 - [ ] Coverage badges in README
 - [ ] Coverage threshold enforcement (target: 85%+)
 
-### 6.3 Performance Regression Detection - NOT STARTED
+### ✅ 6.3 Performance Regression Detection - COMPLETE
 
-**Needed:**
-- [ ] Benchmark baseline establishment
-- [ ] Performance test automation
-- [ ] Regression alerts
-- [ ] Historical performance tracking
+**Status:** Complete
+**Completion Date:** October 6, 2025
+
+**Implemented:**
+- ✅ Benchmark baseline establishment (test/benchmark/baseline.json)
+- ✅ Performance test automation (Vitest benchmarks)
+- ✅ Regression detection with 15% threshold (track-performance.mjs)
+- ✅ GitHub Actions performance workflow (informational warnings)
+- ✅ Autobahn test suite performance metrics tracking
+
+**Benchmark Suites:**
+- **WebSocketFrame Performance** - Frame serialization benchmarks
+  - Small text frames (unmasked/masked): 4.4M / 3.0M ops/sec
+  - Medium binary frames (1KB): 4.2M ops/sec
+  - Large binary frames (64KB): 4.0M ops/sec
+
+- **WebSocketConnection Performance** - Connection operation benchmarks
+  - Connection instance creation: 28-32K ops/sec
+  - Small/medium UTF-8 messages: 24-28K ops/sec
+  - Binary messages (1KB): 24-25K ops/sec
+  - Ping/Pong frames: 31-34K ops/sec
+
+**Autobahn Performance Metrics:**
+- Total test duration tracking across 517 tests
+- Performance-focused test categorization:
+  - 9.x (Limits/Performance): 54 tests, avg 175.56ms
+  - 10.x (Large Messages): 1 test, avg 7.00ms
+  - 12.x (Fragmentation): 90 tests, avg 1.23ms
+- Top 5 slowest tests per category displayed
+
+**Files:**
+- `test/benchmark/frame-operations.bench.mjs`
+- `test/benchmark/connection-operations.bench.mjs`
+- `test/benchmark/track-performance.mjs`
+- `test/benchmark/baseline.json`
+- `vitest.bench.config.mjs`
+- `.github/workflows/performance.yml`
+- `test/autobahn/parse-results.js` (enhanced with performance metrics)
+
+**Scripts:**
+- `pnpm run bench` - Run benchmarks
+- `pnpm run bench:baseline` - Save performance baseline
+- `pnpm run bench:check` - Check for regressions
 
 ### ✅ 6.4 Multi-Version Testing - COMPLETE
 

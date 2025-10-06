@@ -107,11 +107,38 @@ class AutobahnTestRunner {
     return new Promise((resolve, reject) => {
       console.log('🐳 Starting Autobahn test suite with Docker...');
 
+      // Get current commit SHA (fallback to 'unknown' if not in git repo)
+      const { execSync } = require('child_process');
+      let commitSha = 'unknown';
+      try {
+        commitSha = execSync('git rev-parse --short HEAD', { stdio: ['pipe', 'pipe', 'pipe'] }).toString().trim();
+      } catch (error) {
+        // Not in a git repo or git not available
+        console.log('   Warning: Unable to determine commit SHA, using "unknown"');
+      }
+
       // Detect platform and use appropriate config and networking
       const isLinux = process.platform === 'linux';
-      const configFile = isLinux ? 'fuzzingclient-linux.json' : 'fuzzingclient.json';
+      const baseConfigFile = isLinux ? 'fuzzingclient-linux.json' : 'fuzzingclient.json';
+      const configFile = `${baseConfigFile.replace('.json', '')}-temp.json`;
 
-      console.log(`   Platform: ${process.platform}, using config: ${configFile}`);
+      console.log(`   Platform: ${process.platform}, commit: ${commitSha}, using config: ${configFile}`);
+
+      // Generate config file with commit SHA
+      const baseConfigPath = path.join(process.cwd(), 'config', baseConfigFile);
+      const tempConfigPath = path.join(process.cwd(), 'config', configFile);
+
+      try {
+        const configContent = fs.readFileSync(baseConfigPath, 'utf8');
+        const modifiedConfig = configContent.replace(
+          /"agent":\s*"WebSocket-Node[^"]*"/,
+          `"agent": "WebSocket-Node@${commitSha}"`
+        );
+        fs.writeFileSync(tempConfigPath, modifiedConfig);
+      } catch (error) {
+        reject(new Error(`Failed to generate config file: ${error.message}`));
+        return;
+      }
 
       const dockerArgs = [
         'run',
@@ -198,16 +225,16 @@ class AutobahnTestRunner {
 
   cleanup() {
     console.log('\n🧹 Cleaning up...');
-    
+
     if (this.dockerProcess && !this.dockerProcess.killed) {
       console.log('   Stopping Docker container...');
       this.dockerProcess.kill('SIGTERM');
     }
-    
+
     if (this.echoServerProcess && !this.echoServerProcess.killed) {
       console.log('   Stopping echo server...');
       this.echoServerProcess.kill('SIGTERM');
-      
+
       // Force kill if it doesn't stop gracefully
       setTimeout(() => {
         if (this.echoServerProcess && !this.echoServerProcess.killed) {
@@ -215,7 +242,22 @@ class AutobahnTestRunner {
         }
       }, 2000);
     }
-    
+
+    // Clean up temporary config files
+    try {
+      const tempConfigs = [
+        path.join(__dirname, 'config', 'fuzzingclient-temp.json'),
+        path.join(__dirname, 'config', 'fuzzingclient-linux-temp.json')
+      ];
+      tempConfigs.forEach(configPath => {
+        if (fs.existsSync(configPath)) {
+          fs.unlinkSync(configPath);
+        }
+      });
+    } catch (error) {
+      console.log(`   Warning: Failed to clean up temp config files: ${error.message}`);
+    }
+
     console.log('✅ Cleanup complete');
   }
 }
