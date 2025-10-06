@@ -142,8 +142,6 @@ test.describe('WebSocket Real Connection Tests', () => {
     for (const msg of messages) {
       await page.fill('#messageInput', msg);
       await page.click('#sendBtn');
-      // Small delay between messages
-      await page.waitForTimeout(100);
     }
 
     // Wait for all responses

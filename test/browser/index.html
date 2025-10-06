@@ -197,7 +197,9 @@
         if (typeof event.data === 'string') {
           addLog(`← Received: ${event.data}`, 'received');
         } else {
-          addLog(`← Received binary data: ${event.data.size} bytes`, 'received');
+          // Use byteLength for ArrayBuffer, size for Blob
+          const size = event.data.byteLength !== undefined ? event.data.byteLength : event.data.size;
+          addLog(`← Received binary data: ${size} bytes`, 'received');
         }
       };
 
