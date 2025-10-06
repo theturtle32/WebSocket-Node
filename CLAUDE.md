@@ -3,13 +3,16 @@
 ## Build/Test Commands
 
 ### Testing
-- `pnpm test` - Run all vitest tests (616 unit + integration tests)
+- `pnpm test` - Run all vitest tests (632 unit + integration tests)
 - `pnpm test:watch` - Run vitest in watch mode for development
 - `pnpm test:ui` - Run vitest with web UI interface
 - `pnpm test:coverage` - Run tests with coverage report (target: 85%+)
 - `pnpm test:coverage:watch` - Run coverage in watch mode
+- `pnpm test:browser` - Run Playwright browser tests (all browsers)
+- `pnpm test:browser:chromium` - Run Playwright tests with Chromium only
+- `pnpm test:browser:ui` - Run Playwright tests with interactive UI
 - `pnpm test:autobahn` - Run Autobahn WebSocket Protocol Compliance Suite (517 tests)
-- `pnpx vitest run test/unit/[filename].test.mjs` - Run single test file
+- `pnpx vitest run test/unit/[filename].test.mjs` - Run single vitest test file
 
 ### Linting
 - `pnpm lint` - Check code for lint errors
@@ -62,3 +65,5 @@ pnpm test:coverage  # Current: 85.05% ✅
 - When completing a task and creating the PR, poll for Gemini's code review. Then address any medium or high priority comments. Then merge the PR, switch locally back to `v2`
  and pull from remote. Then pick up the next task, create a branch, do the work, commit, push, pr, gemini code review, merge, next task, in a loop until all projects are
 completed.
+- When it would be helpful to reference the latest documentation, use the context7 mcp tools
+- If needed, you have the ability to run commands with `sudo` without requiring a password.

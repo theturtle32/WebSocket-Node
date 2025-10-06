@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Browser Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 10px;
+    }
+    .status {
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .status.connected {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.disconnected {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .status.connecting {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #005a9e;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #messageInput {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    #log {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 3px 0;
+    }
+    .log-sent {
+      color: #0066cc;
+    }
+    .log-received {
+      color: #00aa00;
+    }
+    .log-error {
+      color: #cc0000;
+    }
+    .log-info {
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>WebSocket Browser Test</h1>
+
+  <div id="status" class="status disconnected">
+    Status: <span id="statusText">Disconnected</span>
+  </div>
+
+  <div id="readyState">
+    ReadyState: <span id="readyStateValue">-</span>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <button id="connectBtn" onclick="connect()">Connect</button>
+    <button id="disconnectBtn" onclick="disconnect()" disabled>Disconnect</button>
+    <button id="clearLogBtn" onclick="clearLog()">Clear Log</button>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <input type="text" id="messageInput" placeholder="Enter message to send..." disabled />
+    <button id="sendBtn" onclick="sendMessage()" disabled>Send Message</button>
+    <button onclick="sendTestMessage('ping')" disabled id="pingBtn">Send Ping</button>
+    <button onclick="sendBinaryMessage()" disabled id="binaryBtn">Send Binary</button>
+  </div>
+
+  <div id="log"></div>
+
+  <script>
+    let ws = null;
+    const log = document.getElementById('log');
+    const statusDiv = document.getElementById('status');
+    const statusText = document.getElementById('statusText');
+    const readyStateValue = document.getElementById('readyStateValue');
+    const messageInput = document.getElementById('messageInput');
+
+    // Button references
+    const connectBtn = document.getElementById('connectBtn');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const sendBtn = document.getElementById('sendBtn');
+    const pingBtn = document.getElementById('pingBtn');
+    const binaryBtn = document.getElementById('binaryBtn');
+
+    function addLog(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function updateStatus(status, stateClass) {
+      statusText.textContent = status;
+      statusDiv.className = `status ${stateClass}`;
+    }
+
+    function updateReadyState() {
+      if (ws) {
+        const states = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED'];
+        readyStateValue.textContent = `${ws.readyState} (${states[ws.readyState]})`;
+      } else {
+        readyStateValue.textContent = '-';
+      }
+    }
+
+    function updateButtons() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        connectBtn.disabled = false;
+        disconnectBtn.disabled = true;
+        sendBtn.disabled = true;
+        pingBtn.disabled = true;
+        binaryBtn.disabled = true;
+        messageInput.disabled = true;
+      } else {
+        connectBtn.disabled = true;
+        disconnectBtn.disabled = false;
+        sendBtn.disabled = false;
+        pingBtn.disabled = false;
+        binaryBtn.disabled = false;
+        messageInput.disabled = false;
+      }
+    }
+
+    function connect() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        addLog('Already connected', 'info');
+        return;
+      }
+
+      const url = `ws://${window.location.hostname}:${window.location.port}/`;
+      addLog(`Connecting to ${url}...`, 'info');
+      updateStatus('Connecting...', 'connecting');
+
+      ws = new WebSocket(url, 'echo-protocol');
+
+      ws.onopen = function(event) {
+        addLog('✓ Connected successfully', 'info');
+        updateStatus('Connected', 'connected');
+        updateReadyState();
+        updateButtons();
+      };
+
+      ws.onmessage = function(event) {
+        if (typeof event.data === 'string') {
+          addLog(`← Received: ${event.data}`, 'received');
+        } else {
+          addLog(`← Received binary data: ${event.data.size} bytes`, 'received');
+        }
+      };
+
+      ws.onerror = function(event) {
+        addLog('✗ WebSocket error occurred', 'error');
+      };
+
+      ws.onclose = function(event) {
+        addLog(`✗ Connection closed (code: ${event.code}, reason: ${event.reason || 'none'})`, 'info');
+        updateStatus('Disconnected', 'disconnected');
+        updateReadyState();
+        updateButtons();
+        ws = null;
+      };
+
+      updateReadyState();
+      updateButtons();
+    }
+
+    function disconnect() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        addLog('Closing connection...', 'info');
+        ws.close();
+      }
+    }
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) {
+        addLog('Please enter a message', 'error');
+        return;
+      }
+
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        addLog('Not connected', 'error');
+        return;
+      }
+
+      ws.send(message);
+      addLog(`→ Sent: ${message}`, 'sent');
+      messageInput.value = '';
+    }
+
+    function sendTestMessage(message) {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        addLog('Not connected', 'error');
+        return;
+      }
+
+      ws.send(message);
+      addLog(`→ Sent: ${message}`, 'sent');
+    }
+
+    function sendBinaryMessage() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        addLog('Not connected', 'error');
+        return;
+      }
+
+      const buffer = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]); // "Hello" in binary
+      ws.send(buffer);
+      addLog(`→ Sent binary data: ${buffer.length} bytes`, 'sent');
+    }
+
+    function clearLog() {
+      log.innerHTML = '';
+    }
+
+    // Allow sending with Enter key
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Make functions available to Playwright tests
+    window.testAPI = {
+      connect,
+      disconnect,
+      sendMessage: (msg) => {
+        messageInput.value = msg;
+        sendMessage();
+      },
+      sendTestMessage,
+      sendBinaryMessage,
+      getConnectionState: () => ws ? ws.readyState : -1,
+      getLogEntries: () => Array.from(log.children).map(el => el.textContent),
+      clearLog
+    };
+
+    // Initialize
+    updateButtons();
+    addLog('WebSocket test page loaded', 'info');
+  </script>
+</body>
+</html>
