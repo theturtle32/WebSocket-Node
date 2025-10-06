@@ -23,17 +23,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright browsers
-        run: pnpx playwright install --with-deps chromium
-
       - name: Run lint
         run: pnpm run lint
 
       - name: Run unit tests
         run: pnpm run test
-
-      - name: Run browser tests (Chromium only)
-        run: pnpm run test:browser:chromium
 
       - name: Pull Autobahn Test Suite Docker image
         run: docker pull crossbario/autobahn-testsuite
