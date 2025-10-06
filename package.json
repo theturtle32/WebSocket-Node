@@ -57,6 +57,7 @@
     "test:autobahn": "cd test/autobahn && ./run-wstest.js",
     "bench": "vitest bench --run --config vitest.bench.config.mjs",
     "bench:baseline": "node test/benchmark/track-performance.mjs save",
+    "bench:compare": "node test/benchmark/track-performance.mjs compare",
     "bench:check": "node test/benchmark/track-performance.mjs check",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
