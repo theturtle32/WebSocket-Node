@@ -3,6 +3,11 @@ on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+      fail-fast: false
+    name: Test on Node.js ${{ matrix.node-version }}
     steps:
       - uses: actions/checkout@v2
 
@@ -12,14 +17,17 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      - run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-      - run: pnpm run lint
+      - name: Run lint
+        run: pnpm run lint
 
-      - run: pnpm run test
+      - name: Run unit tests
+        run: pnpm run test
 
       - name: Pull Autobahn Test Suite Docker image
         run: docker pull crossbario/autobahn-testsuite
