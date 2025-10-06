@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-10-06T16:43:17.731Z",
+  "results": {
+    "WebSocketConnection Performance 3866ms": {
+      "create connection instance": 28323.39,
+      "send small UTF-8 message": 28201.35,
+      "send medium UTF-8 message (1KB)": 24615.97,
+      "send binary message (1KB)": 24889.31,
+      "send ping frame": 31562.37,
+      "send pong frame": 32393.72
+    },
+    "WebSocketFrame Performance 10001ms": {
+      "serialize small text frame (17 bytes, unmasked)": 4427042.23,
+      "serialize small text frame (17 bytes, masked)": 3005215.87,
+      "serialize medium binary frame (1KB)": 4239270.36,
+      "serialize large binary frame (64KB)": 4024552.34
+    },
+    "WebSocketConnection Performance": {},
+    "WebSocketFrame Performance": {}
+  }
+}

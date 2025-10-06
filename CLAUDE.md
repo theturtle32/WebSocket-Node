@@ -3,7 +3,7 @@
 ## Build/Test Commands
 
 ### Testing
-- `pnpm test` - Run all vitest tests (632 unit + integration tests)
+- `pnpm test` - Run all vitest tests (628 unit + integration tests)
 - `pnpm test:watch` - Run vitest in watch mode for development
 - `pnpm test:ui` - Run vitest with web UI interface
 - `pnpm test:coverage` - Run tests with coverage report (target: 85%+)
@@ -13,6 +13,11 @@
 - `pnpm test:browser:ui` - Run Playwright tests with interactive UI
 - `pnpm test:autobahn` - Run Autobahn WebSocket Protocol Compliance Suite (517 tests)
 - `pnpx vitest run test/unit/[filename].test.mjs` - Run single vitest test file
+
+### Performance Benchmarking
+- `pnpm bench` - Run performance benchmarks for critical operations
+- `pnpm bench:baseline` - Save current performance as baseline
+- `pnpm bench:check` - Check for performance regressions (CI)
 
 ### Linting
 - `pnpm lint` - Check code for lint errors

@@ -10,3 +10,4 @@ test/scripts/heapdump/*
 test-results.json
 /coverage
 .claude/
+test-results/
