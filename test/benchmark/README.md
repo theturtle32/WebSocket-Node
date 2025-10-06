@@ -14,9 +14,11 @@ pnpm run bench:baseline
 # Compare with baseline (shows ⇑/⇓ indicators)
 pnpm run bench:compare
 
-# Check for regressions (CI mode)
+# Check for regressions (exits with error on performance drops)
 pnpm run bench:check
 ```
+
+Note: `bench:check` is the same as `bench:compare` but is intended for CI environments where you want the build to fail on performance regressions.
 
 ## Benchmark Suites
 
