@@ -34,16 +34,33 @@ function parseResults() {
     failedTests: [],
     nonStrictTests: [],
     unimplementedTests: [],
-    informationalTests: []
+    informationalTests: [],
+    performance: {
+      totalDuration: 0,
+      testCount: 0,
+      byCategory: {
+        'limits': { tests: [], totalDuration: 0, description: '9.x - Limits/Performance' },
+        'largeMessages': { tests: [], totalDuration: 0, description: '10.x - Large Messages' },
+        'fragmentation': { tests: [], totalDuration: 0, description: '12.x - WebSocket Fragmentation' },
+        'other': { tests: [], totalDuration: 0, description: 'Other Tests' }
+      }
+    }
   };
   
+  // Category mapping for performance tests
+  const categoryMap = {
+    '9': 'limits',
+    '10': 'largeMessages',
+    '12': 'fragmentation'
+  };
+
   // Parse each test case
   for (const [testCase, result] of Object.entries(testResults)) {
     summary.total++;
-    
+
     const behavior = result.behavior;
     const behaviorClose = result.behaviorClose;
-    
+
     if (behavior === 'OK' && behaviorClose === 'OK') {
       summary.ok++;
     } else if (behavior === 'UNIMPLEMENTED') {
@@ -80,6 +97,23 @@ function parseResults() {
         duration: result.duration,
         remoteCloseCode: result.remoteCloseCode
       });
+    }
+
+    // Track performance metrics
+    if (result.duration !== undefined) {
+      summary.performance.totalDuration += result.duration;
+      summary.performance.testCount++;
+
+      // Categorize performance tests
+      const majorCategory = testCase.split('.')[0];
+      const category = categoryMap[majorCategory] || 'other';
+
+      summary.performance.byCategory[category].tests.push({
+        testCase: testCase,
+        duration: result.duration,
+        description: result.description
+      });
+      summary.performance.byCategory[category].totalDuration += result.duration;
     }
   }
   
@@ -144,7 +178,48 @@ function parseResults() {
     }
   }
   
-  console.log('\n');
+  // Print performance summary
+  if (summary.performance.testCount > 0) {
+    console.log('=== PERFORMANCE METRICS ===');
+    console.log(`  Total test duration: ${summary.performance.totalDuration.toLocaleString()}ms`);
+    console.log(`  Tests with timing data: ${summary.performance.testCount}`);
+    console.log(`  Average duration: ${(summary.performance.totalDuration / summary.performance.testCount).toFixed(2)}ms\n`);
+
+    // Print category breakdown for performance-focused tests
+    const perfCategories = Object.keys(summary.performance.byCategory).filter(key => key !== 'other');
+    let hasPerfData = false;
+
+    for (const categoryKey of perfCategories) {
+      const category = summary.performance.byCategory[categoryKey];
+      if (category.tests.length > 0) {
+        hasPerfData = true;
+        const avgDuration = (category.totalDuration / category.tests.length).toFixed(2);
+        console.log(`  ${category.description}:`);
+        console.log(`    Tests: ${category.tests.length}`);
+        console.log(`    Total duration: ${category.totalDuration.toLocaleString()}ms`);
+        console.log(`    Average duration: ${avgDuration}ms`);
+
+        // Show top 5 slowest tests in this category
+        const slowestTests = [...category.tests]
+          .sort((a, b) => b.duration - a.duration)
+          .slice(0, 5);
+
+        if (slowestTests.length > 0) {
+          console.log('    Slowest tests:');
+          slowestTests.forEach(test => {
+            console.log(`      ${test.testCase}: ${test.duration}ms`);
+          });
+        }
+        console.log('');
+      }
+    }
+
+    if (!hasPerfData) {
+      console.log('  No performance-focused tests (9.x, 10.x, 12.x) executed.\n');
+    }
+  }
+
+  console.log('');
 
   // Exit with error code if there are actual failures
   if (summary.failed > 0) {
