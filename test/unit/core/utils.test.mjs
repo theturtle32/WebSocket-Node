@@ -251,8 +251,13 @@ describe('Utils Module', () => {
     });
 
     afterEach(() => {
+      const debug = require('debug');
+      debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;
+        if (originalDebugEnv) {
+          debug.enable(originalDebugEnv);
+        }
       } else {
         delete process.env.DEBUG;
       }

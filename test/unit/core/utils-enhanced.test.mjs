@@ -20,8 +20,13 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     afterEach(() => {
+      const debug = require('debug');
+      debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;
+        if (originalDebugEnv) {
+          debug.enable(originalDebugEnv);
+        }
       } else {
         delete process.env.DEBUG;
       }
@@ -62,8 +67,13 @@ describe('Utils Module - Enhanced Coverage', () => {
     });
 
     afterEach(() => {
+      const debug = require('debug');
+      debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;
+        if (originalDebugEnv) {
+          debug.enable(originalDebugEnv);
+        }
       } else {
         delete process.env.DEBUG;
       }
@@ -81,9 +91,12 @@ describe('Utils Module - Enhanced Coverage', () => {
 
         expect(mockLog).toHaveBeenCalled();
         // Verify the format includes timestamp and uniqueID
+        // printOutput calls logFunction.apply(global, args) where args includes:
+        // [formatString, date, uniqueID, ...originalArgs]
         const firstCall = mockLog.mock.calls[0];
         expect(firstCall).toBeDefined();
-        expect(firstCall[0]).toContain('test-id');
+        // The uniqueID should be in args[2] (after formatString and date)
+        expect(firstCall[2]).toBe('test-id');
       }
     });
 
