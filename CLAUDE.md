@@ -16,7 +16,8 @@
 
 ### Performance Benchmarking
 - `pnpm bench` - Run performance benchmarks for critical operations
-- `pnpm bench:compare` - Compare current performance with previous baseline
+- `pnpm bench:baseline` - Save current performance as baseline
+- `pnpm bench:check` - Check for performance regressions (CI)
 
 ### Linting
 - `pnpm lint` - Check code for lint errors
