@@ -36,79 +36,9 @@ jobs:
         run: |
           echo "## 📊 Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          # Extract WebSocketConnection Performance results
-          echo "### WebSocketConnection Performance" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Operation | ops/sec | mean | p99 |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|---------|------|-----|" >> $GITHUB_STEP_SUMMARY
-
-          # Parse connection operations
-          awk '/WebSocketConnection Performance/,/WebSocketFrame Performance/ {
-            if ($1 == "·") {
-              name = ""
-              hz = ""
-              mean = ""
-              p99 = ""
-              found_hz = 0
-
-              for (i=2; i<=NF; i++) {
-                if ($i ~ /^[0-9]+[,0-9]*\.[0-9]+$/ && found_hz == 0) {
-                  hz = $i
-                  mean = $(i+3)
-                  p99 = $(i+5)
-                  found_hz = 1
-                  for (j=2; j<i; j++) {
-                    if (name == "") name = $j
-                    else name = name " " $j
-                  }
-                  break
-                }
-              }
-
-              if (hz != "" && hz != "0.0000") {
-                printf "| %s | %s | %s | %s |\n", name, hz, mean, p99
-              }
-            }
-          }' bench-output.txt >> $GITHUB_STEP_SUMMARY
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### WebSocketFrame Performance" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Operation | ops/sec | mean | p99 |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|---------|------|-----|" >> $GITHUB_STEP_SUMMARY
-
-          # Parse frame operations
-          awk '/WebSocketFrame Performance/,/BENCH  Summary/ {
-            if ($1 == "·") {
-              name = ""
-              hz = ""
-              mean = ""
-              p99 = ""
-              found_hz = 0
-
-              for (i=2; i<=NF; i++) {
-                if ($i ~ /^[0-9]+[,0-9]*\.[0-9]+$/ && found_hz == 0) {
-                  hz = $i
-                  mean = $(i+3)
-                  p99 = $(i+5)
-                  found_hz = 1
-                  for (j=2; j<i; j++) {
-                    if (name == "") name = $j
-                    else name = name " " $j
-                  }
-                  break
-                }
-              }
-
-              if (hz != "" && hz != "0.0000") {
-                printf "| %s | %s | %s | %s |\n", name, hz, mean, p99
-              }
-            }
-          }' bench-output.txt >> $GITHUB_STEP_SUMMARY
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "_Benchmarks run on $(date)_" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat bench-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Check for regressions (informational)
         run: pnpm run bench:check || echo "::warning::Performance regressions detected. Review benchmark results."
