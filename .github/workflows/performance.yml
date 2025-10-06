@@ -39,20 +39,20 @@ jobs:
 
           # Parse JSON and create markdown table
           if [ -f bench-results.json ]; then
-            echo "| Benchmark | Operations/sec | Mean (ms) | Min (ms) | Max (ms) | P99 (ms) |" >> $GITHUB_STEP_SUMMARY
-            echo "|-----------|----------------|-----------|----------|----------|----------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Benchmark | Hz | Min | Max | Mean | P75 | P99 | P995 | P999 |" >> $GITHUB_STEP_SUMMARY
+            echo "|-----------|-------|------|------|------|------|------|------|------|" >> $GITHUB_STEP_SUMMARY
 
             jq -r '
-              def format_number: tostring |
-                (. / ".") as $parts |
-                if ($parts | length) == 2 then
-                  ($parts[0] | gsub("(?<x>[0-9])(?<y>([0-9]{3})+$)"; "\(.x),\(.y)")) + "." + $parts[1]
-                else
-                  $parts[0] | gsub("(?<x>[0-9])(?<y>([0-9]{3})+$)"; "\(.x),\(.y)")
+              def add_commas:
+                tostring |
+                if length <= 3 then .
+                else (.[:-3] | add_commas) + "," + .[-3:]
                 end;
 
+              def format_hz: floor | add_commas;
+
               .files[].groups[].benchmarks[] |
-              "| \(.name) | \(.hz | floor | format_number) | \((.mean * 1000) | (. * 100 | round / 100)) | \((.min * 1000) | (. * 100 | round / 100)) | \((.max * 1000) | (. * 100 | round / 100)) | \((.p99 * 1000) | (. * 100 | round / 100)) |"
+              "| \(.name) | \(.hz | format_hz) | \(.min | (. * 100 | round / 100)) | \(.max | (. * 100 | round / 100)) | \(.mean | (. * 100 | round / 100)) | \(.p75 | (. * 100 | round / 100)) | \(.p99 | (. * 100 | round / 100)) | \(.p995 | (. * 100 | round / 100)) | \(.p999 | (. * 100 | round / 100)) |"
             ' bench-results.json >> $GITHUB_STEP_SUMMARY
 
             echo "" >> $GITHUB_STEP_SUMMARY
