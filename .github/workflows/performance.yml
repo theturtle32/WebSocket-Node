@@ -29,15 +29,25 @@ jobs:
         id: bench
         run: |
           echo "Running performance benchmarks..."
-          pnpm run bench 2>&1 | tee bench-output.txt
+          pnpm exec vitest bench --run --config vitest.bench.config.mjs --outputJson bench-results.json 2>&1 | tee bench-output.txt
 
       - name: Generate benchmark summary
         if: always()
         run: |
-          echo "## 📊 Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          # Parse JSON and create markdown table
+          if [ -f bench-results.json ]; then
+            node scripts/format-benchmarks.mjs bench-results.json >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## 📊 Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ No benchmark results found" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Show terminal output
+          echo "### Terminal Output" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          cat bench-output.txt >> $GITHUB_STEP_SUMMARY
+          sed 's/\x1b\[[0-9;]*m//g' bench-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Check for regressions (informational)
