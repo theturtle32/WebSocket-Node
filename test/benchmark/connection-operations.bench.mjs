@@ -8,7 +8,9 @@ describe('WebSocketConnection Performance', () => {
   const mediumMessage = 'x'.repeat(1024);
   const binaryBuffer = Buffer.alloc(1024);
 
-  // Pre-create connection for send operations (created once, reused across all iterations)
+  // Shared connection for send operations (created once, reused across all iterations)
+  // Note: We initialize this directly rather than using beforeAll() because Vitest's
+  // benchmark runner doesn't execute hooks before benchmarks in the same way as test()
   const sharedSocket = new MockSocket();
   const sharedConnection = new WebSocketConnection(sharedSocket, [], 'echo-protocol', false, {});
   sharedConnection._addSocketEventListeners();
