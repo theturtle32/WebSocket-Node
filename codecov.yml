@@ -24,7 +24,7 @@ coverage:
 comment:
   layout: "reach,diff,flags,tree"
   behavior: default
-  require_changes: no
+  require_changes: yes
   require_base: no
   require_head: yes
 
@@ -34,6 +34,7 @@ ignore:
   - "bench/**"
   - "docs/**"
   - "scripts/**"
+  - "lib/version.js"
   - "**/*.test.mjs"
   - "**/*.test.js"
   - "**/*.bench.mjs"
