@@ -27,7 +27,18 @@ jobs:
         run: pnpm run lint
 
       - name: Run unit tests
+        if: matrix.node-version != '22.x'
         run: pnpm run test
+
+      - name: Run unit tests with coverage
+        if: matrix.node-version == '22.x'
+        run: pnpm run test:coverage
+
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == '22.x'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Pull Autobahn Test Suite Docker image
         run: docker pull crossbario/autobahn-testsuite
