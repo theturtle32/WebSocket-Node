@@ -86,13 +86,18 @@ function parseResults() {
   // Print summary
   console.log('Test Summary:');
   console.log(`  Total tests: ${summary.total}`);
+  console.log(`  Required tests: ${summary.total - summary.unimplemented}`);
+  console.log(`  Optional tests: ${summary.unimplemented}`);
   console.log(`  Passed (OK): ${summary.ok}`);
   console.log(`  Failed: ${summary.failed}`);
   console.log(`  Non-Strict: ${summary.nonStrict}`);
   console.log(`  Informational: ${summary.informational}`);
-  console.log(`  Unimplemented: ${summary.unimplemented}`);
-  
-  const passRate = ((summary.ok / summary.total) * 100).toFixed(1);
+
+  // Pass rate excludes optional, non-strict, and informational tests
+  const strictRequired = summary.total - summary.unimplemented - summary.nonStrict - summary.informational;
+  const passRate = strictRequired > 0
+    ? ((summary.ok / strictRequired) * 100).toFixed(1)
+    : '0.0';
   console.log(`  Pass rate: ${passRate}%`);
   
   // Print failed tests if any
@@ -121,7 +126,7 @@ function parseResults() {
   
   // Print unimplemented tests summary (grouped by major version)
   if (summary.unimplementedTests.length > 0) {
-    console.log('\n=== UNIMPLEMENTED TESTS (Informational) ===');
+    console.log('\n=== OPTIONAL FEATURES NOT IMPLEMENTED (Informational) ===');
     
     // Group by major test category
     const unimplementedByCategory = {};
@@ -140,7 +145,7 @@ function parseResults() {
   }
   
   console.log('\n');
-  
+
   // Exit with error code if there are actual failures
   if (summary.failed > 0) {
     console.error(`❌ ${summary.failed} test(s) failed!`);
@@ -148,6 +153,8 @@ function parseResults() {
   } else {
     console.log(`✅ All tests passed! (${summary.ok} OK, ${summary.nonStrict} non-strict, ${summary.informational} informational, ${summary.unimplemented} unimplemented)`);
   }
+
+  return summary;
 }
 
 if (require.main === module) {

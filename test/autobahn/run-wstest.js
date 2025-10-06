@@ -106,16 +106,22 @@ class AutobahnTestRunner {
   runAutobahnTests() {
     return new Promise((resolve, reject) => {
       console.log('🐳 Starting Autobahn test suite with Docker...');
-      
+
+      // Detect platform and use appropriate config and networking
+      const isLinux = process.platform === 'linux';
+      const configFile = isLinux ? 'fuzzingclient-linux.json' : 'fuzzingclient.json';
+
+      console.log(`   Platform: ${process.platform}, using config: ${configFile}`);
+
       const dockerArgs = [
         'run',
         '--rm',
+        ...(isLinux ? ['--network=host'] : ['-p', '9001:9001']),
         '-v', `${process.cwd()}/config:/config`,
         '-v', `${process.cwd()}/reports:/reports`,
-        '-p', '9001:9001',
         '--name', 'fuzzingclient',
         'crossbario/autobahn-testsuite',
-        'wstest', '-m', 'fuzzingclient', '--spec', '/config/fuzzingclient.json'
+        'wstest', '-m', 'fuzzingclient', '--spec', `/config/${configFile}`
       ];
 
       this.dockerProcess = spawn('docker', dockerArgs, {
@@ -157,26 +163,36 @@ class AutobahnTestRunner {
 
   parseAndDisplayResults() {
     console.log('📊 Parsing test results...\n');
-    
+
     const resultsPath = path.join(__dirname, 'reports', 'servers', 'index.json');
-    
+
     if (!fs.existsSync(resultsPath)) {
       console.error('❌ Results file not found. Tests may not have completed properly.');
-      return;
+      process.exit(1);
     }
 
     try {
       const originalProcessExit = process.exit;
-      // Prevent parseResults from exiting the process
-      process.exit = () => {};
-      
-      parseResults();
-      
+      let exitCode = 0;
+
+      // Intercept process.exit to capture the exit code
+      process.exit = (code) => {
+        exitCode = code || 0;
+      };
+
+      const summary = parseResults();
+
       // Restore original function
       process.exit = originalProcessExit;
-      
+
+      // Exit with appropriate code if there were failures
+      if (exitCode !== 0 || (summary && summary.failed > 0)) {
+        process.exit(1);
+      }
+
     } catch (error) {
       console.error('❌ Failed to parse results:', error.message);
+      process.exit(1);
     }
   }
 
