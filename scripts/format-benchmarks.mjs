@@ -8,8 +8,9 @@ function addCommas(num) {
   return addCommas(str.slice(0, -3)) + ',' + str.slice(-3);
 }
 
-function formatNumber(num, decimals = 2) {
-  return (Math.round(num * 100) / 100).toString();
+function formatNumber(num, decimals = 4) {
+  const multiplier = Math.pow(10, decimals);
+  return (Math.round(num * multiplier) / multiplier).toString();
 }
 
 function formatBenchmarkResults(jsonFile) {
