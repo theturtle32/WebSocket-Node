@@ -11,6 +11,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { EventEmitter } from 'events';
 import * as utils from '../../../lib/utils.js';
+import debug from 'debug';
 
 describe('Utils Module', () => {
   describe('noop()', () => {
@@ -251,8 +252,12 @@ describe('Utils Module', () => {
     });
 
     afterEach(() => {
+      debug.disable();
       if (originalDebugEnv !== undefined) {
         process.env.DEBUG = originalDebugEnv;
+        if (originalDebugEnv) {
+          debug.enable(originalDebugEnv);
+        }
       } else {
         delete process.env.DEBUG;
       }
