@@ -56,9 +56,9 @@
     "test:browser:ui": "playwright test --ui",
     "test:autobahn": "cd test/autobahn && ./run-wstest.js",
     "bench": "vitest bench --run --config vitest.bench.config.mjs",
-    "bench:baseline": "node test/benchmark/track-performance.mjs save",
-    "bench:compare": "node test/benchmark/track-performance.mjs compare",
-    "bench:check": "node test/benchmark/track-performance.mjs check",
+    "bench:baseline": "pnpm run bench -- --outputJson test/benchmark/baseline.json",
+    "bench:compare": "pnpm run bench -- --compare test/benchmark/baseline.json",
+    "bench:check": "pnpm run bench -- --compare test/benchmark/baseline.json",
     "lint": "eslint lib/**/*.js test/**/*.js",
     "lint:fix": "eslint lib/**/*.js test/**/*.js --fix"
   },
