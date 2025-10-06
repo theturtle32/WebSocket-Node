@@ -46,6 +46,8 @@ All prototype-based constructors converted to ES6 classes:
 
 **Verification:** No `util.inherits()` or prototype patterns remain.
 
+**Node.js Compatibility:** Minimum Node.js 18.0+ required (uses nullish coalescing `??=`, Object.entries, default parameters, spread operators)
+
 #### Variable Declaration Modernization: 100% ✅
 - ✅ Zero `var` declarations in lib/ files (verified via grep)
 - ✅ All code uses `const`/`let` with proper block scoping
@@ -58,6 +60,8 @@ All prototype-based constructors converted to ES6 classes:
 - ✅ **Default parameters:** Applied to 6+ key methods
 - ✅ **Object literal shorthand:** Applied across 8 files
 - ✅ **Spread operator:** Used for array/object operations
+- ✅ **Nullish coalescing:** `??=` operator for default value assignment
+- ✅ **Object.entries():** Modern object iteration patterns
 - ✅ **for...of loops:** Replacing traditional for loops where appropriate
 
 #### Remaining Modernization Work: 5% ⏳

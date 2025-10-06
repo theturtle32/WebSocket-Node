@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/theturtle32/WebSocket-Node",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "bufferutil": "^4.0.1",

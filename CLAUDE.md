@@ -45,7 +45,7 @@ pnpm test:coverage  # Current: 85.05% ✅
 - Private properties: prefix with underscore (_propertyName)
 - Prefer const/let over var for new code
 - Use descriptive error messages with proper capitalization
-- Maintain backward compatibility with Node.js 4.x+
+- Minimum Node.js version: 18.x+ (uses ES6+ features including nullish coalescing)
 - Use EventEmitter pattern for async events
 - Always catch and handle errors in Promise chains
 - Document API facing methods with clear JSDoc comments
