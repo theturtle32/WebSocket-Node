@@ -1,6 +1,6 @@
 # WebSocket-Node Performance Benchmarks
 
-This directory contains performance benchmarks for critical WebSocket operations.
+This directory contains performance benchmarks for critical WebSocket operations using Vitest's built-in benchmarking functionality.
 
 ## Running Benchmarks
 
@@ -8,8 +8,14 @@ This directory contains performance benchmarks for critical WebSocket operations
 # Run all benchmarks
 pnpm run bench
 
-# Compare with previous results
+# Save current results as baseline
+pnpm run bench:baseline
+
+# Compare with baseline (shows ⇑/⇓ indicators)
 pnpm run bench:compare
+
+# Check for regressions (CI mode)
+pnpm run bench:check
 ```
 
 ## Benchmark Suites
@@ -46,15 +52,35 @@ Benchmarks output operations per second (hz) and timing statistics:
 
 ## Performance Baselines
 
-These benchmarks establish baseline performance for regression detection:
-1. Frame serialization should maintain 4M+ ops/sec for small frames
-2. Connection operations should maintain 25K+ ops/sec
-3. Large message handling (64KB) should not degrade significantly
+Baseline results are stored in `baseline.json` using Vitest's JSON format. When running `bench:compare` or `bench:check`, Vitest automatically compares current results against the baseline and shows:
+- `[1.05x] ⇑` for improvements (faster)
+- `[0.95x] ⇓` for regressions (slower)
+- Baseline values for reference
+
+Expected performance ranges:
+1. Frame serialization: 3-4.5M ops/sec
+2. Message sending: 100K-900K ops/sec (varies by size)
+3. Ping/Pong: 1.5-2M ops/sec
+4. Connection creation: 30K ops/sec
+
+## Benchmark Structure
+
+Each operation is in its own `describe` block to prevent Vitest from treating them as alternative implementations for comparison. This structure ensures each operation is measured independently:
+
+```javascript
+describe('Send Ping Frame', () => {
+  bench('send ping frame', () => {
+    sharedConnection.ping();
+  });
+});
+```
 
 ## Adding New Benchmarks
 
 When adding benchmarks:
 1. Pre-allocate buffers and data outside the benchmark loop
-2. Use descriptive test names with size information
-3. Focus on operations that directly impact production performance
-4. Avoid testing implementation details
+2. Create shared connections at module scope (not inside benchmark functions)
+3. Use descriptive test names with size information
+4. Put each unique operation in its own `describe` block
+5. Focus on operations that directly impact production performance
+6. Avoid testing implementation details
