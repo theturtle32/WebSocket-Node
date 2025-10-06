@@ -29,13 +29,39 @@ jobs:
         id: bench
         run: |
           echo "Running performance benchmarks..."
-          pnpm run bench 2>&1 | tee bench-output.txt
+          pnpm exec vitest bench --run --config vitest.bench.config.mjs --outputJson bench-results.json 2>&1 | tee bench-output.txt
 
       - name: Generate benchmark summary
         if: always()
         run: |
           echo "## 📊 Performance Benchmark Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Parse JSON and create markdown table
+          if [ -f bench-results.json ]; then
+            echo "| Benchmark | Operations/sec | Mean (ms) | Min (ms) | Max (ms) | P99 (ms) |" >> $GITHUB_STEP_SUMMARY
+            echo "|-----------|----------------|-----------|----------|----------|----------|" >> $GITHUB_STEP_SUMMARY
+
+            jq -r '
+              def format_number: tostring |
+                (. / ".") as $parts |
+                if ($parts | length) == 2 then
+                  ($parts[0] | gsub("(?<x>[0-9])(?<y>([0-9]{3})+$)"; "\(.x),\(.y)")) + "." + $parts[1]
+                else
+                  $parts[0] | gsub("(?<x>[0-9])(?<y>([0-9]{3})+$)"; "\(.x),\(.y)")
+                end;
+
+              .files[].groups[].benchmarks[] |
+              "| \(.name) | \(.hz | floor | format_number) | \((.mean * 1000) | (. * 100 | round / 100)) | \((.min * 1000) | (. * 100 | round / 100)) | \((.max * 1000) | (. * 100 | round / 100)) | \((.p99 * 1000) | (. * 100 | round / 100)) |"
+            ' bench-results.json >> $GITHUB_STEP_SUMMARY
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "_Total benchmarks: $(jq '[.files[].groups[].benchmarks[]] | length' bench-results.json)_" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Show terminal output
+          echo "### Terminal Output" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           sed 's/\x1b\[[0-9;]*m//g' bench-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
