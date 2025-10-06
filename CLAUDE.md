@@ -2,16 +2,30 @@
 
 ## Build/Test Commands
 
-- Run all tests (tape + vitest): `pnpm test`
-- Run legacy tape tests only: `pnpm run test:tape`
-- Run modern vitest tests only: `pnpm run test:vitest`
-- Run single tape test: `pnpx tape test/unit/[filename].js`
-- Run single vitest test: `pnpx vitest run test/unit/[filename].test.mjs`
-- Watch vitest tests: `pnpm run test:watch`
-- Run tests with coverage: `pnpm run test:coverage`
-- Lint codebase: `pnpm lint`
-- Fix lint issues: `pnpm lint:fix`
-- Run autobahn tests (full integration test suite): `pnpm test:autobahn`
+### Testing
+- `pnpm test` - Run all vitest tests (616 unit + integration tests)
+- `pnpm test:watch` - Run vitest in watch mode for development
+- `pnpm test:ui` - Run vitest with web UI interface
+- `pnpm test:coverage` - Run tests with coverage report (target: 85%+)
+- `pnpm test:coverage:watch` - Run coverage in watch mode
+- `pnpm test:autobahn` - Run Autobahn WebSocket Protocol Compliance Suite (517 tests)
+- `pnpx vitest run test/unit/[filename].test.mjs` - Run single test file
+
+### Linting
+- `pnpm lint` - Check code for lint errors
+- `pnpm lint:fix` - Auto-fix lint errors (always run before commit)
+
+### Quick Reference
+```bash
+# Before committing:
+pnpm lint:fix && pnpm test && pnpm test:autobahn
+
+# During development:
+pnpm test:watch  # Auto-run tests on file changes
+
+# Check coverage:
+pnpm test:coverage  # Current: 85.05% ✅
+```
 
 ## Coding Style
 
