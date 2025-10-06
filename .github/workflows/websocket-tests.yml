@@ -29,6 +29,20 @@ jobs:
       - name: Run unit tests
         run: pnpm run test
 
+      - name: Run unit tests with coverage
+        if: matrix.node-version == '20.x'
+        run: pnpm run test:coverage
+
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == '20.x'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
       - name: Pull Autobahn Test Suite Docker image
         run: docker pull crossbario/autobahn-testsuite
 
