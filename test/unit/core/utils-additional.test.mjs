@@ -4,6 +4,7 @@
  * Tests for utility functions to improve overall coverage to 85%+
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { EventEmitter } from 'events';
 import * as utils from '../../../lib/utils.js';
 
 describe('utils - Additional Coverage', () => {
@@ -44,7 +45,6 @@ describe('utils - Additional Coverage', () => {
 
   describe('eventEmitterListenerCount', () => {
     it('should return listener count for an event', () => {
-      const EventEmitter = require('events').EventEmitter;
       const emitter = new EventEmitter();
 
       const listener1 = () => {};
@@ -58,7 +58,6 @@ describe('utils - Additional Coverage', () => {
     });
 
     it('should return 0 for event with no listeners', () => {
-      const EventEmitter = require('events').EventEmitter;
       const emitter = new EventEmitter();
 
       const count = utils.eventEmitterListenerCount(emitter, 'nonexistent');
@@ -135,32 +134,33 @@ describe('utils - Additional Coverage', () => {
     });
 
     it('should create a BufferingLogger when debug is enabled', () => {
-      // Enable debug for this test
       const originalDebug = process.env.DEBUG;
-      process.env.DEBUG = 'test:enabled:*';
-
-      // Force require cache clear for debug module
       const debugModule = require('debug');
-      debugModule.enable('test:enabled:*');
 
-      const logger = utils.BufferingLogger('test:enabled:logger', 'id456');
+      try {
+        // Enable debug for this test
+        process.env.DEBUG = 'test:enabled:*';
+        debugModule.enable('test:enabled:*');
 
-      expect(typeof logger).toBe('function');
-      expect(typeof logger.printOutput).toBe('function');
+        const logger = utils.BufferingLogger('test:enabled:logger', 'id456');
 
-      // Test logging functionality
-      logger('Test message', 'arg1', 'arg2');
+        expect(typeof logger).toBe('function');
+        expect(typeof logger.printOutput).toBe('function');
 
-      // The logger should buffer messages
-      expect(typeof logger.printOutput).toBe('function');
+        // Test logging functionality
+        logger('Test message', 'arg1', 'arg2');
 
-      // Restore original DEBUG setting
-      if (originalDebug) {
-        process.env.DEBUG = originalDebug;
-        debugModule.enable(originalDebug);
-      } else {
-        delete process.env.DEBUG;
-        debugModule.disable();
+        // The logger should buffer messages
+        expect(typeof logger.printOutput).toBe('function');
+      } finally {
+        // Restore original DEBUG setting
+        if (originalDebug) {
+          process.env.DEBUG = originalDebug;
+          debugModule.enable(originalDebug);
+        } else {
+          delete process.env.DEBUG;
+          debugModule.disable();
+        }
       }
     });
   });

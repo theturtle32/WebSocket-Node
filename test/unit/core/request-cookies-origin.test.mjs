@@ -483,34 +483,30 @@ describe('WebSocketRequest - Cookie and Origin Coverage', () => {
       }).toThrow(/Illegal character.* in subprotocol/);
     });
 
-    it('should reject protocol with separator character', () => {
-      const separators = ['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}'];
+    it.each(['(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[', ']', '?', '=', '{', '}'])('should reject protocol with separator character: %s', (sep) => {
+      const newSocket = new MockSocket();
+      newSocket.remoteAddress = '127.0.0.1';
 
-      separators.forEach(sep => {
-        const newSocket = new MockSocket();
-        newSocket.remoteAddress = '127.0.0.1';
+      const newHttpRequest = {
+        url: '/',
+        headers: {
+          'host': 'localhost',
+          'upgrade': 'websocket',
+          'connection': 'Upgrade',
+          'sec-websocket-version': '13',
+          'sec-websocket-key': 'dGhlIHNhbXBsZSBub25jZQ==',
+          'sec-websocket-protocol': `test${sep}protocol`
+        }
+      };
 
-        const newHttpRequest = {
-          url: '/',
-          headers: {
-            'host': 'localhost',
-            'upgrade': 'websocket',
-            'connection': 'Upgrade',
-            'sec-websocket-version': '13',
-            'sec-websocket-key': 'dGhlIHNhbXBsZSBub25jZQ==',
-            'sec-websocket-protocol': `test${sep}protocol`
-          }
-        };
+      const newRequest = new WebSocketRequest(newSocket, newHttpRequest, { maxReceivedFrameSize: 0x10000 });
+      newRequest.readHandshake();
 
-        const newRequest = new WebSocketRequest(newSocket, newHttpRequest, { maxReceivedFrameSize: 0x10000 });
-        newRequest.readHandshake();
+      expect(() => {
+        newRequest.accept(`test${sep}protocol`, null, null);
+      }).toThrow(/Illegal character.* in subprotocol/);
 
-        expect(() => {
-          newRequest.accept(`test${sep}protocol`, null, null);
-        }).toThrow(/Illegal character.* in subprotocol/);
-
-        newSocket.removeAllListeners();
-      });
+      newSocket.removeAllListeners();
     });
 
     it('should accept valid protocol and format correctly', () => {
