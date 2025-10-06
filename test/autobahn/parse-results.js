@@ -47,6 +47,13 @@ function parseResults() {
     }
   };
   
+  // Category mapping for performance tests
+  const categoryMap = {
+    '9': 'limits',
+    '10': 'largeMessages',
+    '12': 'fragmentation'
+  };
+
   // Parse each test case
   for (const [testCase, result] of Object.entries(testResults)) {
     summary.total++;
@@ -99,18 +106,10 @@ function parseResults() {
 
       // Categorize performance tests
       const majorCategory = testCase.split('.')[0];
-      let category = 'other';
-
-      if (majorCategory === '9') {
-        category = 'limits';
-      } else if (majorCategory === '10') {
-        category = 'largeMessages';
-      } else if (majorCategory === '12') {
-        category = 'fragmentation';
-      }
+      const category = categoryMap[majorCategory] || 'other';
 
       summary.performance.byCategory[category].tests.push({
-        case: testCase,
+        testCase: testCase,
         duration: result.duration,
         description: result.description
       });
@@ -187,7 +186,7 @@ function parseResults() {
     console.log(`  Average duration: ${(summary.performance.totalDuration / summary.performance.testCount).toFixed(2)}ms\n`);
 
     // Print category breakdown for performance-focused tests
-    const perfCategories = ['limits', 'largeMessages', 'fragmentation'];
+    const perfCategories = Object.keys(summary.performance.byCategory).filter(key => key !== 'other');
     let hasPerfData = false;
 
     for (const categoryKey of perfCategories) {
@@ -201,14 +200,14 @@ function parseResults() {
         console.log(`    Average duration: ${avgDuration}ms`);
 
         // Show top 5 slowest tests in this category
-        const slowestTests = category.tests
+        const slowestTests = [...category.tests]
           .sort((a, b) => b.duration - a.duration)
           .slice(0, 5);
 
         if (slowestTests.length > 0) {
           console.log('    Slowest tests:');
           slowestTests.forEach(test => {
-            console.log(`      ${test.case}: ${test.duration}ms`);
+            console.log(`      ${test.testCase}: ${test.duration}ms`);
           });
         }
         console.log('');
